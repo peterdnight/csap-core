@@ -1,10 +1,8 @@
-# csap-core
+# csap-core _**powered by: [csap-starter](https://github.com/csap-platform/csap-starter/wiki)**_
 
-Documentation:  [Csap Wiki](https://github.com/csap-platform/csap-core/wiki)
-Powered by: [csap-starter](https://github.com/csap-platform/csap-starter/wiki) 
+**Documentation:**  [Csap Wiki](https://github.com/csap-platform/csap-core/wiki)
 
-
-csap-core projects:
+**csap-core projects:**
 - agent: based on spring profile, it provides:
     - host management agent / portal
     - application portal
