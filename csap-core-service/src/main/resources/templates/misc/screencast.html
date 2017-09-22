@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<head >
+
+		<title th:inline="text"> CSAP Screencast</title>
+
+		<script th:replace="csap/fragments/libsAndStyles :: pageContent"></script>
+
+
+
+		<script th:src="@{/js/csapLibs/commonJQ.js}"></script>
+		<script th:src="@{/js/csapLibs/csapUtils/CsapUser.js}"></script>
+
+
+		<link th:href="@{/js/csapLibs/qtip/jquery.qtip.min.css}" rel="stylesheet"
+			  type="text/css" media="screen" />
+		<script th:src="@{/js/csapLibs/qtip/jquery.qtip.min.js}"></script>
+
+		<script th:src="@{/js/csapLibs/jquery.autosize.js}"></script>
+
+
+		<script th:src="@{/js/misc/screencast.js}"></script>
+		<style>
+			.resp {
+				padding: 2px;
+				text-align: left;
+				word-break: break-all;
+				word-wrap: break-word;
+			}
+		</style>
+	</head>
+
+
+
+	<body th:inline="text">
+
+
+		<header>
+			<div class="noteHighlight" >
+				CS-AP ScreenCasts 
+				<a class="formButton"
+				   href="https://github.com/csap-platform/csap-core/wiki"> Learn more: CSAP@Jive</a> <a class="formButton"
+				   href="https://github.com/csap-platform/csap-core/wiki/pages/training"> Browse screencasts</a></div>
+
+			<div class="note"
+				 style="float: right; font-size: 0.7em; font-weight: normal; margin-left: 5em; text-align:left; width: 20em">
+				If you have an older browser version and video fails to
+				stream/display, you can download the <span id="vidMp4"><a class="simple"   th:href="${ mp4 }">mp4 version</a></span>. The
+				latest IE, Safari, Chrome, and Firefox releases support html5 video
+				encoding. </div>
+		</header>
+
+
+		<!-- 
+			<div id="vidFrame" style="padding: 1em;">
+				<span id="vidWiki" style="padding: 1em;"></span>
+				<div id="vid" style="padding: 1em;"></div>
+			</div>
+		-->
+
+		<div id="vidFrame" style="padding: 1em;">
+
+			Viewing Size: 
+			<select id="vidSize" class="choices" title="Select resolution in window, or use browser controls on video to maximize" >
+				<option>800x600</option>
+				<option >1024x768</option>
+				<option selected="selected">1280x960</option>
+			</select> 
+
+			<span id="vidWiki" style="padding: 1em;"><a class="formButton"
+														th:href="${ wiki }">
+					Visit Related Info Wiki</a>
+			</span>
+
+			<div style="padding: 1em;">
+				<video id="theVideo" controls="controls" height="960" width="1280">
+					<source th:src="${ mp4 }" type="video/mp4">
+						Your browser does not support the video tag.
+				</video>
+			</div>
+		</div>
+
+
+	</body>
+</html>

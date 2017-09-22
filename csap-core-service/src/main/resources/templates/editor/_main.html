@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+
+		<script th:replace="~{ /editor/_main-head :: pageContent }"></script>
+		<title>replaced</title>
+
+	</head>
+
+	<body>
+
+
+
+		<header id="header">
+
+			<span style="margin-right: 1em;">Package Editor:</span>
+			<a
+				id="showPackageDialog"
+				class="pushButton"
+				title="Change Package"
+				href="#changePackage"> [[ ${ selectedRelease } ]] </a>
+			<input
+				class="releasePackage"
+				th:value="${ selectedRelease }"
+				type="hidden" />
+
+
+
+
+			<div th:replace="~{ /deployment/menus :: pageContent }" ></div>
+
+
+
+			<a
+				class="pushButton serviceNavigate"
+				title="Switch to host view for deployment"
+				th:href="@{/hosts(releasePackage=${selectedRelease})}">
+				<img th:src="@{/images/16x16/network-workgroup.png}" />Host
+			</a>
+
+			<a
+				class="pushButton serviceNavigate"
+				title="Switch to service view for deployment"
+				th:href="@{/services(releasePackage=${selectedRelease})}">
+				<img th:src="@{/images/16x16/internet-web-browser.png}"/>Services
+			</a>
+
+		</header>
+
+
+		<div id="packageDialogWrapper">
+
+			<div
+				id="packageDialogContents"
+				class="info ">
+				Release Packages are used to group related software packages together for ease of management. Notes:
+				<ul>
+					<li>
+						<span class="highlight">Any uncommitted changes will be lost</span> when navigating to a new package
+					</li>
+					<li>
+						Constraint: when standard enterprise loadbalancing is being used,  
+						<span class="highlight">service names must be unique across all packages</span>
+						in order for routing by the shared loadbalancer service (Httpd)
+					</li>
+				</ul>
+			</div>
+
+
+			<button
+				class="pushButton packageSelectButton"
+				th:each="name : ${ packageNames }"
+				th:text="${name}">WillBeUpdated</button>
+
+		</div>
+
+
+		<!--  tab index set to pick up focus to close tooltips -->
+		<div
+			id="editorMain"
+			tabindex="-1">
+
+			<div id="mainDisplayNav">
+
+
+				<label id="editOps">Application Definition: <a
+						id="filesButton"
+						title="Browse Application Definition Files"
+						class="simple"
+						href="#">
+						<img
+							class="butImage"
+							th:src="@{/images/16x16/logs.png}"/>Files
+					</a>
+
+					<a
+						id="filesButton"
+						title="Download a zip copy of files"
+						class="simple"
+						th:href="@{${ @csapCoreService.OS_URL + '/getConfigZip'} }">
+						<img
+							class="butImage"
+							th:src="@{/images/16x16/go-down.png}"/>Download
+					</a>
+
+
+					<a
+						id="defButton"
+						class="simple"
+						href="showSummary"
+						title="View Application in a summary view highlighting key operational aspects">
+						<img
+							class="butImage"
+							th:src="@{/images/16x16/internet-news-reader.png}"/>Summary
+					</a>
+				</label>
+
+				<div
+					class="infoWarn"
+					style="display: inline-block; width: auto; margin-bottom: 0.5em"
+					th:if="${scmRole} == null">Read Only Mode - Contact your administrator if you require write permissions</div>
+
+				<span style="display: inline-block; float: right; font-style: italic; font-size: 0.8em; margin-right: 2em">
+					[[${T(org.csap.agent.model.Application).HOST_NAME}]] </span>
+
+
+			</div>
+
+
+			<div
+				id="resultsSection"
+				style="display: none">
+
+				<pre id="resultPre">[[ ${result} ]]</pre>
+
+			</div>
+
+
+
+			<div
+				id="clusterButtons"
+				style="display: none">
+
+				<div th:if="${ ( infraRole == null) }" class="news">
+					Operations Disabled: your account is not a member of infra admins
+				</div>
+				<div th:if="${ ( infraRole != null) }">
+					<button
+						id="applyButton"
+						class="pushButton"
+						title="Apply changes in editor to cluster without checking in.">
+						<img th:src="@{/images/16x16/go-jump.png}"/> Apply
+					</button>
+
+					<button
+						id="showCiButton"
+						class="pushButton"
+						title="Check editor changes into source control and apply to cluster.">
+						<img th:src="@{/images/16x16/mail-send-receive.png}"/> CheckIn
+					</button>
+
+
+					<button
+						id="validateConfig"
+						class="pushButton"
+						title="Validate Definition">
+						<img th:src="@{/images/16x16/document-new.png}"/> Validate
+					</button>
+
+					<br/>
+					<div id="ciDiv">
+
+						<div
+							class="infoWarn"
+							style="font-size: 1em; width: auto; margin: 2em"
+							th:if="${showCheckinWarning != null} ">
+							<br /> Capability modification not recommended in current lifecycle: [[ ${lifecycle} ]] <br /> <br />Editor
+							should only be used for reloading or viewing in non-dev lifecycles. CS-AP best practice is to follow lifecycle
+							deployments for all artifacts (jars, wars, application definitions, property files, etc). <br /> <br />
+						</div>
+
+						<label title="" >
+							userid:
+							<input
+								id="ciUser"
+								style="width: 8em"
+								name="ciUser"
+								th:value="${userid}" />
+						</label>
+
+						<label title="" >
+							password:
+							<input
+								id="ciPass"
+								style="width: 8em;"
+								name="ciPass"
+								value=""
+								type="password" />
+
+						</label>
+
+						<label title="" >
+							branch:
+							<input
+								id="ciBranch"
+								style="width: 10em"
+								name="ciBranch"
+								th:value="${ applicationBranch }"
+								title="Either trunk, or branches/yourbranchName" />
+						</label>
+
+						<label title="Update ALL the files on disk into source control (Git only). Used when adding a new application to source control." >
+							Update All:
+							<input
+								id="ciUpdateAll"
+								style="width: auto; vertical-align: middle"
+								type="checkbox"
+								/>
+						</label>
+						<br/>
+						<textarea
+							id="comment"
+							style="width: 50em; margin-left: 3em"
+							name="comment"></textarea>
+						<br/> 
+						<span style="padding-left: 12em;"></span>
+					</div>
+
+				</div>
+
+
+			</div>
+
+
+
+			<div id="tabs">
+				<ul>
+					<li>
+						<a
+							id="showSummary"
+							href="#summaryTab"
+							title="Summary view and definition reload">Summary</a>
+					</li>
+					<li>
+						<a
+							id="showTree"
+							href="#treeTab"
+							title="Update application using a navigation tree">Application Editor</a>
+					</li>
+					<li>
+						<a
+							id="showLifeForm"
+							href="#lifeFormTab"
+							title="Update application using a lifecycle view">Lifecycle Editor</a>
+					</li>
+					<li>
+						<a
+							id="showRelease"
+							href="#releaseTab"
+							title="Update application services using a selectable attribute eg. version">Service Attributes</a>
+					</li>
+
+				</ul>
+
+				<div id="summaryTab">
+
+
+					<div th:replace="/editor/tab-summary"></div>
+
+				</div>
+
+				<div id="lifeFormTab">
+
+
+					<div class="loadingLargePanel">
+						Loading <br />Lifecycle
+					</div>
+					<div id="lifeEditor"></div>
+
+				</div>
+
+				<div id="treeTab">
+
+					<div class="loadingLargePanel">One moment while content is loaded</div>
+
+					<div id="jsonFileBrowser"></div>
+
+					<div id = "jsonFileContainer" style="display: none">
+						<textarea
+							id="json"
+							style=""
+							spellcheck="false">loading...</textarea>
+					</div>
+				</div>
+
+
+				<div id="releaseTab">
+					<div class="loadingLargePanel">One moment while content is loaded</div>
+					<div th:replace="/editor/tab-release"></div>
+				</div>
+
+			</div>
+
+
+		</div>
+
+
+		<div
+			id="serversPrompt"
+			style="display: none">
+			<div>
+				<span
+					style="padding-left: 6em;"
+					title="Application Container to deploy to.">Runtime:</span> <select
+					class="runtimeSelect"
+					title="Select Application Container">
+
+					<option
+						th:each="runtime : ${runtimes}"
+						th:value="${runtime}"
+						th:text="${runtime}">filled</option>
+
+				</select>
+
+				<a
+					style="padding-left: 3em"
+					class="simple"
+					target="_blank"
+					href="https://github.com/csap-platform/csap-core/wiki#updateRefRuntime+Support">About Runtimes</a>
+
+			</div>
+		</div>
+
+
+
+	</body>
+
+</html>

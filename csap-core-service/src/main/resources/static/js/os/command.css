@@ -1,0 +1,291 @@
+
+.hostLabel, .hostCustom, .hostCheckbox {
+	vertical-align: middle;
+	margin-right: 4px;
+	font-size: 10pt;
+}
+.hostCustom {
+	margin-bottom: 3px;
+}
+
+#hostSelection {
+	display: inline-block ;
+}
+#hostSelectButton {
+	line-height: auto;
+}
+
+#hostDisplay {
+	-webkit-column-count: 4; /* Chrome, Safari, Opera */
+	-moz-column-count: 4; /* Firefox */
+	column-count: 4;
+}
+
+input, select {
+	margin-left: 0
+}
+
+.matchTarget {
+	background-color: yellow;
+	font-weight: bold;
+}
+
+.matchLabel {
+	font-size: 0.8em;
+	margin-top: 1em;
+}
+
+.fileInSearchFolder {
+	display: inline-block;
+	min-width: 10em; 
+}
+
+.osTemplate {
+	display: none;
+}
+
+.ui-widget {
+	font-size: 0.8em;
+}
+
+select {
+	border-radius: 3px;
+}
+
+form {
+	padding: 1em;
+	padding-top: 0.5em;
+}
+
+input {
+	margin-right: 1em;
+}
+
+input.radio {
+	margin-right: 3em;
+	margin-left: 0;
+}
+
+#resultsSection pre {
+	width: 95%;
+}
+
+.progress {
+	position: absolute;
+	top: 2.5em;
+	right: 3em;
+	width: 200px;
+	border: 1px solid black;
+	padding: 0px;
+	border-radius: 7px;
+}
+
+.bar {
+	background-color: red;
+	width: 0%;
+	height: 15px;
+	border-radius: 7px;
+}
+
+.percent {
+	position: absolute;
+	display: inline-block;
+	padding: 0;
+	text-align: center;
+	width: 100%;
+	top: 4px;
+	font-weight: bold;
+	font-size: 0.6em;
+}
+
+.butImage {
+	width: 12px;
+	margin-left: 2px;
+	position: relative;
+	top: 3px;
+}
+
+#cancelButton {
+	font-style: italic;
+	margin-left: 0.5em;
+	vertical-align: middle;
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: -8em;
+	font-size: 0.8em;
+}
+
+#outputButton {
+	font-style: italic;
+	margin-left: 1em;
+	vertical-align: middle;
+	display: none;
+	font-size: 0.8em;
+}
+
+.commandSection {
+	display: inline-block;
+	width: 50%;
+}
+
+.browserSection {
+	display: inline-block;
+	width: 200px;
+	margin: 0;
+	vertical-align: top;
+	margin-left: 1em;
+	padding-top: 1em;
+	padding-bottom: 0;
+	display: inline-block;
+}
+
+thead, tbody {
+	overflow: auto;
+	display: block;
+}
+
+.outputColumn {
+	width: 40em;
+	white-space: pre;
+	font-family: Lucida Console;
+}
+
+textarea {
+	font-family: Lucida Console;
+	font-size: 9pt;
+	white-space: pre;
+}
+.col1 {
+	width: 200px;
+}
+
+
+tr.selected {
+	background-color: "red";
+}
+
+form {
+	background-color: inherit;
+	padding-top: 1em;
+}
+
+table.bordered {
+	margin-top: 0em;
+	margin-left: 0em;
+	font-size: 1em;
+	table-layout: fixed;
+	word-break: break-all;
+}
+
+thead, tbody {
+	overflow: auto;
+	display: block;
+}
+
+#templateTable td:nth-child(1), #templateTable th:nth-child(1) {
+	width: 20em;
+	padding-left: 20px;
+	padding-right: 0;
+}
+
+#templateTable td:nth-child(2), #templateTable th:nth-child(2) {
+	width: 50em;
+	padding-left: 20px;
+	padding-right: 0;
+}
+
+#resultsTable td:nth-child(1), #resultsTable th:nth-child(1) {
+    padding-left: 1em;
+    padding-right: 1em;
+    width: 10em;
+	min-width: 10em;
+}
+
+
+
+#resultsTable tbody td {
+	padding-right: 6px;
+	padding-left: 6px;
+	padding-top: 6px;
+	text-align: left;
+}
+
+#templateTable tbody tr:hover {
+	text-decoration: underline;
+	cursor: pointer;
+	background-color: #C4E8F2;
+}
+
+#resultsTable {
+	display: none;
+	margin-left: 2em;
+	margin-top: 2em;
+}
+
+#resultsTable  th:last-child {
+	padding-right: 2.5em;
+}
+
+.hostColumn {
+	width: 10em;
+}
+
+
+
+.description, #logSearchForm label {
+	display: inline-block;
+	font-weight: bold;
+	width: 10em;
+	text-align: right;
+	vertical-align: top;
+	padding-top: 0.25em;
+}
+
+#logSearchForm label {
+	width: auto;
+	margin-left: 1em;
+	margin-right: 1em;
+}
+
+#logSearchForm input {
+	width: 20em;
+	margin-right: 0em;
+}
+
+#quickSearch {
+	display: none;
+}
+
+#quickSearch-button {
+	margin-left: 2em;
+}
+
+.ui-selectmenu-button {
+	vertical-align: middle;
+}
+
+
+#quickSearch-button .ui-selectmenu-text, #logSearchForm  .ui-selectmenu-text
+{
+	padding-top: 2px;
+	padding-bottom: 2px;
+	background-color: white;
+}
+
+#submitSearchButton {
+	font-size: 1.5em;
+	font-weight: bold;
+	height: 52px;
+	width: 250px;
+	vertical-align: top;
+	margin-top: 0px;
+}
+
+label {
+	font-weight: bold;
+}
+
+#hostDialogContainer {
+	font-size: 10pt;
+}

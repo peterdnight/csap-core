@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<head th:fragment="pageContent" th:remove="tag" >
+
+		<title th:inline="text"> Realtime-[[ ${ csapApp.getName() } ]]</title>
+
+		<script th:replace="~{ csap/fragments/libsAndStyles :: pageContent }"></script>
+
+		<script th:replace="csap/fragments/jqplot-includes :: pageContent"></script>
+
+		<script th:src="@{/js/csapLibs/commonJQ.js}"></script>
+		<script th:src="@{/js/csapLibs/csapUtils/CsapUser.js}"></script>
+
+
+
+		<link th:href="@{/js/csapLibs/qtip/jquery.qtip.min.css}" rel="stylesheet"
+			  type="text/css" media="screen" />
+		<script th:src="@{/js/csapLibs/qtip/jquery.qtip.min.js}"></script>
+
+
+		<script th:inline="javascript">
+
+			var meterIdParam = [[ ${ #httpServletRequest.getParameter('meterId') }  ]];
+			var projectParam = [[ ${ #httpServletRequest.getParameter('project') }  ]];
+			var baseUrl = [[ @{/service} ]] ;
+
+			var agentHostUrlPattern = [[${ agentHostUrlPattern }]];
+
+			var serviceName = [[ ${ #httpServletRequest.getParameter('serviceName') }  ]];
+
+		</script>
+
+
+		<script  th:attr="data-main=@{ ${csapApp.requiresUrl('/js/deployment/modules/real-time-dashboard.js')}   }" 
+		th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script>
+
+<!--		<script  th:attr="data-main=@{ ${csapApp.requiresUrl('/js/deployment/modules/service-portal-main.js')}   }" 
+		th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script>-->
+
+		<style>
+			#vmTable {
+				margin-top: 1em;
+			}
+
+			#vmTable thead th {
+				padding-right: 24px;
+			}
+
+			.meterContainer {
+				position: relative; 
+			}
+			.meterInput {
+				left: 1em;
+				position: absolute;
+				top: 1em;
+				z-index: 99;
+			}
+
+			#vmTable tfoot tr.totalRow {
+				border-bottom: 0 none;
+				border-top: 2px solid grey;
+			}
+
+			#vmTable td:nth-child(1), #vmTable th:nth-child(1) {
+				min-width: 8em;
+				font-size: 0.8em;
+			}
+
+
+			td.num, th.num {
+				font-size: 0.8em;
+				width: 10em;
+				text-align: right;
+				position: relative ;
+			}
+
+
+			.meterGraph {
+				width: 200px;
+				height: 150px;
+				font-size: 0.8em;
+			}
+
+			.meterContainer {
+				display: inline-block; 
+				margin: 0.5em;
+				border: 2px solid white;
+				background-color: white;
+				border-radius: 5px;
+			}
+			.meterContainer:hover {
+				border: 2px solid blue;
+			}
+
+			#progressbar {
+				display: inline-block ;
+			}
+			#collectionTime {
+				font-size: 0.7em;
+				font-weight: normal;
+				margin-right: 1em
+			}
+
+			.ui-progressbar {
+				width: 10em;
+				height: 10px;
+			}
+
+			#meterHistogram, #meterTable {
+				display: inline-block;
+			}
+
+			#meterHistogram {
+				vertical-align: top ;
+				font-size: 1.5em;
+				margin-bottom: 1em;
+				margin-top: 2em;
+				margin-left: 2em;
+			}
+			table.jqplot-table-legend {
+				width: 15em;
+			}
+			.jqplot-table-legend-swatch {
+				width: 1em;
+			}
+
+
+		</style>
+
+	</head>

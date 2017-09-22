@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+
+		<title th:replace="~{ os/command-head  :: pageContent }"></title>
+
+	</head>
+
+	<body th:inline="text">
+
+
+
+
+		<script th:replace="~{ os/pageTitleBanner :: pageContent }"></script>
+
+		<div id="hostSelection" style="font-size: 0.8em;">
+
+			<label data-qtip="Select Host(s) for display. If multiple hosts are selected, graphs may be viewed per VM or stacked into a single panel">
+				<button  id="hostSelectButton" class="pushButton">
+					Select Hosts (<span id="hostSelectCount">1</span>)</button>
+			</label>
+
+			<label >
+				Separate Output:
+				<input id="separateOutput" type="checkBox" checked="checked"
+					   title="By default output from all VMs is consolidated into a single html table. Check this for separated output." 
+					   style="width: 1em;" />
+			</label>
+
+			<div id="hostDialogContainer" style="display: none">
+				<div id="hostCusomizeDialog">
+
+					<div style="">
+						<select id="selectHostByCluster" 
+								style="margin: 0; padding: 0; font-size: 1em">
+							<option value="none">Select By Cluster...</option>
+						</select> 
+
+						<a id="hostUnCheckAll" href="#" style="margin-left: 3em; font-size: 0.8em"
+						   class="simple">Clear All</a> 
+
+						<a id="hostCheckAll" href="#"
+						   style="margin-left: 3em; font-size: 0.8em" class="simple">Select All</a>
+
+						<label id="serviceHostFilter" style="margin-left: 2em">
+							<input  type="checkBox" checked="checked"
+								   title="By default only hosts matching the service are shown." 
+								   style="margin-right: 3px" />
+							Filter using <span th:text="${ serviceName }"></span> in same package
+						</label>
+
+
+					</div>
+
+
+					<br/>
+
+					<div id="hostDisplay">
+						<input data-host="" class="instanceCheck"
+							   style="margin-right: 0.2em" type="checkbox"
+							   title="Select to include in operations" />
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+
+
+
+		<div class="browserSection">
+
+			<table id="resultsSelector" class="simple" style="margin-left: 0; font-size: 0.8em;">
+				<thead>
+
+					<tr>
+						<th class="col1">Select Item to View</th>
+					</tr>
+				</thead>
+
+				<tbody id="resultsSelectorBody">
+				</tbody>
+			</table>
+		</div>
+
+
+		<div th:switch="${ command }" th:remove="tag" >
+			<div th:case="'script'" th:remove="tag"> 
+
+				<div th:replace="~{ os/script :: pageContent }"></div>
+			</div>
+			<div th:case="'logSearch'" th:remove="tag">
+				<div th:replace="~{ os/search :: pageContent }"></div>
+			</div>
+			<div th:case="'sync'" th:remove="tag">
+				<div th:replace="~{ os/sync :: pageContent }"></div>
+			</div>
+			<div th:case="'upload'" th:remove="tag">
+				<div th:replace="~{ os/upload :: pageContent }"></div>
+			</div>
+			<div th:case="'delete'" th:remove="tag">
+				<div th:replace="~{ os/delete :: pageContent }"></div>
+			</div>
+		</div>
+
+
+
+
+		<div id="resultsContainer" class="commandSection" style="display: inline-block">
+			<div class="progress">
+				<div class="bar"></div>
+				<div class="percent">0%</div>
+
+				<a id="cancelButton" class="simple" href="#cancel" title="Cancel in progress command">
+					Cancel<img class="butImage" src="../images/16x16/process-stop.png">
+				</a>
+
+			</div>
+
+			<a id="outputButton" class="simple" href="clear" title="Excessive output will be truncated in view below">
+				Show Full Output<img class="butImage" src="../images/16x16/os.png">
+			</a>
+			
+			<label>
+				<input id="wrapTextLines" type="checkbox" style="margin-left: 3em; margin-right: 0" />
+				Wrap lines
+			</label>
+			<textarea id="resultsTextArea" name="results" readonly style="width: 100%; height: 14em; margin: 1em; padding: 0.5em;"></textarea>
+
+			<table id="resultsTable" class="simple fixed">
+				<thead>
+
+					<tr>
+						<th class="hostColumn">Host</th>
+						<th class="outputColumn">Command Output</th>
+					</tr>
+				</thead>
+
+				<tbody id="resultsTableBody">
+				</tbody>
+			</table>
+		</div>
+
+
+
+
+
+	</body>
+
+</html>

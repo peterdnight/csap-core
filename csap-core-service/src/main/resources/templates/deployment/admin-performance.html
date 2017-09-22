@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+	<head><title>fragment</title></head>
+	<body th:fragment="pageContent" th:remove="tag">
+
+		<div id="performanceContainer">
+			<div id="osLearnMore" class="info" style="display: none" >
+
+
+				Learn more about CSAP Packages at 
+				<a class="simple" href="https://github.com/csap-platform/csap-core/wiki#updateRefCSAP+Packages">CSAP Reference guide</a>
+
+				<div class="quote">
+					CSAP enables change management practices consistent with best practices. Adhoc installation of software, or related configuration files , is strongly discouraged.
+					Industry practice is to place any artifact under source control, and use of a package manager to install. 
+					CS-AP provides package management and deployment capability that leverages industry standard deployment via a maven repository,
+					with configuration files store in svn. Maven provides versioned wars files for java applications, and zips files for non-java. 
+					This might be complimented by other systems, such as http://puppetlabs.com/puppet/puppet-open-source.
+				</div>
+
+			</div>
+
+			<div id="osChart"  >
+
+
+				<button id="refreshStats" class="pushButton" href="#refreshTimes"
+						data-qtipRight="Click to view/refresh charts; charts will be refreshed 4 times">
+					<img class="" src="images/16x16/view-refresh.png">
+				</button>
+
+				<a id="osAnalytics" 
+				   th:if="${collectHost} == null"
+				   class="simple analytics" title="View Analytics for all hosts" href="#launchAnalytics">
+					Open OS Analytics <img src="images/16x16/x-office-spreadsheet.png">
+				</a>
+
+				<div id="serviceStats" data-qtipRight=""
+					 th:if="${collectHost} == null">
+					<table class="simple">
+						<thead>
+
+							<tr>
+								<th style="">OS Resources</th>
+								<th>Most<br/>Recent</th>
+								<th>24 Hour<br/> Average</th>
+								<th>7 Day<br/> Average</th>
+								<th class="limitsColumn">Alert Level</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr >
+								<td colspan="99">
+									<div class="loadingPanel">loading data</div>
+
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
+
+
+				</div>
+
+
+
+				<div id="appStats" data-qtipRight="">
+
+
+
+					<div class="appTitle">
+
+						<label title="Warnings displayed comparing current to average values" style="font-weight: normal">
+							Highlight: 
+							<select id="filterThreshold">
+								<option value="5">5%</option>
+								<option value="10">10%</option>
+								<option value="20" selected="selected">20%</option>
+								<option value="30">30%</option>
+								<option value="40">40%</option>
+								<option value="50">50%</option>
+							</select>
+						</label>
+
+						<label title="Values shown will be extrapolated to selected time interval" style="font-weight: normal">
+							Rate: 
+
+							<select id="rateSelect" >
+								<option value="default">Default (30s)</option>
+								<option value="perSecond">Per Second</option>
+								<option value="per30Second">Per 30 Second</option>
+								<option value="perMinute">Per Minute</option>
+								<option value="perHour">Per Hour</option>
+								<option value="perDay">Per Day</option>
+							</select>
+						</label>
+
+
+
+
+						<div id="analyticLinks">
+
+							<a id="jmxAnalyticsLaunch" class="simple jmxClassifier"
+							   data-qtipRight="Open multi-host analytics view of the standard Java metrics in the analytics portal." href="#jmx">
+								Java<img src="images/16x16/x-office-spreadsheet.png">
+							</a>
+
+							<label class="appMetricsButton"
+								   th:if="${serviceInstance.getPerformanceConfiguration()} != null"> 
+								<a id="applicationLaunch" class="simple" 
+								   data-qtipRight="Open multi-host analytics view of the application metrics in the analytics portal." href="#app">
+									App<img
+										src="images/16x16/x-office-spreadsheet.png">
+								</a>
+							</label>
+						</div>
+						<br/>
+					</div>
+
+
+					<table class="simple">
+						<thead>
+
+							<tr>
+								<th style="text-align: left"
+									data-qtipRight="Select Java or Application to view respective collections">
+									<label class="appMetricsLabel"
+										   
+										   > 
+										<input
+											class="appMetricsButton" type="radio" name="metricChoice"
+											value="app" checked="checked" />Application
+									</label> 
+									<br/>
+									<label class="jmxClassifier">
+										<input id="jmxMetricChoice"
+											   type="radio" name="metricChoice" value="java" />Java
+									</label>
+
+								</th>
+								<th data-qtipRight="The most recent number of collections to average" >
+									Most<br/>Recent<br/>
+									<select 
+										id="numAppSamples">
+										<option>1</option>
+										<option>5</option>
+										<option selected="selected">10</option>
+										<option>20</option>
+										<option>50</option>
+										<option>100</option>
+										<option>200</option>
+									</select>
+
+
+								</th>
+								<th>Average: <br/> 24 Hour</th>
+								<th>
+									Average: <br/> 
+								
+									<input id="compareStartInput"
+										   data-qtipRight="Modify 7 day Average end date; default is the last seven days"
+										   type="text"  placeholder="Last 7 days"
+										   class="datepicker"/>
+								</th>
+								<th class="limitsColumn">Alert Level</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr>
+								<td colspan="99">
+									<div class="loadingPanel">
+										Retrieving current, <br/>24 hour, and 7 day
+										resource summaries
+									</div>
+									<div class="info" style="display: none; font-size: 10pt; margin-top: 2em;padding:1em;" >
+
+										<div class="infoNews"> <a class="simple" target="_blank" href="https://github.com/csap-platform/csap-core/wiki/blog">View Latest CSAP News</a>
+										</div>
+
+										<div id="eolSoftware" style="display: none">
+											<span style="background-color: yellow">End Of Life Software Detected - production SLA is impacted</span>
+											<div class="quote">
+												Using software no longer supported violates standard engineering practices for ensuring security
+												and stability:
+												<div class="eolItems">
+
+												</div>
+											</div>
+										</div>
+
+										<span style="background-color: yellow">No Application Metrics are configured - production SLA is impacted</span>
+
+										<div class="quote">
+											It is strongly recommended - and standard engineering practice - that every service exports at least a single data point indicative of processing activity. 
+											This is necessary in order to correlate work produced with resources consumed.
+											This can include anything from API invocation (counts and duration), active users, devices processed, etc.
+										</div>
+										CSAP can collect Application metrics from  any http or Java (JMX) endpoint(s).<br/>
+										To learn more, visit:  
+										<a class="simple" style="display: inline" href="https://github.com/csap-platform/csap-core/wiki#updateRefCustom+Metrics" target="_blank">
+											How To Configure</a>
+										<br/><br/>If using java, use the option above to select the standard java metrics (Heap, Threads, Tomcat Http, etc.).
+									</div>
+
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
+
+
+				</div>
+
+			</div>
+		</div>
+
+		<div id="graphDiv">
+
+			<div id="panelControls">
+				<a href="#close" class="simple" id="closePanel" title="Close Graph">
+					<img th:src="@{/images/delete.png}">
+				</a>
+				<a href="#close" class="simple" id="maxPanel" title="Maximize Graph">
+					<img id="togglePanel" th:src="@{/images/maxWindow.gif}">
+				</a>
+			</div>
+
+			<div id="panelInfo"><div>message updated in js</div></div>
+
+			<div id="graphConfiguration" style="display: none">
+				<div id="jmxCustomWhenClassSet" style="display: none"></div>
+				<select id="isStackHosts" style="margin-left: 0.5em;vertical-align: middle;">
+					<option value="-1" >1 per graph</option>
+					<option value="0" selected="selected" >Merge: series 1</option>
+				</select>
+			</div>
+
+			<div id="hostDisplay">
+				<input data-host="" class="instanceCheck" checked="checked"
+					   style="margin-right: 0.2em" type="checkbox"
+					   title="Select to include in operations" />
+			</div>
+
+			<div th:replace="/graphs/template :: pageContent"></div>
+
+			<div id="serviceContainer"  class="gpanel" ></div>
+			<div id="jmxContainer"      class="gpanel" ></div>
+			<div id="jmxCustomContainer" class="gpanel" ></div>
+
+		</div>
+	</body>
+</html>

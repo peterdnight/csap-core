@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<head th:fragment="pageContent" th:remove="tag" >
+
+		<title th:inline="text"> [[  ${ lifecycle + ":" + serviceInstance.getServiceName() }   ]]</title>
+
+		<script th:replace="~{ csap/fragments/libsAndStyles :: pageContent }"></script>
+
+		<script th:replace="csap/fragments/jqplot-includes :: pageContent"></script>
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/commonJQ.js')} }"></script>
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/csapUtils/CsapUser.js')} }"></script>
+
+
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/csapLibs/qtip/jquery.qtip.min.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/qtip/jquery.qtip.min.js')} }"></script>
+
+
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/csapLibs/jquery.contextMenu.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/jquery.contextMenu.js')} }"></script>
+
+		<script th:inline="javaScript">
+
+			var servicesOnHostForward = [[ ${ servicesOnHost } ]];
+			var servicesOnHostReverse = [[ ${ servicesOnHost} ]];
+			servicesOnHostReverse.reverse();
+			var agentHostUrlPattern = [[${ agentHostUrlPattern }]];
+			var jvms = [[ ${ csapJava} ]] ;
+			var commandScreen = [[${T(org.csap.agent.input.http.ui.windows.HostPortal).COMMAND_SCREEN_URL}]];
+			var serviceFilter = [[${serviceInstance.getServiceName()}]];
+			var hostName = [[${param.hostName}]] [0];
+			var isScript = [[${serviceInstance.isScript()}]];
+			var isOs = [[${serviceInstance.isOs()}]];
+			var isTomcatEol = [[ ${!serviceInstance.isUpToDate() && serviceInstance.isTomcatPackaging() } ]];
+			var life = [[${lifecycle}]];
+			
+			
+			
+			var baseUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).BASE_URL}}]];
+			var serviceBaseUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).SERVICE_URL}}]];
+			var serviceEditUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).EDIT_URL}}]]
+					+ '/serviceDialog?serviceName=' + serviceFilter + "&hostName=" + hostName;
+			var serviceDefUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).DEFINITION_URL}}]] + '/service';
+			var deployProgressUrl = "service/query/deployProgress";
+			var analyticsUrl = [[${analyticsUrl}]]
+			var reportUrl = "service/report";
+			
+			
+			var appId = [[${ eventUser }]];
+			var releasePackage = [[${param.releasePackage}]]  [0];
+			console.log("releasePackage: " + releasePackage);
+			var selectedProject = [[${param.releasePackage}]]  [0];
+			
+			var _graphReleasePackage = [[ ${ graphReleasePackage }  ]] ;
+			var isDesktop = [[${csapApp.isRunningOnDesktop()}]] ;
+			if ( isDesktop ) {
+				appId = "csapeng.gen";
+				_graphReleasePackage = "CSAP Engineering";
+			}
+
+			var eventApiUrl = [[${eventApiUrl}]];
+			var svcUser = [[${serviceInstance.getUser()}]];
+	
+			var serverType = [[ ${ serviceInstance.getServerType() } ]];
+			var httpdArray = [[ ${ testUrls } ]] ;
+			var customMetrics = [[     ${serviceInstance.getPerformanceConfiguration()       } ]];
+			// Initialize js variables
+			var isShowWarning = false;
+			if ([[${serviceInstance.isKillWarnings()}]]) isShowWarning = true;
+			var hasCommandResult = true;
+			if ([[${result} == null]]) hasCommandResult = false;
+			var isServiceParamPresent = false;
+			if ([[${param.serviceName} != null]]) isServiceParamPresent = true;
+
+			var lb = [[ ${lifeCycleSettings.getLbUrl()} ]];
+			var historyUrl = [[ ${lifeCycleSettings.getHistoryUiUrl()} ]];
+			var userid = [[ ${ userid } ]]
+					var deployTimeout = 10000; // default 10s
+			var serviceName = "null";
+			var serviceJobs = "null" ;
+			var serviceJobDefinition = "null" ;
+			if ([[ ${serviceInstance} != null ]]) {
+				serviceName = [[  ${ serviceInstance.getServiceName_Port() }   ]] ;
+				serviceShortName = [[  ${ serviceInstance.getServiceName() }   ]] ;
+				var servicePerformanceId = [[  ${ serviceInstance.getPerformanceId() }   ]] ;
+				serviceJobs = [[  ${ serviceInstance.getJobs() }   ]]
+				serviceJobDefinition = [[  ${ serviceInstance.getJobsDefinition() }   ]]
+				var currentInstance = "#" + hostName + "_" + serviceName;
+				var debugPort = [[  ${ serviceInstance.getDebugPort() }   ]]
+
+				var httpPort = [[  ${ serviceInstance.getPort() }   ]]
+				var jmxPort = [[  ${ serviceInstance.getJmxPort() }   ]]
+				var isSkipJmx = [[  ${ serviceInstance.isSkipJmxCollection() }   ]]
+
+				var serviceUrl = [[  ${ serviceInstance.getUrl() }   ]]
+				var serviceContext = [[  ${ serviceInstance.getContext() }   ]]
+				deployTimeout = [[  ${ serviceInstance.getDeployTimeOutSeconds() * 1000 }   ]]
+				var isOsOrWrapper = [[  ${ serviceInstance.isOs() || serviceInstance.isWrapper() }   ]]
+				
+			// alert (isOsOrWrapper) ;
+			}
+
+			var __dockerConfiguration = [[   ${ serviceDocker }   ]] ;
+			var resourceLimits = [[   ${ serviceLimits }   ]] ;
+			var jmxLabels = [[ ${  jmxLabels }  ]];
+			
+			// eventWrapp lifeCycleSettings.getEventMetricsUrl() lifeCycleSettings.getEventApiUrl()
+			
+			var uiSettings = {
+					baseUrl: [[@{ ${ T(org.csap.agent.CsapCoreService).BASE_URL}}]],
+					appId: [[${ eventUser }]],
+					appIdParam: [[${ eventUser }]],
+					life: [[ ${ lifecycle } ]],
+					appGraphParam: serviceShortName,
+					lifeParam: [[ ${ lifecycle } ]],
+					metricsDataUrl: serviceBaseUrl + "/metricsApi/" ,
+					eventApiUrl: serviceBaseUrl + "/eventApi" ,
+					projectParam : _graphReleasePackage
+			}
+			
+			if ( isDesktop ) {
+				// needed to resolve model properties
+				uiSettings.projectParam = "CSAP Desktop" ;
+			}
+			
+
+			if (  [[${csapApp.isDesktopHost()}]] ) {
+				uiSettings.isForceHostToLocalhost = true;
+			}
+			
+
+		</script>
+
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/editor/editor-dialog-service.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+		<link th:href="@{ ${csapApp.versionedUrl('/js/editor/editor.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/lineNums/jquery-linedtextarea.js')} }"></script>
+		<link th:href="@{ ${csapApp.versionedUrl('/js/csapLibs/lineNums/jquery-linedtextarea.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/deployment/serviceContext.js')} }"></script>
+
+
+		<script  th:attr="data-main=@{ ${csapApp.requiresUrl('/js/deployment/modules/service-portal-main.js')}   }" 
+		th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script>
+		<!--
+		<script  th:attr="data-main=@{/js/deployment/modules/admin-main}" th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script>
+		-->
+
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/deployment/admin.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+	</head>

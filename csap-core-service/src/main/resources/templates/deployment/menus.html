@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<body th:fragment="pageContent" th:remove="tag">
+
+		<span style="float: right; margin-right: 1em">
+			<a id="logout" class="simple" th:href="@{/logout}"><img class="butImage" th:src="@{/images/16x16/system-log-out.png}"></a>
+		</span>
+		
+		<select id="help" >
+			<option value="default">Help</option>
+			<option th:each="toolEntry : ${ csapApp.helpMenuMap }" 
+
+					th:value="@{ ${toolEntry.value} }"
+					th:text="${ toolEntry.key }"></option>
+		</select>
+		
+		<select id="tools" >
+			<option value="default">Tools</option>
+			<option th:value="@{/os/showRoles}">User Roles</option>
+			<option th:value="@{/health}">Service Health Reports</option>
+			<option th:value="@{/file/propertyEncoder}">Property Encrypter</option>
+			<option th:value="@{/edit/showSummary}">Capability Summary</option>
+			<option th:value="${lifeCycleSettings.HistoryUiUrl}">History Browser</option>
+			<option th:value="${lifeCycleSettings.AnalyticsUiUrl}">Analytics Browser</option>
+			<option th:value="@{/test}">Test Page</option>
+			<option th:value="@{/api/host/emanStatus?alertLevel=1.0}">HealthCheck - EMAN</option>
+			<option th:value="@{/api/application/health}">HealthCheck - API</option>
+			<option th:value="@{/service/genHttpdWorkers}">Generate Http LoadBalance</option>
+		</select>
+		
+		<select id="devOps" >
+			<option value="default">Dev Ops</option>
+			<option th:each="toolEntry : ${ @csapInformation.buildToolsMap() }" 
+
+					th:value="@{ ${toolEntry.value} }"
+					th:text="${ toolEntry.key }"></option>
+
+
+		</select>
+
+
+
+	</body>

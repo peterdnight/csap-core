@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>TODO supply a title</title>
+	</head>
+	<body th:fragment="pageContent" th:remove="tag" >
+
+		<div id="script" class="commandSection">
+
+			<form id="executeScriptForm" action="executeScript" method="post">
+
+				<input id="jobIdInput" type="hidden" name="jobId" value="" />
+				<input id="cancelInput" type="hidden" name="cancel" value="" />
+				User: <select id="executeUserid" name="chownUserid">
+					<option th:each="optionUser : ${osUsers}" 
+							th:selected="${ optionUser == csapUser }"
+							th:value="${ optionUser }"
+							th:text="${ optionUser }">will be replaced</option>
+
+				</select> 
+
+				<span id="hostButtonTarget"></span>
+				<button id="templateButton" class="promptButton" style="float: right;">
+					<img class="butImage" src="../images/16x16/internet-news-reader.png" style="top: 1px;">Script Templates...
+				</button>
+				<br/>
+				<button id="executeSubmitButton" class="pushButton">Execute Script</button>
+				Script Name:
+				<input id="scriptName" name="scriptName" th:value="${  userid + '_script.sh' }" style="width: 20em;" />
+
+				Time Out:
+				<input type="number" name="timeoutSeconds" style="width: 4em; margin-right: 0" value="30"
+					   title="Commands will be aborted if not completed in specified interval"
+					   />
+				seconds
+				<input style="font-size: 0.6em; padding:0; width: 1em; margin-left: 2em" th:if="${_csrf != null}"
+						th:name="${_csrf.parameterName}"
+						th:value="${_csrf.token}"/>
+
+				<textarea id="scriptText" name="contents" style="width: 100%; height: 14em;" spellcheck="false">[[ ${ contents } ]]</textarea>
+
+			</form>
+			
+			
+
+			<div th:replace="~{ os/command-templates :: pageContent }"></div>
+
+		</div>
+
+
+
+	</body>
+</html>

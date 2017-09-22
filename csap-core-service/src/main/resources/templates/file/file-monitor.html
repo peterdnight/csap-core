@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+	<head >
+
+		<title th:inline="text">[[ ${shortName} ]]</title>
+
+		<script th:replace="~{ csap/fragments/libsAndStyles :: pageContent }"></script>
+
+
+		<script th:src="@{/js/csapLibs/commonJQ.js}"></script>
+		<script th:src="@{/js/csapLibs/csapUtils/CsapUser.js}"></script>
+
+
+		<link th:href="@{/js/csapLibs/qtip/jquery.qtip.min.css}" rel="stylesheet"
+			  type="text/css" media="screen" />
+		<script th:src="@{/js/csapLibs/qtip/jquery.qtip.min.js}"></script>
+
+
+		<script th:inline="javascript">
+
+			var isAdmin = [[ ${ adminRole } ]];
+			var user = [[ ${ user } ]];
+			var serviceName = [[ ${ serviceName }  ]];
+			var folder = [[ ${ fromFolder }  ]];
+			var hostName = [[ ${ host }  ]];
+			var commandScreen = [[ @{ ${T(org.csap.agent.CsapCoreService).OS_URL + '/command'}} ]]; ;
+			var serviceFullName = [[ ${ serviceName }  ]];
+			var folder = [[ ${ fromFolder }  ]];
+			if (serviceName != null) {
+				serviceName = serviceName.substr(0, serviceName.indexOf("_"));
+				//document.title = serviceName + ":" + document.title;
+			} else {
+				//document.title = "File" + ":" + document.title;
+			}
+
+		</script>
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/file/file-monitor.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+		
+		<script  th:attr="data-main=@{ ${csapApp.requiresUrl('/js/file/modules/file-monitor.js')}   }" 
+			th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script>
+
+	</head>
+
+
+
+	<body >
+
+		<header id="header" style="text-align: left; padding-left: 8em; margin-bottom:0em; clear: both">
+			File Monitor: 
+			<select id="logFileSelect">
+				<option 
+					th:each="logEntry : ${ logFileMap }"
+					th:value="${logEntry.value}" 
+					th:selected="${ logEntry.key.endsWith(initialLogFileToShow) }" 
+					th:text="${logEntry.key}"  >
+				</option>
+			</select>
+
+			<span th:if='${serviceName} != null and ${!serviceName.equals("null") } '>
+				Service: 
+				<div class="noteHighlight">[[ ${ serviceName }  ]]</div>
+			</span>
+			Host: 
+			<div class="noteHighlight" >[[ ${ host }  ]]</div>	
+
+
+			<span id="fileSize"></span>
+		</header>
+
+
+		<div class="error"
+			 th:if="${initialLogFileToShow == ''}" >Warning: no matching files found. Verify that location for service exists:<br>
+				Service: [[ ${ serviceName }  ]] <br/>
+				folder: [[ ${ fromFolder }  ]] <br/>
+		</div>
+
+		<div class="resourceConfig">
+
+
+			<a  id="downloadButton" class="simple" href="#downloadFile" 
+				title="Download selected file"  >
+				<img class="butImage" src="../images/16x16/download.png">Download</a>
+
+			<a  id="clearButton" class="simple" href="#clear" 
+				title="Clear Output shown below"  >
+				<img class="butImage" src="../images/16x16/document-new.png"/>clear</a>
+
+			<a  id="searchButton" class="simple" href="#search" 
+				title="Search 1 or more Hosts for content. If text is selected, it will be passed to search."  >
+				<img class="butImage" src="../images/16x16/system-search.png">Search</a>
+
+			<a  id="grepButton" class="simple" href="#script" 
+				title="Use linux commands to search for items in file"  >
+				<img class="butImage" src="../images/16x16/os.png"/>Script
+			</a>
+
+			<a  id="tailButton" class="simple" href="#filter tail"
+				title="Linux tail command piped to grep to filter results"  >
+				<img class="butImage" src="../images/16x16/system-search.png">Filter</a>
+
+
+			<div style="float: right; margin-right: 1em">
+				<input id="highlightText" 
+					   title="Enter text to be highlighted in logs (hit Enter key to refresh current buffer)."
+					   placeHolder="Log levels" /> 
+
+				<label id="dockerControls" class="radio" for="checkedButton"
+						title="Maximum docker lines to retrieve per request" >
+					
+					Docker Lines: <input id="dockerLineCount" class="custom" value="500"> 
+				</label>
+				
+				
+				<label class="radio" for="checkedButton"
+					   title="Scroll Automatically">
+					<input id="scrollButton" class="custom" type="checkbox"
+						   checked="checked"> AutoScroll 
+				</label>
+
+				<label class="radio" for="wrapButton"
+					   title="Lines exceeding browser width will be wrapped. Uncheck for a horizontal scroll.">
+					<input
+						id="wrapButton" class="custom" type="checkbox" checked="checked"/>
+					WrapLines
+				</label>
+
+
+				<label>Refresh:
+					<select id="refreshSelect"
+							title="Affects browser and server resource consumption">
+						<option>2</option>
+						<option>5</option>
+						<option>10</option>
+						<option>30</option>
+						<option>60</option>
+						<option value="9999999">Never</option>
+					</select>
+				</label>
+
+				<label>Buffer Size:
+					<select id="bufferSelect"
+							title="Affects browser resource consumption and performance">
+						<option value="50">50kb</option>
+						<option value="100">100kb</option>
+						<option value="200">200kb</option>
+						<option value="500">500kb</option>
+						<option value="1024">1Mb</option>
+						<option value="5120">5Mb</option>
+						<option value="10240">10Mb</option>
+						<option value="99999"
+								title="Warning - this could cause your browser to crash">Full
+							File</option>
+					</select>
+				</label>
+			</div>
+
+
+
+		</div>
+
+		<div id="monitorDiv" tabindex="1">
+		</div>
+
+
+	</body>
+</html>

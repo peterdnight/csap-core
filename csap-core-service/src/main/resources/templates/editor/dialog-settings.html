@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<head>
+
+		<title th:inline="text">Settings Dialog</title>
+
+		<script th:replace="~{ csap/fragments/libsAndStyles :: pageContent }"></script>
+
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/editor/dialog-settings.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/editor/editor.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+
+		<link th:href="@{/js/csapLibs/qtip/jquery.qtip.min.css}" rel="stylesheet"
+			  type="text/css" media="screen" />
+		<script th:src="@{/js/csapLibs/qtip/jquery.qtip.min.js}"></script>
+
+		<script th:src="@{/js/csapLibs/lineNums/jquery-linedtextarea.js}"></script>
+		<link th:href="@{/js/csapLibs/lineNums/jquery-linedtextarea.css}" rel="stylesheet"
+			  type="text/css" media="screen" />
+
+
+
+
+		<script th:inline="javascript">
+			var baseUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).BASE_URL}}]];
+			var settingsEditUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).EDIT_URL}}]] + '/settingsDialog';
+			var settingsDefUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).DEFINITION_URL}}]] + '/settings';
+
+		</script>
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/commonJQ.js')} }"></script>
+
+
+		<script  th:attr="data-main=@{/js/editor/modules/settings-test}" th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script>
+
+	</head>
+
+	<body th:inline="text">
+
+
+		<header th:replace="csap/fragments/page :: header"></header>
+
+		<button  id="showButton" class="pushButton">Show Settings Dialog</button>
+
+
+
+		<section id='dialogContents' class='editDialog'>
+
+			<div class="settingsLoading loadingLargePanel">
+				Loading <br/>Settings
+			</div>
+
+			<div id="settingsTemplates" style="display: none">
+				<select class="services">
+					<option>Will be updated</option>
+				</select>
+				<select class="trendType">
+					<option value="jmxCustom/detail">App</option>
+					<option value="jmx/detail">Java</option>
+					<option value="vm">Host</option>
+					<option value="service/detail">OS</option>
+					<option value="custom/core" title="attribute: coresUsed">CPU</option>
+					<option value="custom/logRotate" title="attribute: MeanSeconds,  log Rotation in seconds">Log</option>
+					<option value="userid" title="attribute: totActivity, csap user activity count">User</option>
+				</select>
+				<select class="realtimeType">
+					<option value="jmxCustom">App</option>
+					<option value="jmxCommon">Java</option>
+					<option value="vm">Host</option>
+					<option value="process">OS</option>
+				</select>
+
+
+			</div>
+
+
+			<div id='dialogResult' class='editDialog' >
+
+
+
+				<div >
+					Updated: <div class="noteAlt"></div>. 
+					<br/><br/> Changes will be loaded once they have been applied or checked in.
+				</div>
+
+			</div>
+
+
+
+			<div id="dialogOpsContainer">
+				<label > 
+					<span> Environment:</span>
+					<select
+						id="dialogLifeSelect"
+						class="dialogLifeSelect"
+						style="width: 14em">
+						<option
+							th:each="lifeEntry : ${ csapApp.getActiveModel().getLifeCycleToGroupMap() }"
+							th:selected="${lifeEntry.key == lifeToEdit }"
+							th:value="${lifeEntry.key}"
+							th:text="${lifeEntry.key}">Will be updated with dev/stage/lt/...</option>
+					</select>
+				</label> 
+
+				<button class="pushButton notifyButton" title="Send changes to infrastructure admin for review and provisioning.">
+					Request
+				</button>
+				<div th:if="${ ( infraRole == null) }" class="news" title="Your userid is not a member of infra admins, so request will be sent for review">
+					Review Required
+				</div>
+
+				<button 
+					th:if="${ ( infraRole != null) }"
+					class="pushButton updateDefButton">
+					Update
+				</button>
+
+				<!--
+				<button id="rename" class="pushButton renameDefButton">
+					Rename
+				</button>
+
+				<button class="pushButton deleteDefButton">
+					Delete
+				</button>
+				-->
+
+				<label id="validateOnly" title="Changes will be validated, but not updated">
+					Validate Only:
+					<input id="validateOnlyCheckbox" type="checkbox" />
+				</label>
+			</div>
+
+			<div id='settingsEditor'>
+				<ul>
+					<li><a href="#general">General</a></li>
+					<li title="Lifecycle references are used in service definitions to avoid multiple locations for configuration items such as passwords, etc">
+						<a href="#references">References</a></li>
+					<li title="Defines the global alert defaults that can be selectively over-written on a per service basis">
+						<a href="#alerts">Alerts</a></li>
+					<li title="Configuration of the CSAP performance collections">
+						<a href="#collection">Data Collection</a></li>
+					<li title="Application real time performance meters are displayed on the Application Portal landing page.">
+						<a href="#realtime">Real Time Performance</a></li>
+					<li title="Application performance trends are displayed on the Application Portal landing page. ">
+						<a href="#trending">Trends</a></li>
+					<li title="Configuration of publication events to monitoring systems">
+						<a href="#publication">Health Integration</a></li>
+					<li title="Access to definition in json text editor">
+						<a href="#jsonEditor">Json Editor</a></li>
+				</ul>
+
+
+				<div id="jsonEditor" class="group serviceDef">
+					<textarea id="serviceJson" name="serviceJson" spellcheck=false data-path="ROOT">Loading</textarea> 
+					<br/>
+				</div>
+
+				<div id="general"  class="group">
+					<br/><label class="lastModified" ><span>Last Modified By:</span> <div class="noteAlt" >----</div> </label> <br/>
+
+					<div class="greenSection">
+						<div class="heading">
+							CSAP Management Agent Performance: review thoroughly prior to changing.
+						</div>
+						<label class="" title="The number of concurrent threads used when running cluster wide commands">
+							<span>Threads:</span> <input class="smallJson" placeholder="5" data-path="agent.numberWorkerThreads" />
+						</label>
+						<label class="" title="The maximum time to wait for query response before marking host agent down">
+							<span>Time out (Ms):</span> <input class="smallJson" placeholder="5000" data-path="agent.adminToAgentTimeoutInMs" />
+						</label>
+						<label class="" title="The interval in minutes that logrotate is executed. Each service has its own policy (logrotate.config) to determine if/how logs are rotated">
+							<span>Log Rotation (Minutes):</span> <input class="smallJson" placeholder="60" data-path="agent.logRotationMinutes" />
+						</label>
+						<label class="" title="Used to filter devices when reporting reads/writes on host dashboard">
+							<span>iostat filter:</span> <input class="smallJson" placeholder="^sd.*" data-path="agent.iostatFilter" />
+						</label>
+
+						<div class="heading">
+							Infrastructure health tests: More frequent testing will cause load, but increase visibility to infrastructure
+						</div>
+						<label class="" title="Frequency of test in minutes">
+							<span>CPU Interval(m):</span> <input class="smallJson" placeholder="60" data-path="agent.infraTests.cpuIntervalMinutes" />
+						</label>
+						<label class="" title="The number of loops to perform in millions. 1 million takes ~6 seconds">
+							<span>Loops(millions):</span> <input class="smallJson" placeholder="1" data-path="agent.infraTests.cpuLoopsMillions" />
+						</label>
+						<label class="" title="Frequency of test in minutes">
+							<span>Disk Interval(m):</span> <input class="smallJson" placeholder="60" data-path="agent.infraTests.diskIntervalMinutes" />
+						</label>
+						<label class="" title="The number of MB to write then delete in the default CSAP disk.">
+							<span>Write(MB):</span> <input class="smallJson" placeholder="100" data-path="agent.infraTests.diskWriteMb" />
+						</label>
+
+
+						<div class="heading">
+							CSAP Management Agent Access Controls
+						</div>
+
+						<label class="" title="Used to transfer files and service requests">
+							<span >User:</span> <input style="width: 10em" placeholder="apiUser" data-path="agent.apiUser" />
+						</label>
+
+						<label class="" title="Used to transfer files and service requests. Default is derived from Application.json and">
+							<span style="min-width: 3em">Password:</span> <input  style="width: 10em" placeholder="Default Encrypted" data-path="agent.apiPass" />
+						</label>
+						<label class="" title="Uses a local token to validate API calls. If false, configured security will be used - ensure ROLES assigned includes admin.">
+							<span style="min-width: 3em">Local Auth:</span> <input class="smallJson" placeholder="true" data-path="agent.apiLocal" />
+						</label>
+
+					</div>
+					<div class="blueSection">
+						<div class="heading">
+							Applications are typically fronted with a network configuration to enable high availability,
+							and SSSL offload.
+						</div>
+
+
+						<label class=""><span>Load Balancer:</span> <input class="medium" data-path="lbUrl" /></label>
+						<br/>
+						<label class=""><span>Auto LB Reloads:</span> <input class="smallJson" placeholder="yes" data-path="autoRestartHttpdOnClusterReload" /></label>
+						<label class=""><span>Port Start:</span> <input class="smallJson" placeholder="yes" data-path="portRange.start" /></label>
+						<label class=""><span>Port End</span> <input class="smallJson" placeholder="yes" data-path="portRange.end" /></label>
+
+
+						<div class="heading">
+							Service Integrations 
+						</div>
+						<label class=""><span>Monitoring Url:</span> <input class="medium" data-path="monitoringUrl" /></label>
+						<label class=""><span>Default Maven</span> <input class="medium" data-path="mavenCommand" /></label>
+
+						<div class="heading">
+							Application Portal Defaults for Landing Page
+						</div>
+						<label class=""><span>Default Cluster:</span> <input class="smallJson" data-path="defaultUiDisplayCluster" /></label>
+						<label class=""><span>Default Version:</span> <input class="smallJson" data-path="defaultUiDisplayVersion" /></label>
+
+
+						<div class="heading">
+							Application Disks allow application team to export a Filesystem that is separately ACLed enabling SME's access
+						</div>
+						<label class="" title="Collection of global resource usage, such as mpstat, memory, disk">
+							<span>Disks: </span> <input class="wide" placeholder="none" data-json="true" data-path="file-browser" />
+						</label>
+
+					</div>
+
+					<div class="heading">
+						News Items appear on CSAP Landing Page. Note that empty lines will not be displayed on the landing page
+					</div>
+					<textarea id="newItems" data-convert_lines="true" data-adjust="20" data-fit="true" spellcheck=false data-json="true" data-path="newsItems" ></textarea>
+
+
+
+
+				</div>
+
+
+
+
+				<div id="references" class="group textGroup">
+					<div class="heading">
+						Life Cycle references are shared across ALL services in the selected lifecycle. Services can reference
+						by including : "$lifeCycleRef:variableName" in the service environment variables value
+					</div>
+					<textarea id="refsText"  spellcheck=false data-path="references" ></textarea> 
+
+				</div>
+
+
+
+				<div id="alerts"  class="group">
+
+					<div class="greenSection">
+						<div class="heading">
+							Host Defaults  
+						</div>
+						<label class="alerts" title="">
+							<span>Disk Full(%):</span> <input class="" data-path="monitorDefaults.maxDiskPercent" />
+						</label>
+						<label class="" title="Comma separated list of disks that will not trigger alerts. Regex supports">
+							<span>Disks Ignored:</span> <input class="medium" placeholder="eg. /auto/usrpattern.*" data-path="monitorDefaults.maxDiskPercentIgnorePatterns" />
+						</label>
+						<br/>
+						<label class="alerts" title="">
+							<span>Cpu (%):</span> <input class="" placeholder="80" data-path="monitorDefaults.maxHostCpu" />
+						</label>
+						<label class="alerts" title="">
+							<span>Cpu Load:</span> <input class="" placeholder="4" data-path="monitorDefaults.maxHostCpuLoad" />
+						</label>
+						<label class="alerts" title="">
+							<span>Cpu IO Wait:</span> <input class="" placeholder="10" data-path="monitorDefaults.maxHostCpuIoWait" />
+						</label>
+						<label class="alerts" title="">
+							<span>Minimum Memory(MB):</span> <input class="" placeholder="500" data-path="monitorDefaults.minFreeMemoryMb" />
+						</label>
+
+					</div>
+
+					<div class="redSection">
+						<div class="heading">
+							The number of samples to collect and average when issuing alerts. Increasing will avoid intermittent alerts, but note they will still be recorded in csap health reports.  
+						</div>
+						<label class="alerts" title="The number of samples to collect and average when issuing alerts">
+							<span>Limit Sample Count: </span> <input class="" placeholder="5" data-path="monitorDefaults.limitSamples" />
+						</label>
+
+
+
+						<div class="heading">
+							CSAP Host Saver: Runaway resource consumption by services can cause hosts to become non-response or impact SLA.
+							If current threads, disk, sockets, or files for a service exceeds the maximum*threshold - the service will be killed.
+						</div>
+						<label class="alerts" title="">
+							<span>Auto Stop Threshold:</span> <input class="" placeholder="2.0" data-path="monitorDefaults.autoStopServiceThreshold" />
+						</label>
+					</div>
+
+					<div class="blueSection">
+
+
+						<div class="heading">
+							Service Threshold Defaults - the global defaults can selectively be overridden on a per service basis
+						</div>
+						<label class="alerts" title="">
+							<span>Cpu (%):</span> <input class="" data-path="monitorDefaults.max_topCpu" />
+						</label>
+						<label class="alerts" title="">
+							<span>Thread Count:</span> <input class="" data-path="monitorDefaults.max_threadCount" />
+						</label>
+						<label class="alerts" title="Default unit is bytes. Add m for MB or g for GB">
+							<span>RSS Memory:</span> <input class="" data-path="monitorDefaults.max_rssMemory" />
+						</label>
+						<label class="alerts" title="">
+							<span>Disk Used (MB):</span> <input class="" data-path="monitorDefaults.max_diskUtil" />
+						</label>
+						<label class="alerts" title="">
+							<span>File Count:</span> <input class="" data-path="monitorDefaults.max_fileCount" />
+						</label>
+						<label class="alerts" title="">
+							<span>Socket Count:</span> <input class="" data-path="monitorDefaults.max_socketCount" />
+						</label>
+						<label class="alerts" title="">
+							<span>Tomcat Connections:</span> <input class="" data-path="monitorDefaults.max_tomcatConnections" />
+						</label>
+
+
+
+						<label class="alerts" title="">
+							<span>Heartbeat Enabled:</span> <input class="" data-path="monitorDefaults.jvm_jmxHeartbeat" />
+						</label>
+						<label class="alerts" title="">
+							<span>Ignore Stopped:</span> <input class="" data-path="monitorDefaults.jvm_jmxHeartbeatIgnoreStopped" />
+						</label>
+
+					</div>
+
+				</div>
+
+				<div id="collection"  class="group">
+
+
+					<div class="greenSection">
+						<div class="heading">
+							CSAP agent running on every host performs collection of key OS (linux APIs) and Application (JMX or HTTP)
+							metrics
+						</div>
+						<label class="" title="Setting the max time prevents non-responsive/slow processes causing irregulage collection intervals">
+							<span>Max Collection (ms)</span> <input placeholder="2000" class="smallJson" data-path="agent.maxJmxCollectionMs" />
+						</label>
+
+						<label class="" title="Collecting disk usage can cause significant resource consumption.">
+							<span>Disk Collection (minutes):</span> <input placeholder="5" class="smallJson" data-path="agent.duIntervalMins" />
+						</label>
+
+						<label class="" title="Collecting open files can cause significant resource consumption.">
+							<span>Open Files (minutes):</span> <input placeholder="2" class="smallJson" data-path="agent.lsofIntervalMins" />
+						</label>
+
+
+						<div class="heading">
+							Collection Intervals (in seconds)
+						</div>
+						<label class="" title="Collection of global resource usage, such as mpstat, memory, disk">
+							<span>OS Shared:</span> <input class="" placeholder="os default" data-json="true" data-path="metricsCollectionInSeconds.resource" />
+						</label>
+
+						<label class="" title="Collection of process level statistics">
+							<span>OS Process:</span> <input class="" placeholder="os default" data-json="true" data-path="metricsCollectionInSeconds.service" />
+						</label>
+
+						<label class="" title="Application metrics collected by http or jmx">
+							<span>Application:</span> <input class="" placeholder="os default" data-json="true" data-path="metricsCollectionInSeconds.jmx" />
+						</label>
+
+
+
+						<div class="heading">
+							Collections cache size: Agent in memory cache is used to retain performance data and is reflected in the CSAP real time graphs shown on Host Dashboard.
+						</div>
+
+						<label class="" title="Number of collections stored in Java Heap.">
+							<span>Collections cache size:</span> <input placeholder="600" class="smallJson" data-path="metricsCollectionInSeconds.inMemoryCacheSize" />
+						</label>
+
+					</div>
+
+					<div class="redSection">
+
+						<div class="heading">
+							Collections - Low memory trigger: initiates listing of all processes and sends /csap/system/memory/low event
+						</div>
+
+						<label class="" title="Collecting open files can cause significant resource consumption.">
+							<span>When Memory less than (MB):</span> <input placeholder="2" class="smallJson" data-path="metricsCollectionInSeconds.processDumps.lowMemoryInMb" />
+						</label>
+
+						<label class="" title="Setting the max time prevents non-responsive/slow processes causing irregulage collection intervals">
+							<span>Interval to collect from:</span> <input placeholder="2000" class="smallJson" data-path="metricsCollectionInSeconds.processDumps.resouceInterval" />
+						</label>
+
+						<label class="" title="Collecting disk usage can cause significant resource consumption.">
+							<span>Max Captures Per Interval:</span> <input placeholder="5" class="smallJson" data-path="metricsCollectionInSeconds.processDumps.maxInInterval" />
+
+						</label>
+
+					</div>
+
+					<div class="blueSection">
+
+						<div class="heading">
+							Collections Publication Intervals (in hours). Note: Shorter intervals will increase load on trending queries.
+						</div>
+						<label class="" title="Collection of global resource usage, such as mpstat, memory, disk">
+							<input class="wide" placeholder='{"30seconds": "0.5", "300seconds": "24", "3600seconds": "24"}' data-json="true" data-path="metricsCollectionInSeconds.uploadIntervalsInHours" />
+						</label>
+
+						<!--<label class="" title="Collection of global resource usage, such as mpstat, memory, disk">
+							<span>Process Audit:</span> <input class="wide" placeholder="os default" data-json="true" data-path="metricsCollectionInSeconds.processDumps" />
+						</label> -->
+
+						<br/><br/>
+						<div class="heading">
+							Event publication to CSAP Analytics Portal includes both user and metric events.
+						</div>
+						<label class="" title="Publication url, to disable, enter: no">
+							<span>Publish Url:</span> <input class="wide" placeholder="2000" data-path="csapData.eventUrl" />
+						</label>
+						<label class="" title="">
+							<span>Publish User:</span> <input placeholder="2000" data-path="csapData.user" />
+						</label>
+						<label class="" title="">
+							<span>Publish Pass:</span> <input placeholder="2000" data-path="csapData.pass" />
+						</label>
+						<label class="" title="">
+							<span>API Url:</span> <input class="wide" placeholder="2000" data-path="csapData.eventApiUrl" />
+						</label>
+						<label class="" title="">
+							<span>Metrics Url:</span> <input class="wide" placeholder="2000" data-path="csapData.eventMetricsUrl" />
+						</label>
+						<label class="" title="">
+							<span>Analytics Portal:</span> <input class="wide" placeholder="2000" data-path="csapData.analyticsUiUrl" />
+						</label>
+						<label class="" title="">
+							<span>History Portal:</span> <input class="wide" placeholder="2000" data-path="csapData.historyUiUrl" />
+						</label>
+
+					</div>
+
+
+				</div>
+
+				<div id="publication" class="group textGroup">
+					<div class="heading">
+						CSAP may optional publish health information to external monitoring systems. CSAP analytics and nagios
+						are both supported.
+					</div>
+					<textarea id="metricsPublication"  spellcheck=false data-path="metricsPublication" ></textarea> 
+
+				</div>
+
+				<div id="realtime" class="group textGroup">
+
+					<div class="heading" style="margin-top: 0">
+						In-line edits and ordering are supported by clicking on links below, alternately:
+
+						<button title="toggle json editor" 
+								class="pushButton toggleRealTimeButton">Json Editor</button>
+
+						<span title="attribute selections are populated fromt the first package found. If the same service is in multiple packages, optionSource can be used to specify the package name">note: optionSource</span>
+
+					</div>
+
+
+					<div class="realTimeViewContainer">
+						<table class="simple realTimeTable" >
+							<thead>
+
+								<tr>
+									<th title="*optional include ms">
+										Landing Page Label</th>
+									<th>Service</th>
+									<th>Attribute</th>
+									<th>Type</th>
+									<th title="green,red,yellow settings on meter">
+										Intervals</th>
+									<th title="reverse color direction on meter">
+										Rev</th>
+									<th title="vmCount may be used to average out value">Divide</th>
+									<th>Multiply</th>
+
+								</tr>
+							</thead>
+
+							<tbody></tbody>
+
+						</table>
+					</div>
+
+					<div class="realTimeViewContainer" style="display: none">
+						<textarea  spellcheck=false data-path="metricsCollectionInSeconds.realTimeMeters" ></textarea> 
+					</div>
+
+				</div>
+
+				<div id="trending" class="group textGroup">
+
+					<div class="heading" style="margin-top: 0">
+						In-line edits and ordering are supported by clicking on links below, alternately: 
+						<button title="toggle json editor" 
+								class="pushButton toggleTrendingButton">Json Editor</button>
+					</div>
+
+
+					<div class="trendingViewContainer">
+						<table class="simple trendingTable" >
+							<thead>
+
+								<tr>
+									<th title="*optional include ms">
+										Landing Page Label</th>
+									<th>Service</th>
+									<th>Attribute</th>
+									<th>Type</th>
+									<th title="All Vm Totals">
+										Total</th>
+									<th>Divide</th>
+
+								</tr>
+							</thead>
+
+							<tbody></tbody>
+
+						</table>
+					</div>
+
+					<div class="trendingViewContainer" style="display: none">
+						<textarea  spellcheck=false data-path="metricsCollectionInSeconds.trending" ></textarea> 
+					</div>
+
+				</div>
+
+
+
+
+			</div>
+
+		</section>
+
+
+
+
+
+		<footer th:replace="csap/fragments/page :: footer"></footer>
+	</body>
+
+</html>

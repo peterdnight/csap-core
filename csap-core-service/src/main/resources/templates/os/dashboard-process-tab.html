@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>process tab fragment</title>
+	</head>
+
+	<body th:fragment="pageContent" th:remove="tag" >
+		<div id="processTab" style="margin-right: 2em;">
+			<div class="quote">Related:
+				<a title="Processes: sorted by cpu" target="_blank" class="simple" 
+				   th:href="@{ getTop(filter=${ agentUser } ) }">processes: top</a>
+				<a title="Processes: Shown as allocation tree" target="_blank" class="simple" href="getPsTree">process: tree</a>
+				<a title="Processes: sorted by memory" target="_blank" class="simple" href="showProcesses?csapFilter=false&sortByNice=false&">process: memory</a>
+				<a title="Processes: filtered by csap ,sorted by memory" target="_blank" class="simple" href="showProcesses?csapFilter=true&sortByNice=false&">csap: memory</a>
+				<a title="Processes: sorted by priority" target="_blank" class="simple" href="showProcesses?csapFilter=false&sortByNice=true&">process: priority</a>
+				<a title="Processes: filtered by csap ,sorted by priority" target="_blank" class="simple" href="showProcesses?csapFilter=true&sortByNice=true&">csap: priority</a>
+				<a title="Processes: launch linux pidstat" target="_blank" class="simple" href="command?command=script&template=processDetails">pidstat</a> 
+				<label  id="processReloadTime"></label>
+			</div>
+
+
+			<div class="quote">Linux Process Status:
+
+				<label>
+					Filter:  
+					<input id="processFilter" placeholder="enter filter"/>
+
+					Show only CSAP processes: 
+					<input id="filterCsap" type="checkbox" name="filter" value="filter" checked="checked"/>
+
+				</label>
+				<label title="Note: Some processes use significant amounts of shared memory, and may be double counted. Oracle has been excluded.">
+					Memory(RSS): <span id="totalMem">total</span>GB
+				</label>
+				<label>
+					Interval: 
+					<select id="cpuIntervalId"
+							style="margin-left: 1em; margin-bottom: 0.5em; width: 5em"
+							onchange="refreshProcessTable();">
+						<option value="5">5s</option>
+						<option value="10" selected="selected">10s</option>
+						<option value="20">20s</option>
+						<option value="60">60s</option>
+						<option value="999">none</option>
+					</select>
+				</label>
+			</div>
+
+			<div  class="inlineDiv">
+				<!--  hack for IE in standards mode. It wants all content in table -->
+				<table id="processTable" class="bordered tablesorter  tablesorter-csapSummary">
+					<thead>
+						<tr>
+							<th class="osProcess">OS Process</th>
+							<th class="controls" style="width: 5em">Controls</th>
+							<th class="raw" style="width: 3em">Sockets<br/>(ss)</th>
+							<th style="width: 5em">ps cpu%<br/>(pidstat)</th>
+							<th style="width: 5em">top cpu%<br/>(top)</th>
+							<th style="width: 3em">Priority<br/>(nice)</th>
+							<th style="width: 4em">Threads<br/>(jstack)</th>
+							<th style="width: 4em" >Memory<br/>RSS(MB)</th>
+							<th style="width: 4em">Virtual<br/>GB</th>
+							<th class="raw" style="width: 3em">Files<br/>(/proc)</th>
+							<th class="raw" style="margin:0;padding:0">Key Params<br/>(All Params)</th>
+							<th style="width: 5em">DiskSpace Mb</th>
+							<th class="raw" style="width: 5em" title="15 second sample">Disk Read (Kb)</th>
+							<th class="raw" style="width: 5em" title="15 second sample">Disk Write (Kb)</th>
+						</tr>
+					</thead>
+					<tbody class="template" >
+						<tr>
+							<td></td>
+							<td class="controls"></td>
+							<td class="num raw"></td>
+							<td class="num"></td>
+							<td class="num"></td>
+							<td class="num"></td>
+							<td class="num"></td>
+							<td class="num"></td>
+							<td class="num"></td>
+							<td class="num raw"></td>
+							<td class="num raw"></td>
+							<td class="num"></td>
+
+							<td class="num raw"></td>
+							<td class="num raw"></td>
+						</tr>
+					</tbody>
+					<tbody id="loadRow"><tr ><td colspan="99">
+								<div class="loadingLargePanel">
+									Retrieving process data and<br/>
+									correlating OS resources
+								</div>
+							</td></tr>
+					</tbody>
+					<tbody class="content"></tbody>
+				</table>
+			</div>
+
+			<div id="mpTableDiv" class="inlineDiv">
+				<!--  hack for IE in standards mode. It wants all content in table -->
+				<table id="mpTable" class="bordered fixed" > 
+					<thead>
+						<tr>
+							<th style="width: 5em">Cpu</th>
+							<th>%user</th>
+							<th>%sys</th>
+							<th>%iowait</th>
+							<th>%idle</th>
+							<th>intr/s</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Loading</td>
+							<td>Loading</td>
+							<td>Loading</td>
+							<td>Loading</td>
+							<td>Loading</td>
+							<td>Loading</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+	</body>
+</html>

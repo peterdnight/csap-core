@@ -1,0 +1,11 @@
+{
+	"PackageAJvm": {
+		"dev": "org.demo:TestForVersionReleaseFile:1-SNAPSHOT:jar",
+		"stage": "org.demo:TestForVersionReleaseFile:2-SNAPSHOT:jar",
+		"lt": "org.demo:TestForVersionReleaseFile:3-SNAPSHOT:jar",
+		"prod": "org.demo:TestForVersionReleaseFile:4-SNAPSHOT:jar"
+	},
+	"MissingServie": {
+		"dev": "org.demo:TestForVersionReleaseFile:9.9.9-SNAPSHOT:jar"
+	}
+}

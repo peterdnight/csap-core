@@ -1,0 +1,61 @@
+
+
+<!-- 
+	- Summary Tab included in ClusterManager.jsp
+-->
+
+<div style="position: relative">
+	<input id="releaseFilter" style="width: 130px" placeholder="Enter filter"
+		   title="Filter by lifecycle, servicename, version, etc. Hit enter key to apply filter" value=""/>
+
+	<select id="batchAttributeSelect">
+		<option value="maven.dependency"> Release Version</option>
+		<option value="source.path"> Source Code</option>
+		<option value="autoStart"> Start Order</option>
+		<option value="parameters"> Start Parameters</option>
+		<option value="processFilter"> OS Process Match</option>
+		<option value="osProcessPriority"> OS Priority</option>
+		<option value="server"> Runtime</option>
+		<option value="description"> Description</option>
+		<option value="docUrl"> Help Url</option>
+		<option value="logDirectory">Log Directory</option>
+		<option value="disk">Disk</option>
+		<option value="propDirectory">Property Directory</option>
+		<option value="metaData">Customization meta data</option>
+		<option value="port">Primary Port (http, etc)</option>
+		<option value="url">url</option>
+		<option value="launchUrl">launch url</option>
+		<option value="monitors.max_topCpu"> Alert: Cpu</option>
+		<option value="monitors.max_threadCount"> Alert: Thread Count</option>
+		<option value="monitors.max_rssMemory"> Alert: Memory(RSS)</option>
+		<option value="monitors.max_diskUtil"> Alert: Disk(Mb)</option>
+		<option value="monitors.max_fileCount"> Alert: Open Files</option>
+		<option value="monitors.max_socketCount"> Alert: Socket Count</option>
+		<option value="monitors.max_tomcatConnections"> Alert: Tomcat Connections</option>
+		<option value="monitors.jvm_jmxHeartbeat"> Alert: Heartbeat Enabled</option>
+		<option value="monitors.nagiosCommand">Alert: Nagios</option>
+	</select>
+
+	<table class="bordered fixed">
+		<thead>
+
+			<tr>
+				<th  style="">
+					Service Filter:  
+					<img title="Instances with versions in definition file are shown. Use the filter to specify lifecycle, version, etc. To add
+						 lifecycle values, use the editor to add override (select maven for a prod overide of service version)." class="but" th:src="@{/images/16x16/help.png}"/>
+				</th>
+				<th  style="width: 50em; text-align: left" >
+					Service Attribute:
+
+
+				</th>
+			</tr>
+		</thead>
+
+		<tbody id="releaseTableBody">
+		</tbody>
+
+	</table>
+</div>
+

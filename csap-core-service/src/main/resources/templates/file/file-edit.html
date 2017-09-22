@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<head >
+
+		<title th:inline="text"> [[ ${ targetFile.getName() } ]] Edit [[ ${ host } ]]  </title>
+
+		<script th:replace="~{ csap/fragments/libsAndStyles :: pageContent }"></script>
+
+
+		<script th:src="@{/js/csapLibs/lineNums/jquery-linedtextarea.js}" ></script>
+		<link th:href="@{/js/csapLibs/lineNums/jquery-linedtextarea.css}"  rel="stylesheet" type="text/css"
+			  media="screen"/>
+
+		<script th:src="@{/js/csapLibs/commonJQ.js}"></script>
+		<script th:src="@{/js/csapLibs/csapUtils/CsapUser.js}"></script>
+
+
+		<link th:href="@{/js/csapLibs/qtip/jquery.qtip.min.css}" rel="stylesheet"
+			  type="text/css" media="screen" />
+		<script th:src="@{/js/csapLibs/qtip/jquery.qtip.min.js}"></script>
+
+
+		<script th:inline="javascript">
+			var baseUrl=[[@{ / }]] ;
+
+			var isAdmin = [[ ${ adminRole } ]];
+			var rootFile = [[ ${ rootFile } ]];
+			var user = [[ ${ user } ]];
+			var serviceName = [[ ${ serviceName }  ]];
+			var hostName = [[ ${ host }  ]];
+			var commandScreen = [[ @{${ T(org.csap.agent.CsapCoreService).OS_URL + '/command'}}]]; 
+			var fromFolder = [[ ${ fromFolder }  ]];
+			var hasResults = false;
+			var saveResult = "";
+			if ( [[ ${ result != null } ]] )  {
+				hasResults = true;
+				saveResult = [[    ${ result }   ]];
+			}
+
+		</script>
+
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/file/file-monitor.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/misc/property-encoder.js')} }"></script>
+		
+		<script  th:attr="data-main=@{ ${csapApp.requiresUrl('/js/file/modules/file-edit.js')}   }" 
+			th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script>
+			
+
+		<style>
+			.resp {
+				padding: 2px;
+				text-align: left;
+				width: 220px;
+				word-break: break-all;
+				word-wrap: break-word;
+			}
+
+			.formControls {
+				position: absolute;
+				top: 3px;
+				right: 2em;
+				font-size: 0.8em;
+			}
+
+
+			header {
+				text-align: left;
+				padding-left: 2em;
+				margin-bottom: 0em;
+				font-size: 0.8em;
+				padding-top: 0.6em;
+				min-height: 1.4em;
+			}
+		</style>
+
+	</head>
+
+
+
+	<body th:inline="text">
+
+
+
+
+
+		<header style="">
+			CS-AP File Editor: 
+			<div class="noteHighlight" >
+				<span th:title="${ targetFile.getAbsolutePath() }">
+					[[ ${ targetFile.getName() } ]] 
+				</span>
+				<span th:if="${ rootFile != null }">
+					(system)
+				</span>
+			</div>
+		</header>
+
+
+		<form id="editForm" action="saveChanges" method="post">
+
+			<!--<input type="submit"  class="submit" value="Update File"/>  -->
+			<div class="formControls">
+				<a id="formSubmitButton" class="pushButton" href="#" style="margin-right: 3em"
+				   title="Update file on host">Save</a> 
+
+				<input name="fromFolder"
+					   th:value="${ fromFolder }" type="hidden" />
+
+				<input name="serviceName"
+					   th:if="${ serviceName } != null"
+					   th:value="${ serviceName }" type="hidden" />
+
+
+				User: <select id="chownUserid" name="chownUserid" title="User to set ownershop">
+					<option th:each="osUser : ${osUsers}" 
+							th:selected="${ osUser == user }"
+							th:value="${ osUser }"
+							th:text="${ osUser }">will be replaced</option>
+
+				</select> 
+
+				<a id="sync" target="_blank" class="pushButton" href="#sync"
+				   title="Copy to other hosts"> 
+					Copy
+				</a> 
+
+				<a id="encodeButton" href="#"
+				   class="pushButton"
+				   title="Generate Encoded Values. File is a property file with 1 a=b entry per line">
+					Encrypt
+				</a>
+				
+				<button id="decodeButton"  class="pushButton"
+					title="Decode previous values."
+					th:if="${ infraRole }">
+					Decrypt
+				</button>
+
+
+				<a id="helpButton" target="_blank"
+				   href="https://github.com/csap-platform/csap-core/wiki#updateRefProperty+Files"
+				   class="simple" style="display: inline">
+				   <img class="but" src="../images/16x16/help.png">
+				</a>
+				<a id="replaceButton" href="#" class="pushButton "
+				   title="Toggle Encoded Values">Toggle</a> 
+				   
+				Host: [[ ${ host } ]]
+				<input style="font-size: 0.8em; padding:0; width: 1em" th:if="${_csrf != null}"
+						th:name="${_csrf.parameterName}"
+						th:value="${_csrf.token}"/>
+			</div>
+			<textarea id="contents" name="contents" spellcheck="false">[[${contents}]]</textarea>
+		</form>
+
+		<div id="ajaxResults" style="display: none">
+			<table class="bordered"
+				   style="table-layout: fixed; width: 770px; font-size: 0.8em;">
+				<thead>
+					<tr>
+						<th style="" class="resp">&nbsp;Key</th>
+						<th style="" class="resp">Original</th>
+						<th style="" class="resp">Encoded</th>
+					</tr>
+				</thead>
+				<tbody
+					style="display: block; border: 1px solid green; height: 300px; overflow: auto; width: 760px">
+				</tbody>
+			</table>
+		</div>
+
+	</body>
+</html>

@@ -1,0 +1,111 @@
+
+#batchProgressBar {
+	position: relative;
+	width: 60em;
+	height: 3em ;
+	margin-left: 2em;
+}
+
+
+#batchProgressLabel {
+	position: absolute;
+	left: 40%;
+	top: 4px;
+	font-weight: bold;
+	font-size: 2em;
+}
+
+#showBatchDialog {
+	display: inline;
+	margin-left: 2em;
+}
+
+#showBatchDialog img {
+	height: 14px;
+	padding-right: 3px;
+	vertical-align: middle;
+}
+
+
+#clusterHostJson, #clusterServiceJson, .batchFilter {
+	display: none;
+}
+
+
+.configLabels {
+	display: block;
+	margin-bottom: 0.25em;
+}
+
+.hostCheckboxes, .serviceCheckboxes {
+	-webkit-column-count: 4; /* Chrome, Safari, Opera */
+	-moz-column-count: 4; /* Firefox */
+	column-count: 4;
+}
+
+.batchDialog input {
+	margin-left: 0.5em;
+	margin-right: 0.25em;
+	vertical-align: middle;
+}
+
+.batchDialog div.title {
+	background-color: lightgrey;
+	float: none;
+	font-style: normal;
+	margin: 0.5em;
+	margin-top: -1.5em;
+	font-size: 1em;
+	padding-top: 0.3em;
+}
+
+.batchDialog div.title a {
+	display: inline;
+}
+
+.batchDialog {
+	position: relative;
+	background-color: white;
+	border: 1px none;
+	border-radius: 0;
+	margin: 1em;
+	margin-top: 2em;
+	padding: 0.5em;
+}
+
+.batchResult label , .batchConfig label{
+	font-weight: bold;
+	margin-left: 2em ;
+}
+
+#hostJobsTable a.simple {
+	display: block ;
+}
+.serviceLogs {
+	-webkit-column-count: 4; /* Chrome, Safari, Opera */
+	-moz-column-count: 4; /* Firefox */
+	column-count: 4;
+}
+
+#hostJobsTable thead {
+	display: block;
+}
+
+#hostJobsTable  tbody {
+	display: block;
+	overflow: auto;
+	max-height: 15em;
+}
+
+#hostJobsTable  td:nth-child(1), #hostJobsTable  th:nth-child(1) {
+	width: 200px;
+}
+
+#hostJobsTable  td:nth-child(2), #hostJobsTable  th:nth-child(2) {
+	width: 500px;
+}
+
+#hostJobsTable th {
+	padding: 9px;
+	text-align: center;
+}

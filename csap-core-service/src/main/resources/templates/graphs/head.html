@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<head th:fragment="pageContent" th:remove="tag" >
+
+		<script th:replace="csap/fragments/libsAndStyles :: pageContent"></script>
+
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/commonJQ.js')} }"></script>
+
+
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/csapLibs/qtip/jquery.qtip.min.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/qtip/jquery.qtip.min.js')} }"></script>
+
+
+		<script  th:attr="data-main=@{ ${csapApp.requiresUrl('/js/graphs/modules/graphPackage/ResourceGraph.js')}   }" 
+		th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script>
+
+	</head>
+
+</html>

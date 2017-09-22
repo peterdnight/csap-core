@@ -1,0 +1,8 @@
+Filesystem Type Size Used Avail Use% Mounted on
+/dev/sda1 ext3 11G 6.3G 3.9G 62% /
+tmpfs tmpfs 12G 1.1G 11G 9% /dev/shm
+/dev/mapper/cstg_volume_group-oracleLV ext3 148G 56G 85G 40% /home/oracle
+/dev/mapper/cstg_volume_group-mqLV ext3 9.9G 258M 9.1G 3% /home/mquser
+/dev/mapper/cstg_volume_group-denodoLV ext3 9.9G 2.9G 6.6G 31% /home/denodo
+/dev/mapper/cstg_volume_group-ssadminLV ext3 29G 2.4G 25G 9% /home/ssadmin
+shmfs tmpfs 12G 1.1G 11G 9% /dev/shm

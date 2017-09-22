@@ -1,0 +1,69 @@
+div.clusterHostName {
+	font-weight: bold;
+}
+
+a.svcHighlight {
+	background-color: yellow ;
+}
+div.clusterItems {
+	-webkit-column-count: 3;
+	-moz-column-count: 3;
+	column-count: 3;
+}
+
+.lifeContents {
+	margin-top: 1em;
+}
+
+.lifeContents label {
+	margin-left: 2em;
+	font-size: 10pt;
+}
+
+.lifeContents label a, .lifeContents label a:hover {
+	vertical-align: middle;
+}
+
+.lifeContents label img {
+	vertical-align: bottom;
+}
+
+#lifeEdit-button {
+	vertical-align: middle;
+}
+
+#editLifeTable tr.high td {
+	background-color: #FCFAF0 ;
+}
+#editLifeTable tr.normal td {
+	background-color: white ;
+}
+
+
+#editLifeTable a {
+	display: inline-block;
+}
+
+#editLifeTable td:nth-child(1) a {
+	font-size: 12pt;
+}
+#editLifeTable td:nth-child(2) a {
+	white-space: nowrap ;
+}
+
+#editLifeTable td:nth-child(3)  {
+	white-space: nowrap ;
+	min-width: 35em;
+}
+#editLifeTable td:nth-child(3) a {
+	white-space: nowrap ;
+}
+
+
+.addServiceClusterButton, .addNewClusterButton {
+	float: right;
+}
+.addServiceClusterButton img, .addNewClusterButton img {
+	vertical-align: middle;
+}
+

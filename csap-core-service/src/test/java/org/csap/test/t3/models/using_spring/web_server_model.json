@@ -1,0 +1,446 @@
+{
+	"capability": {
+		"name": "DEFAULT APPLICATION FOR JUNITS",
+		"ajpSecret": "junitAjp",
+		"scm": "https://github.com/csap-platform/sample-definition.git",
+		"repoUrl": "https://repo.maven.apache.org/maven2/",
+		"helpMenuItems": {
+			"Release Notes": "https://github.com/csap-platform/csap-core/wiki#updateRefConsole+Release+Notes"
+		}
+	},
+	"clusterDefinitions": {
+		"dev": {
+			"settings": {
+				"agent": {
+					"maxJmxCollectionMs": 10000,
+					"numberWorkerThreads": "4",
+					"adminToAgentTimeoutInMs": 6000,
+					"lsofIntervalMins": 1,
+					"duIntervalMins": 1,
+					"apiLocal": true,
+					"apiUser": "agentUser",
+					"apiPass": "CSAP Developmentdev",
+					"infraTests": {
+						"cpuIntervalMinutes": 10,
+						"cpuLoopsMillions": 1,
+						"diskIntervalMinutes": 10,
+						"diskWriteMb": 500 
+					}
+				},
+				"operatorNotifications": [
+					"someUser@yourCompany.com",
+					"asdfsd@sdfsd.com"
+				],
+				"newsItems": [
+					"Simple News"
+				],
+				"portRange": {
+					"start": 9200,
+					"end": 9300
+				},
+				"csapData": {
+					"eventUrl": "disabled",
+					"eventApiUrl": "$eventApiUrl",
+					"eventMetricsUrl": "$eventMetricsUrl",
+					"analyticsUiUrl": "$analyticsUiUrl",
+					"historyUiUrl": "$historyUiUrl",
+					"user": "$user",
+					"pass": "$pass"
+				},
+				
+				"loadBalanceVmFilter": [
+					"none"
+				],
+				
+				"lbUrl": "https://csap-secure.yourcompany.com",
+				"autoRestartHttpdOnClusterReload": "no",
+
+				"launchUrls": {
+					"1 tomcat http": "default"
+				},
+				"metricsPublication": [
+					{
+						"type": "nagios",
+						"intervalInSeconds": 300,
+						"url": "https://nagiosprovider.yourcompany.com:8443/nrdp/",
+						"token": "yourToken",
+						"user": "updateUser",
+						"pass": "updatePass"
+					},
+					{
+						"type": "csapCallHome",
+						"intervalInSeconds": 300,
+						"url": "http://csaptools.yourcompany.com/CsapGlobalAnalytics/rest/vm/health",
+						"user": "$csapUser1",
+						"pass": "$csapPass1"
+					}
+				],
+				"monitorDefaults": {
+					"maxDiskPercent": 60,
+					"maxHostCpuLoad": 77,
+					"maxHostCpuIoWait": 11,
+					"minFreeMemoryMb": 500,
+					"max_diskWriteKb": 15
+				},
+				"metricsCollectionInSeconds": {
+					"processDumps": {
+						"resouceInterval": 30,
+						"maxInInterval": 3,
+						"lowMemoryInMb": 5000
+					},
+					"resource": [],
+					"service": [],
+					"jmx": []
+				}
+			},
+			"csspLocal": {
+				"jvmPorts": {
+					"Cssp3ReferenceMq": ["824x"],
+					"ServiceWithCustomRouting": ["825x"]
+				},
+				"osProcessesList": ["httpd"],
+				"version": {
+					"1": {
+						"hosts": ["localhost"]
+					}
+				}
+			},
+			"factory": {
+				"jvmPorts": {
+					"Cssp3ReferenceMq": ["824x"],
+					"ServiceWithCustomRouting": ["825x"]
+				},
+				"osProcessesList": ["httpd"],
+				"singleVmPartition": {
+					"1": {
+						"hosts": ["factoryHost-dev01", "factoryHost-dev-002"]
+					}
+				}
+			}
+		},
+		"dev2": {
+			"settings": {
+				"operatorNotifications": ["someUser@yourCompany.com",
+					"asdfsd@sdfsd.com"],
+				"newsItems": [
+					"New CS-AP release - view Help/Release notes for more information.",
+					"After selecting a service - you can bookmark the page for future direct access.",
+					"Context menus are available via right mouse click on service instance tables.",
+					"Please post suggestions/bugs to the <a class=\"simple\" style=\"display: inline;\" href=\"https://github.com/csap-platform/csap-core\">discussion forums</a>"],
+				"portRange": {
+					"start": 9200,
+					"end": 9300
+				},
+				"csapData": {
+					"eventUrl": "no",
+					"eventUiCountUrl": "/AuditService/api/audit/numberOfAuditRecordsByDays/{numberOfDays}",
+					"analyticsUiUrl": "/AuditService/show/analytics?numberOfDays=1",
+					"historyUiUrl": "/AuditService/show/history",
+					"user": "$csapUser1",
+					"pass": "$csapPass1"
+				},
+				"defaultUiDisplayVersion": "all",
+				"defaultUiDisplayCluster": "all",
+				"lsofIntervalMins": 1,
+				"maxJmxCollectionMs": 3000,
+				"duIntervalMins": 1,
+				"lbUrl": "https://csap-secure.yourcompany.com",
+				"consoleHistoryUi": "/AuditService/show/history",
+				"autoRestartHttpdOnClusterReload": "no",
+				"useCsapAudit": "no",
+				"numberWorkerThreads": "4",
+				"adminToAgentTimeoutInMs": 6000,
+				"launchUrls": {
+					"1 tomcat http": "default",
+					"2 web internal": "http://yourlb.yourcompany.com",
+					"3 web filtered": "http://testhost.yourcompany.com:8090",
+					"4 web external": "https://testweb.yourcompany.com",
+					"5 current host": "http://$host.yourcompany.com"
+				},
+				"useCsapMetrics": "http://testhost.yourcompany.com:8191/AuditService/api/metrics",
+				"metricsPublication": [
+					{
+						"type": "nagios",
+						"intervalInSeconds": 300,
+						"url": "https://nagiosprovider.yourcompany.com:8443/nrdp/",
+						"token": "9rU6U5uKuzuh5buc",
+						"user": "demo1",
+						"pass": "uLWgmTcs9LWHJz3K"
+					},
+					{
+						"type": "csapCallHome",
+						"intervalInSeconds": 300,
+						"url": "http://csaptools.yourcompany.com/CsapGlobalAnalytics/rest/vm/health",
+						"user": "$csapUser1",
+						"pass": "$csapPass1"
+					}],
+				"monitorDefaults": {
+					"maxDiskPercent": 60,
+					"maxHostCpuLoad": 77,
+					"minFreeMemoryMb": 500
+				},
+				"metricsCollectionInSeconds": {
+					"processDumps": {
+						"resouceInterval": 30,
+						"maxInInterval": 3,
+						"lowMemoryInMb": 5000
+					},
+					"resource": [30],
+					"service": [30],
+					"jmx": [30]
+				}
+			},
+			"csspLocal": {
+				"jvmPorts": {
+					"Cssp3ReferenceMq": ["824x"],
+					"ServiceWithCustomRouting": ["825x"]
+				},
+				"osProcessesList": ["httpd"],
+				"version": {
+					"1": {
+						"hosts": ["peter"]
+					}
+				}
+			}
+		}
+	},
+	"jvms": {
+		"CsAgent": {
+			"description": "CsAgent provides core service management capabilities, along with runtimes. admin services uses it extensively.",
+			"docUrl": "https://github.com/csap-platform/csap-core/wiki#updateRefCsAgent",
+			"autoStart": "01",
+			"osProcessPriority": "-10",
+			"java": "-Xms256M -Xmx256M -XX:MaxPermSize=128m -DskipPlatformEscape=y",
+			"server": "cssp-2.x",
+			"source": {
+				"scm": "svn",
+				"path": "http://yourSvnOrGit/yourPathToSource",
+				"branch": "HEAD"
+			},
+			"maven": {
+				"dependency": "org.csap:csap-core-service:2.4.2-SNAPSHOT:war"
+			},
+			"customMetrics": {
+				"jmxHeartbeatMs": {
+					"mbean": "spring.application:application=CsAgent,type=CstgCustom,name=HealthCheck",
+					"attribute": "HealthStatus"
+				},
+				"TotalVmCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"attribute": "SystemCpuLoad"
+				},
+				"ProcessCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"attribute": "ProcessCpuLoad"
+				},
+				"HostDashboard": {
+					"simonCounter": "http.CsAgent.ui.HostDashboard.GET"
+				},
+				"AdminPings": {
+					"simonCounter": "http.CsAgent.ui.getManagerJson.GET"
+				},
+				"OsCommandsCounter": {
+					"simonCounter": "java.OsCommandRunner.execute"
+				},
+				"OsCommandsMeanMs": {
+					"simonMedianTime": "java.OsCommandRunner.execute",
+					"divideBy": "1000000"
+				},
+				"OsCommandsMaxTimeMs": {
+					"simonMaxTime": "java.OsCommandRunner.execute",
+					"divideBy": "1000000"
+				},
+				"getVmStatsDefault": {
+					"simonCounter": "java.pojo.OsManager.getVmStats()"
+				},
+				"getVmStatsCounterPerSecond": {
+					"simonCounter": "java.pojo.OsManager.getVmStats()",
+					"divideBy": "interval"
+				},
+				"getVmStatsMeanMs": {
+					"simonMedianTime": "java.pojo.OsManager.getVmStats()",
+					"divideBy": "1000000"
+				},
+				"getVmStatsMaxTimeMs": {
+					"simonMaxTime": "java.pojo.OsManager.getVmStats()",
+					"divideBy": "1000000"
+				}
+			},
+			"version": {
+				"1": {
+					"dev": {},
+					"stage": {},
+					"lt": {},
+					"prod": {}
+				},
+				"2": {
+					"dev": {},
+					"stage": {},
+					"lt": {},
+					"prod": {}
+				}
+			}
+		},
+		"Cssp3ReferenceMq": {
+			"description": "Provides cssp-3.x reference implementation for engineering, along with core platform regression tests.",
+			"docUrl": "https://github.com/csap-platform/csap-core/wiki#updateRefCode+Samples",
+			"java": "  -Xms16M -Xmx256M -XX:+UseParNewGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10",
+			"server": "cssp-3.x",
+			"autoStart": "55",
+			"source": {
+				"scm": "svn",
+				"path": "http://yourSvnOrGit/yourPathToSource/Cssp3Reference",
+				"branch": "trunk"
+			},
+			"maven": {
+				"dependency": "com.your.group:Cssp3Reference:1.0.14.1:war"
+			},
+			"customMetrics": {
+				"TotalVmCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"attribute": "SystemCpuLoad"
+				},
+				"ProcessCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"attribute": "ProcessCpuLoad"
+				},
+				"jmxHeartbeatMs": {
+					"mbean": "spring.application:application=FactorySample,type=CstgCustom,name=HealthCheck",
+					"attribute": "HealthStatus"
+				},
+				"SpringJmsListeners": {
+					"mbean": "org.csap.:application=csap,name=SpringBeans",
+					"attribute": "JmsActive"
+				},
+				"SpringJmsCount": {
+					"simonCounter": "jms.Demo_JmsListener.onMessage()"
+				},
+				"SpringJmsCountPerSecond": {
+					"simonCounter": "jms.Demo_JmsListener.onMessage()",
+					"divideBy": "interval"
+				},
+				"SpringJmsMedianTimeMs": {
+					"simonMedianTime": "jms.Demo_JmsListener.onMessage()",
+					"divideBy": "1000000"
+				},
+				"SpringJmsMaxMs": {
+					"simonMaxTime": "jms.Demo_JmsListener.onMessage()",
+					"divideBy": "1000000"
+				},
+				"SpringDbcpActive": {
+					"mbean": "org.csap.:application=csap,name=SpringBeans",
+					"attribute": "DbActive"
+				},
+				"SpringDbcpIdle": {
+					"mbean": "org.csap.:application=csap,name=SpringBeans",
+					"attribute": "DbIdle"
+				},
+				"DBAddItem": {
+					"simonCounter": "jpa.Demo_DataAccessObject.addSchedule()"
+				},
+				"DBShowItem": {
+					"simonCounter": "jpa.Demo_DataAccessObject.showScheduleItemsJpql()"
+				}
+			},
+			"version": {
+				"1": {
+					"dev": {},
+					"stage": {},
+					"lt": {},
+					"prod": {}
+				},
+				"2": {}
+			},
+			"metaData": "exportWeb, -nio",
+			"servletMaxConnections": "400",
+			"servletTimeoutMs": "10000",
+			"servletThreadCount": "100",
+			"monitors": {
+				"max_diskUtil": "3000",
+				"max_threadCount": "300",
+				"max_fileCount": "489",
+				"max_rssMemory": "768000",
+				"max_tomcatConnections": "20",
+				"max_topCpu": "150"
+			}
+		},
+		"ServiceWithCustomRouting": {
+			"description": "SpringMVC showcase",
+			"docUrl": "https://github.com/spring-projects/spring-mvc-showcase",
+			"java": "-Xms128M -Xmx128M -XX:MaxPermSize=128m",
+			"autoStart": "91",
+			"server": "tomcat7.x",
+			
+			"apacheModJk": {
+				"loadBalance": [
+					"method=Next",
+					"sticky_session=1"
+				],
+				"connection": [
+					"reply_timeout=10000"
+				]
+			},
+			
+			"apacheModRewrite": [
+				"RewriteRule ^/test1/(.*)$  /ServiceWithCustomRouting/$1 [PT]",
+				"RewriteRule ^/test2/(.*)$  /ServiceWithCustomRouting/$1 [PT]"
+			],
+			
+			"source": {
+				"scm": "git",
+				"path": "https://github.com/spring-projects/spring-mvc-showcase.git",
+				"branch": "HEAD"
+			},
+			"maven": {
+				"dependency": "com.your.group:SpringMvcShowCases:1.0.0:war"
+			},
+			"version": {
+				"1": {
+					"dev": {},
+					"stage": {
+						"java": "-Xms192M -Xmx192M -XX:MaxPermSize=128m"
+					},
+					"lt": {},
+					"prod": {}
+				}
+			}
+		}
+	},
+	"osProcesses": {
+		"httpd": {
+			"description": "httpd includes modjk for routing to services.  It will use the $STAGING/httpConf files without the *Export*",
+			"docUrl": "https://github.com/csap-platform/csap-core/wiki#/CSAP+HttpdWrapper",
+			"url": "http://$host:8080/server-status,http://$host:8080/status,http://$host:8080",
+			"autoStart": "15",
+			"propDirectory": "/home/ssadmin/staging/httpdConf",
+			"processFilter": "httpd_8080",
+			"deployTimeoutMinutes": "10",
+			"port": "8080",
+			"jmxPort": "-1",
+			"server": "wrapper",
+			"metaData": "skipJmxCollection,generateWorkerProperties",
+			"source": {
+				"scm": "svn",
+				"path": "http://yourSvnOrGit/svn/smartservices/coreservices/trunk/cssp/HttpdWrapper",
+				"branch": "HEAD"
+			},
+			"maven": {
+				"dependency": "com.your.group:HttpdWrapper:2.2.17.11:zip"
+			},
+			"version": {
+				"1": {
+					"dev": {},
+					"stage": {},
+					"lt": {},
+					"prod": {}
+				},
+				"2": {
+					"dev": {},
+					"stage": {},
+					"lt": {},
+					"prod": {}
+				}
+			}
+		}
+	}
+}

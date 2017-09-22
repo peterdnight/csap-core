@@ -1,0 +1,383 @@
+
+# CSAP agent sets based on lifecycle
+# csapDefaultConfiguration add for testing default config on desktop
+#spring.profiles.active: desktop,admin,company
+#spring.profiles.active: desktop,agent,company
+spring.profiles.active: desktop,agent,company,csapDefaultConfiguration
+
+---
+#
+#    Common Config 
+#
+
+
+spring:
+  mail:
+    host: "${mailServer:smtp.yourcompany.com}"
+    port: "${mailPort:99}"
+  resources:
+    cache-period: 32000000  # 1 year
+  aop:
+    proxy-target-class: true
+  thymeleaf:
+    mode: HTML
+  http:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+      
+      
+# agent specific configuration
+csap-agent:
+
+  # agent URI pattern used by admin (to sync state) and ui cross launching to logs, host dashboard, file manager, etc.
+  host-url-pattern: "${hostUrlPattern:http://CSAP_HOST.yourCompany.com:8011/CsAgent}"
+  
+  # private network support: used for server side communication - defaults to be same as host-url-pattern
+  #  host-url-pattern-internal: "http://CSAP_HOST.yourcompany.com:8011/CsAgent"
+  
+# Common configuration for agent and admin
+my-service-configuration:
+
+  disable-ssl-validation: false
+  
+  staging: ${STAGING:}
+  processing: ${PROCESSING:}
+  
+  docker:
+    url: "tcp://localhost.yourcompany.com:4243"
+    connection-pool: 5
+
+  test:
+    enabled: false
+
+  locator:
+    hello-provider: "BootReference"
+    hello-api: "/helloNoSecurity"
+    
+# Disable fallback to basic auth, use LDAP or not based on the above
+security.basic.enabled: false
+
+server:
+  compression:
+    enabled: true
+    mime-types:
+      - application/json
+      - application/xml
+      - text/html
+      - text/xml
+      - text/plain
+      
+  port: 8011
+  context-path: /CsAgent
+  session:
+    persistent: false
+  error:
+    include-stacktrace: always
+
+
+# @CsapBootApplication
+csap:
+
+  baseContext: /csap
+  
+  documentation:
+      enabled: true
+  info:
+    name: "${csapName:MyDesktop}"
+    load-balancer-url: "${csapLbUrl:http://your-lb.yourcompany.com}"
+    lifecycle: "${csapLife:dev}"
+    version: "${csapVersion:Desktop.SNAPSHOT.1}"
+    http-port: "${csapHttpPort:8080}" 
+    working-dir: "${csapWorkingDir:/the/path/to/app}" 
+    cluster: "${csapName:dev-desktop-1}"
+     
+  encryptable-properties:
+    enabled: true
+    token: "Something IMMUTABLE and hopefully hard to guess and find by running simply grep commands on the command line. Should be overwritten."
+    property-files: 
+      - csapSecurity.properties
+      
+  web-server:
+    enabled: true
+    ajp-secret: ${csapAjp:ThisWillBeReplaced}
+  
+  security:
+    enabled: true
+    ldap-enabled: true
+    csrf-enabled: true
+    max-concurrent-user-sessions: 0 # 0 indicates unlimited sessions
+    rest-api-filter:
+      enabled: true
+      urls:
+        - /api/*
+      group: "$CSAP_ADMIN_GROUP"
+      cache-seconds: 300
+  
+  performance:
+    enabled: true
+    monitor-urls: 
+        - /
+        - /services
+        - /service/*
+        - /hosts/*
+        - /admin/*
+        - /editor/*
+        - /definition/*
+        - /os/*
+        - /explorer/*
+        
+         
+    alert:
+    
+      debug: false
+      
+      remember-count: ${csapMaxBacklog:1000}
+      
+      throttle: 
+        count: 5
+        frequency: 1
+        time-unit: HOURS 
+      
+      notify:
+        addresses: "${csapAddresses:disabled}"
+        email-host: ${mailServer:smtp.yourcompany.com}
+        frequency: "${csapFrequency:4}"
+        time-unit: "${csapTimeUnit:HOURS}"
+        email-max-alerts: "${csapMaxBacklog:1000}"
+        email-time-out-ms: 500
+        
+      limits:
+        - 
+          id: csap.exception
+          ignore-null: true
+          occurences-max: 2
+          collect-time: 1
+          collect-units: MINUTES
+  
+        # Log Rotations
+        - 
+          id: service.jobs.all.logs
+          occurences-min: 1
+          collect-time: 60
+          collect-units: MINUTES
+          max-time: 30
+          max-units: SECONDS
+  
+        # agent refreshes are triggered by admin
+        - 
+          id: AgentStatus
+          occurences-min: 2
+          collect-time: 2 # allows for migrations
+          collect-units: MINUTES
+          max-time: 3
+          max-units: SECONDS
+          
+        # OS Commands and scripts
+        - 
+          id: java.OsCommandRunner.execute
+          collect-time: 2
+          collect-units: MINUTES
+          occurences-max: 200
+          max-time: 60
+          max-units: SECONDS
+        - 
+          id: csap.service.jobs
+          ignore-null: true
+          occurences-max: 2
+          max-time: 8
+          max-units: MINUTES
+        - 
+          id: java.OsCommandRunner.execute.userScript
+          ignore-null: true
+          max-time: 10
+          max-units: SECONDS
+          
+        # agent collections from JVMS
+        - 
+          id: collector.jmx.failures
+          ignore-null: true
+          occurences-max: 0
+        - 
+          id: collector.jmx.custom.failures
+          ignore-null: true
+          occurences-max: 0
+        - 
+          id: collector.jmx
+          collect-time: 1
+          collect-units: MINUTES
+          occurences-min: 1
+          max-time: 3
+          max-units: SECONDS
+  
+        # agent posting data to csaptools analytics service
+        - 
+          id: csapdata.publish.queue.failure
+          occurences-max: 1
+          ignore-null: true
+        - 
+          id: csapdata.publish.all
+          max-time: 5
+          max-units: SECONDS
+        - 
+          id: csapdata.publish.csap-metrics
+          collect-time: 30
+          collect-units: MINUTES
+          occurences-min: 1
+        - 
+          id: csapdata.publish.csap-reports
+          collect-time: 30
+          collect-units: MINUTES
+          occurences-min: 1
+  locator:
+    enabled: true
+    active-urls-locator: "${csapLbUrl:https://your-lb.yourcompany.com}/admin/api/service/urls/active/"
+    low-resources-url-locator: "${csapLbUrl:https://your-lb.yourcompany.com}/admin/api/service/url/low/"
+    low-resource: "lowCpu"  #lowLoad, lowCpu, ...
+    
+
+
+
+# Spring Boot actuator exposes several endpoints, and csap security is used to authenticate
+management:
+  context-path: /devOps
+  security:
+    enabled: false
+
+# Spring actuator: info settings
+info:
+  build.profile: ${spring.profiles.active}
+  build.artifact: "Maven: @project.artifactId@"
+  build.name: "@project.name@"
+  build.description: "@project.description@"
+  build.version: "@project.version@"
+ 
+---
+
+#
+#  ================ admin configuration
+#
+
+spring:
+    profiles: admin
+    
+server:
+  context-path: /admin
+  port: 8911
+  
+my-service-configuration:
+  alerts:
+    remember-count: ${csapMaxBacklog:3000}
+    
+    throttle: 
+      count: 5
+      frequency: 1
+      time-unit: HOURS 
+    
+    notify:
+      addresses: "${csapAddresses:disabled}"
+      frequency: "${csapFrequency:4}"
+      time-unit: "${csapTimeUnit:HOURS}"
+      email-max-alerts: "${csapMaxBacklog:1000}"
+      email-time-out-ms: 500    
+
+csap:
+  performance:
+    alert:
+      limits:
+        - 
+          id: csap.exception
+          ignore-null: true
+          occurences-max: 2
+          collect-time: 1
+          collect-units: MINUTES
+        - 
+          id: agent.remote.status
+          collect-time: 2
+          collect-units: MINUTES
+          occurences-min: 1
+          mean-time:  2
+          mean-units: SECONDS
+          max-time: 5
+          max-units: SECONDS
+        - 
+          id: http.admin.service.getServicesInLifeCycleSummary.GET
+          ignore-null: true
+          mean-time:  500
+          mean-units: MILLISECONDS
+          max-time: 3
+          max-units: SECONDS
+
+---
+
+#
+#  ================ desktop configuration
+#
+
+# update AgentMicroService.java and cache period to do desktop cache testing
+spring:
+    profiles: desktop
+    resources:
+        cache-period: 0
+ 
+ 
+my-service-configuration:
+  staging: target/STAGING
+  processing: target/PROCESSING
+  definition-folder: "../../dev-definition"
+  
+  docker:
+    url: "tcp://localhost:4243"
+  
+
+server:
+  context-path: /CsAgent
+  tomcat:
+    accesslog:
+      enabled: true
+      pattern: "%h %l %u %t &quot;%r&quot; %s %b"
+      
+# log will be pushed to java temp      
+  
+    
+csap:
+  security: 
+    enabled: true
+    ldap-enabled: true   # requires csapSecurity.properties in your home dir
+  encryptable-properties:
+    enabled: true
+    algorithm: PBEWITHMD5ANDDES
+    property-files:
+      - "csapSecurity.properties"
+      - "${user.home}/csap/csapSecurity.properties"   #overwrite the above if it exists
+      
+
+      
+---
+
+#
+#  ================ profile for testing csap default (no ldap, etc).
+#
+
+spring:
+    profiles: csapDefaultConfiguration
+    resources:
+        cache-period: 0
+        
+
+my-service-configuration:
+  staging: target/STAGING
+  processing: target/PROCESSING
+  definition-folder: "src/main/resources/shellScripts/defaultConf/" 
+  
+    
+csap:
+  security: 
+    enabled: true
+    ldap-enabled: false   # requires csapSecurity.properties in your home dir
+  encryptable-properties:
+    enabled: true
+    algorithm: PBEWITHMD5ANDDES
+    property-files:
+      - "csapSecurity.properties"
+      

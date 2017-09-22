@@ -1,0 +1,116 @@
+
+---
+#
+#    Default config using in memory auth.
+#
+
+
+spring:
+  mail:
+    host: "${mailServer:smtp.yourcompany.com}"
+    port: 25
+  resources:
+    cache-period: 32000000  # 1 year
+  aop:
+    proxy-target-class: true
+  thymeleaf:
+    mode: HTML
+  http:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+
+# agent location
+csap-agent:
+  host-url-pattern: "http://CSAP_HOST.yourcompany.com:8011/CsAgent"
+  
+# Client side loadbalancing
+my-service-configuration:
+  locator:
+    hello-provider: "BootEurekaDemo"
+    hello-api: "hello"
+    
+# Disable fallback to basic auth, use LDAP or not based on the above
+security.basic.enabled: false
+
+server:
+  
+  port: 8011
+  context-path: /CsAgent
+  session:
+    persistent: false
+  error:
+    include-stacktrace: always
+
+
+# @CsapBootApplication
+csap: 
+  documentation:
+      enabled: true
+      
+  info:
+    name: "${csapName:MyDesktop}"
+    load-balancer-url: "${csapLbUrl:http://csap-secure.yourcompany.com}"
+    lifecycle: "${csapLife:dev}"
+    version: "${csapVersion:1.0-Desktop}"
+    port: "${csapPort:8080}"
+    cluster: "${csapName:dev-desktop-1}"
+     
+  encryptable-properties:
+    enabled: true
+    token: "Something IMMUTABLE and hopefully hard to guess and find by running simply grep commands on the command line. Should be overwritten."
+    property-files: 
+      - csapSecurity.properties
+      
+  web-server:
+    enabled: true
+  
+  security:
+    enabled: true
+    ldap-enabled: false
+    rest-api-filter:
+      enabled: true
+      urls:
+        - /api/*
+      group: "$CSAP_ADMIN_GROUP"
+      cache-seconds: 300
+  
+  performance:
+    enabled: true
+    monitor-urls: 
+        - /
+        - /services
+        - /service/*
+        - /hosts/*
+        - /admin/*
+        - /editor/*
+        - /definition/*
+        - /api/*
+        - /os/*
+        
+  locator:
+    enabled: true
+    active-urls-locator: "${csapLbUrl:https://csap-secure.yourcompany.com}/admin/api/service/urls/active/"
+    low-resources-url-locator: "${csapLbUrl:https://csap-secure.yourcompany.com}/admin/api/service/url/low/"
+    low-resource: "lowCpu"  #lowLoad, lowCpu, ...
+    
+
+
+
+# Spring Boot actuator exposes several endpoints, and csap security is used to authenticate
+management:
+  context-path: /devOps
+  security:
+    enabled: false
+
+# Spring actuator: info settings
+info:
+  build.profile: ${spring.profiles.active}
+  build.artifact: "Maven: @project.artifactId@"
+  build.name: "@project.name@"
+  build.description: "@project.description@"
+  build.version: "@project.version@"
+ 
+
+
+

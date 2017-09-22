@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<head th:fragment="pageContent" th:remove="tag" >
+
+		<title th:inline="text"> [[ ${ lifecycle + ":" + csapApp.getName() } ]] </title>
+
+		<script th:replace="~{ csap/fragments/libsAndStyles :: pageContent }"></script>
+
+		<script th:replace="csap/fragments/jqplot-includes :: pageContent"></script>
+
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/commonJQ.js')} }"></script>
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/csapUtils/CsapUser.js')} }"></script>
+
+
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/csapLibs/qtip/jquery.qtip.min.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/qtip/jquery.qtip.min.js')} }"></script>
+
+
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/csapLibs/jquery.contextMenu.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/jquery.contextMenu.js')} }"></script>
+
+
+		<script th:inline="javascript">
+			var inHostMode = false;
+			var contextUrl = [[@{ ${"/"} }]];
+			var baseUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).SERVICE_URL}}]];
+			var reportUrl = baseUrl + "/report";
+			var trendUrl = baseUrl + "/trend";
+			var appId = [[${ eventUser }]];
+			var agentHostUrlPattern = [[${ agentHostUrlPattern }]];
+			var desktopTestProject = "";
+			if ([[${csapApp.isRunningOnDesktop()}]]) {
+			appId = "csapeng.gen";
+			desktopTestProject = "CSAP Engineering";
+			}
+
+
+			var activePackge = [[ ${csapApp.activeModelName}]];
+			var analyticsUrl = [[${analyticsUrl}]];
+			var activityUrl = baseUrl + "/activityCount";
+			var historyUrl = [[${lifeCycleSettings.historyUiUrl}]];
+			var eventApiUrl = [[${lifeCycleSettings.eventApiUrl}]];
+			// fixed in Thymeleaf 3
+			var httpdArray = [[     ${ testUrls }     ]]  ;
+		//    for ( i=0; i< httpdArray.length; i++) { console.log("testUrl: " + httpdArray[i]) ; }
+
+			var hostName = [[${T(org.csap.agent.model.Application).HOST_NAME}]];
+			var lb = [[${lifeCycleSettings.lbUrl}]];
+			var userid = [[${userid}]];
+			var deployTimeout = 10000; // default 10s
+			var serviceName = "null";
+			var defaultLifeCycle = [[${lifecycle}]];
+			CsapCommon.configureCsapAlertify();
+		</script>
+
+
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/deployment/serviceContext.js')} }"></script>
+
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/deployment/menus.js')} }"></script>
+
+		<!--
+		<script th:src="@{ ${csapApp.versionedUrl('/js/deployment/services.js')} }"></script> -->
+
+
+		<script  th:attr="data-main=@{ ${csapApp.requiresUrl('/js/deployment/modules/app-portal-main.js')}   }" 
+		th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script>
+		<link th:href="@{ ${csapApp.versionedUrl('/js/deployment/services.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/deployment/service-dialog-batch.js')} }"></script>
+		<link th:href="@{ ${csapApp.versionedUrl('/js/deployment/service-dialog-batch.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+
+	</head>
+
+</html>

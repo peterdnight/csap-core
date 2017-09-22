@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<head th:fragment="pageContent" th:remove="tag" >
+
+		<title th:inline="text"> [[ ${ host } ]] Dashboard</title>
+
+		<script th:replace="csap/fragments/libsAndStyles :: pageContent"></script>
+
+		<script th:replace="csap/fragments/jqplot-includes :: pageContent"></script>
+		<script th:replace="csap/fragments/flot-includes :: pageContent"></script>
+
+
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/commonJQ.js')} }"></script>
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/csapUtils/CsapUser.js')} }"></script>
+
+
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/csapLibs/qtip/jquery.qtip.min.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/qtip/jquery.qtip.min.js')} }"></script>
+
+
+
+		<!-- https://github.com/mar10/fancytree/releases -->
+		<link th:href="@{/webjars/fancytree/2.19.0/dist/skin-win7/ui.fancytree.min.css}" rel="stylesheet" type="text/css" />
+		<script th:src="@{/webjars/fancytree/2.19.0/dist/src/jquery.fancytree.js}"></script>
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/fancytree/jquery.fancytree.contextMenu.js')} }"></script>
+
+		<script th:inline="javascript">
+
+			var DEFAULT_RESOURCE_GRAPH_HOST = [[ ${ host } ]];
+			var serviceFilterParam = [[ ${ #httpServletRequest.getParameter(T(org.csap.agent.CSAP).SERVICE_NOPORT_PARAM) } ]];
+			var uiSettings = {
+				baseUrl: [[@{ ${ T(org.csap.agent.CsapCoreService).BASE_URL}}]],
+				hostName:  [[ ${ host } ]],
+				life:   [[ ${ life } ]],
+				user:  [[ ${ eventUser } ]],
+				metricsUrl: [[ ${ eventMetricsUrl } ]]
+			}
+
+			var baseUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).BASE_URL}}]];
+			var explorerUrl = [[ @{ ${explorerUrl} }  ]] ;
+			var dockerUrl = [[ @{ ${dockerUrl} }  ]] ;
+
+
+			var commandScreen = [[@{ ${ T(org.csap.agent.input.http.ui.windows.HostPortal).COMMAND_SCREEN_URL }}]];
+			var fileManagerUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).FILE_MANAGER_URL}}]];
+			
+		</script>
+
+		<script  th:attr="data-main=@{ ${csapApp.requiresUrl('/js/os/modules/hostDash.js')}   }" 
+				th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script>
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/os/hostDash.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+		<link th:href="@{ ${csapApp.versionedUrl('/js/os/host-explorer.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+	</head>

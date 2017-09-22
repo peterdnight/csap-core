@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+    <head><title>fragment</title></head>
+    <body th:fragment="pageContent" th:remove="tag">
+
+
+        <table id="core" class="simple" >
+            <thead>
+
+                <tr>
+                    <th><div class="title">User Interface</div> Click to test</th>
+                    <th>returns</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+
+                <tr>
+                    <td><a class="simple" th:href="@{/services}">Deployment - Services</a></td>
+                    <td>Web App</td>
+                    <td>Application Portal, default landing page</td>
+                </tr>
+
+                <tr>
+                    <td><a class="simple" th:href="@{/find-service/CSAP Desktop/admin}">find-service</a></td>
+                    <td>Web App</td>
+                    <td>service-portal, deployment, analytics, etc.</td>
+                </tr>
+
+                <tr>
+                    <td>
+                    	<a class="simple" th:href="@{/health}"> Admin Health Portal </a> <br/>
+                    	<a class="simple" th:href="@{/health(testCount=100)}"> Test Mode </a>
+                    </td>
+                    <td>Web App</td>
+                    <td>Show aggregate service health report across all hosts</td>
+                </tr>
+
+
+                <tr>
+                    <td><a class="simple" th:href="@{/clusterDialog}"> clusterDialog </a></td>
+                    <td>Web App</td>
+                    <td>Browse hosts by cluster, and run scripts, browse the Files, launch host dashboard</td>
+                </tr>
+
+                <tr>
+                    <td><a class="simple" th:href="@{/batchDialog}"> batchDialog </a></td>
+                    <td>Web App</td>
+                    <td>Batch deployment support</td>
+                </tr>
+
+
+                <tr>
+                    <td>
+						<a class="simple" th:href="@{/os/HostDashboard}"> Host Dashboard </a><br/>
+						<a class="simple" th:href="@{/os/HostDashboard(service=CsAgent,graph=fileCount)}"> CsAgent FileCount </a>
+					</td>
+                    <td>Web App</td>
+                    <td>Comprehensive management for Operating System</td>
+                </tr>
+
+                <tr>
+                    <td><a class="simple" th:href="@{/file/propertyEncoder}"> Property Encryption</a></td>
+                    <td>Web App</td>
+                    <td>Use to encode property files using environment algorithm and key</td>
+                </tr>
+
+
+				<tr>
+                    <td>
+						<a class="simple" th:href="@{/viewScreencast(item=status,wiki=Overview)}">
+							viewScreencast</a>
+						<br/>
+
+						<a class="simple" th:href="@{/screencast(item=status,wiki=Overview)}">
+							screencast with redirect to csap tools</a>
+					</td>
+                    <td>html</td>
+                    <td>ScreenCasts</td>
+                </tr>
+
+				<tr>
+                    <td>
+                    
+						<a class="simple" th:href="@{/os/testLdap(numAttempts=5)}">
+							ldap connection test</a>
+						<br/>
+						
+						<a class="simple" th:href="@{/ssoLogin(ref='http://csaptools.yourcompany.com/admin/services?releasePackage=CSAP%20Engineering')}">
+							ssl login to csaptools</a>
+					</td>
+                    <td>html</td>
+                    <td>SSL login for labs without certs</td>
+                </tr>
+
+
+            </tbody>
+
+        </table>
+
+
+		<table id="core" class="simple" >
+            <thead>
+
+                <tr>
+                    <th><div class="title">Application Editing</div> Click to test</th>
+                    <th>returns</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+
+                <tr>
+                    <td><a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/application'} }"> Application Editor </a></td>
+                    <td>Web App</td>
+                    <td>UI Used to modify the application definition</td>
+                </tr>
+
+
+                <tr>
+                    <td><a class="simple" th:href="@{${ @csapCoreService.OS_URL + '/getConfigZip'} }"> Application Definition </a></td>
+                    <td>ZIP file</td>
+                    <td>Download Application definition</td>
+                </tr>
+
+                <tr>
+                    <td><a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/showSummary'} }"> Application Summary </a></td>
+                    <td>Web App</td>
+                    <td>Summary report of Application, included limits, instance information</td>
+                </tr>
+                <tr>
+                    <td><a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/lifecycle'} }"> Life Cycle Editor </a></td>
+                    <td>Web App</td>
+                    <td>Modify clusters, services, landing page, agent collections,...</td>
+                </tr>
+                <tr>
+                    <td>
+						<a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/serviceDialog'}(serviceName=CsAgent,hostName='*') }"> CsAgent </a><br/>
+						<a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/serviceDialog'}(serviceName=ServletSample,hostName='*') }"> ServletSample </a><br/>
+						<a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/serviceDialog'}(serviceName=BootEnterprise,hostName='*') }"> BootEnterprise </a><br/>
+						<a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/serviceDialog'}(serviceName=CsapTestDocker,hostName='*') }"> CsapTestDocker </a><br/>
+						<a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/serviceDialog'}(serviceName=nginx,hostName='*') }"> nginx </a><br/>
+						<a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/serviceDialog'}(serviceName=Cssp3ReferenceMq,hostName='*') }"> Cssp3ReferenceMq </a><br/>
+						<a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/serviceDialog'}(serviceName=PackageAJvm,hostName='*') }"> PackageAJvm  </a><br/>
+						<a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/serviceDialog'}(serviceName=jdk,hostName='*') }"> jdk  </a><br/>
+						<a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/serviceDialog'}(serviceName=httpd,hostName='*') }"> httpd  </a>
+						<a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/serviceDialog'}(serviceName=mongoDb,hostName='*') }"> mongoDb  </a>
+					</td>
+                    <td>Web App</td>
+                    <td>In context editing of service definition</td>
+                </tr>
+
+				<tr>
+                    <td>
+						<a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/clusterDialog'}(clusterName='*') }"> Cluster Editor </a><br/>
+					</td>
+                    <td>Web App</td>
+                    <td>Modify services and host assignment</td>
+                </tr>
+
+                <tr>
+                    <td>
+						<a class="simple" th:href="@{${ @csapCoreService.EDIT_URL + '/settingsDialog'}(serviceName=CsAgent,hostName='*') }"> Lifecycle Settings </a><br/>
+					</td>
+                    <td>Web App</td>
+                    <td>Settings include landing page, performance collections, etc.</td>
+                </tr>
+
+
+            </tbody>
+
+        </table>
+
+
+        <table id="appPerf" class="simple" >
+            <thead>
+
+                <tr>
+                    <th><div class="title">Performance Portal</div> Click to test</th>
+                    <th>returns</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>
+						<a class="simple" th:href="@{/os/performance(source=dev)}">Default(dev)</a><br/>
+                        <a class="simple" th:href="@{/os/performance(source=prod)}">Default(prod)</a><br/>
+                        <a class="simple" th:href="@{/os/performance(source=dev,appId=csapeng.gen,life=dev,project='CSAP Engineering')}">Performance csap dev</a><br/>
+                        <a class="simple" th:href="@{/os/performance(source=prod,appId=csapeng.gen,life=prod,project='CSAP Engineering')}">Performance csap prod</a><br/>
+                        <a class="simple" th:href="@{/os/performance(source=prod,appId=csapssp.gen,life=prod,project='SNTC and PSS')}">Performance sntc prod</a><br/>
+                        <a class="simple" th:href="@{/os/performance(source=prod,appId=csapir.gen,life=prod,project='Contract_MPC_OV')}">Performance OV prod</a><br/>
+                    </td>
+                    <td>Web App</td>
+                    <td>Use to view performance dashboard, browse to select </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <a class="simple" 
+                           th:href="@{/os/performance(source=dev,life=dev,host='csap-dev01',report=graphJmx,project='CSAP Desktop',service=CsAgent,appId=csapeng.gen,appGraph=appGraph)}">
+                            CsAgent Application: csap-dev01 </a>
+
+						<br/>
+                        <a class="simple" 
+                           th:href="@{/os/performance(test=prod,life=prod,host='v01app-prd802,v01app-prd803',report=graphJmx,project='SNTC and PSS',service=DataReaderSvc,appId=csapssp.gen,appGraph=appGraph)}">
+                            DataReader App Prod </a>
+
+					</td>
+
+                    <td>Web App</td>
+                    <td>Direct: show csagent application graphs</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <a class="simple" 
+                           th:href="@{/os/performance(source=dev,life=dev,report=tableVm,project='CSAP Engineering',appId=csapeng.gen)}">
+                            csapeng: Host Summary</a></td>
+
+                    <td>Web App</td>
+                    <td>Host Analytic Table</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <a class="simple" 
+                           th:href="@{/os/performance(source=dev,life=dev,report=tableService,project='CSAP Engineering',appId=csapeng.gen)}">
+                            csap-dev OS Analytics
+						</a>
+
+						<br/>
+						<a class="simple" th:href="@{/os/performance(source=prod,appId=csapssp.gen,life=prod,project='SNTC and PSS',report=tableService)}">
+							sntc3 OS Analytics
+						</a>
+					</td>
+
+                    <td>Web App</td>
+                    <td>Service Analytic Table</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <a class="simple" 
+                           th:href="@{/os/performance(source=dev,life=dev,report=tableUser,project='CSAP Engineering',appId=csapeng.gen)}">
+                            csapeng: User Summary</a></td>
+
+                    <td>Web App</td>
+                    <td>User Analytic Table</td>
+                </tr>
+
+                <tr>
+                    <td>
+
+                        <a class="simple" 
+                           th:href=
+						   "@{/os/performance(life=dev,host='csap-dev01,csap-dev02',report=graphService,project='CSAP Engineering',service=CsAgent,appId=csapeng.gen)}">
+                            CsAgent OS</a>
+						<br/>
+                        <a class="simple" 
+                           th:href=
+						   "@{/os/performance(life=dev,host='csap-dev01',report=graphService,project='CSAP Engineering',service=BootReference,appId=csapeng.gen)}">
+                            Boot Reference OS single</a>
+						<br/>
+                        <a class="simple" 
+                           th:href=
+						   "@{/os/performance(life=dev,host='csap-dev01,csap-dev02',report=graphService,project='CSAP Engineering',service=BootReference,appId=csapeng.gen)}">
+                            Boot Reference OS all</a>
+
+					</td>
+
+                    <td>Web App</td>
+                    <td>Stacked Graphs</td>
+                </tr>
+
+
+
+                <tr>
+                    <td>  
+                        <a class="simple" 
+                           th:href=
+						   "@{/os/performance(life=dev,host='csap-dev01',report=graphVm,project='CSAP Engineering',service=CsAgent,appId=csapeng.gen,appGraph=appGraph)}">
+                            csap-dev01 host</a>
+						<br/>
+                        <a class="simple" 
+                           th:href=
+						   "@{/os/performance(life=dev,host='csap-dev01',report=graphJmx,project='CSAP Engineering',service=CsAgent,appId=csapeng.gen,appGraph=appGraph)}">
+                            CsAgent_APP</a>
+						<br/>
+                        <a class="simple" 
+                           th:href="@{/os/performance(life=dev,host='csap-dev01',report=graphJmx,project='CSAP Engineering',service=CsAgent,appId=csapeng.gen)}">
+                            CsAgent_JMX</a>
+						<br/>
+
+
+                        <a class="simple" 
+                           th:href="@{/os/performance(life=dev,host='csap-dev01,csap-dev02,csap-dev03,csap-dev04',report=graphJmx,project='CSAP Engineering',service=CsAgent,appId=csapeng.gen)}">
+                            CsAgent_JMX_2hosts</a>
+						<br/>
+
+                        <a class="simple" 
+                           th:href="@{/os/performance(life=dev,host='csap-dev01,csap-dev02,csap-dev03,csap-dev04',report=graphJmx,appGraph=appGraph,project='CSAP Engineering',service=CsAgent,appId=csapeng.gen)}">
+                            CsAgent App 2 hosts</a>
+						<br/>
+                    </td>
+
+                    <td>Web App</td>
+                    <td>csapeng graphs</td>
+                </tr>
+
+                <tr>
+                    <td>
+						<a class="simple" th:href="@{/os/performance(source=prod,appId=csapssp.gen,life=prod,project='SNTC and PSS',report=graphVm,host='v01app-prd004,v01app-prd005,v01app-prd006,v01app-prd007,v01app-prd008,v01app-prd009')}">
+							SNTC3 Host Graphs
+						</a>
+						<br/>
+						<a class="simple" th:href="@{/os/performance(source=prod,appId=csapssp.gen,life=prod,project='SNTC and PSS',service=CsAgent,report=graphService,host='v01app-prd004,v01app-prd005,v01app-prd006,v01app-prd007,v01app-prd008,v01app-prd009')}">
+							CsAgent OS 
+						</a>
+						<br/>
+						<a class="simple" th:href="@{/os/performance(source=prod,appId=csapssp.gen,life=prod,project='SNTC and PSS',service=CsAgent,report=graphJmx,host='v01app-prd004,v01app-prd005,v01app-prd006,v01app-prd007,v01app-prd008,v01app-prd009')}">
+							CsAgent JMX 
+						</a>
+						<br/>
+
+                        <a class="simple" th:href="@{/os/performance(source=prod,appId=csapssp.gen,life=prod,project='SNTC and PSS',service=CsAgent,report=graphJmx,appGraph=appGraph,host='v01app-prd004,v01app-prd005,v01app-prd006,v01app-prd007,v01app-prd008,v01app-prd009')}">
+							CsAgent APP 
+						</a>
+						<br/>
+                        <a class="simple" th:href="@{/os/performance(source=prod,appId=csapssp.gen,life=prod,project='SNTC and PSS',service=activemq,report=graphJmx,host='v01app-prd004,v01app-prd005,v01app-prd006,v01app-prd007,v01app-prd008,v01app-prd009')}">
+							activemq JMX 
+						</a>
+						<br/>
+
+                        <a class="simple" th:href="@{/os/performance(source=prod,appId=csapssp.gen,life=prod,project='SNTC and PSS',service=activemq,report=graphJmx,appGraph=appGraph,host='v01app-prd004,v01app-prd005,v01app-prd006,v01app-prd007,v01app-prd008,v01app-prd009')}">
+							activemq APP 
+						</a>
+						<br/>
+
+                        <a class="simple" th:href="@{/os/performance(source=prod,appId=csapssp.gen,life=prod,project='SNTC and PSS',service=CsAgent,report=graphJmx,host='v01app-prd004,v01app-prd005,v01app-prd006,v01app-prd007,v01app-prd008,v01app-prd009')}">
+							IPP JMX 
+						</a>
+
+
+					</td>
+
+                    <td>Web App</td>
+                    <td>SNTC3 Graphs</td>
+                </tr>
+                <tr>
+                    <td>
+                        <a class="simple" 
+                           th:href="@{/os/performance(life=dev,report='service/detail',project='CSAP Engineering',service=CsAgent,appId=csapeng.gen)}">
+                            Analytics: Csagent OS</a>
+						<br/>
+
+                        <a class="simple" 
+                           th:href="@{/os/performance(life=dev,report='jmx/detail',project='CSAP Engineering',service=CsAgent,appId=csapeng.gen)}">
+                            Analytics: Csagent JMX</a>
+						<br/>
+
+                        <a class="simple" 
+                           th:href="@{/os/performance(life=dev,report='jmxCustom/detail',project='CSAP Engineering',service=CsAgent,appId=csapeng.gen)}">
+                            Analytics: Csagent Application</a>
+
+					</td>
+
+                    <td>Web App</td>
+                    <td>Service Portal cross launches for Analytics</td>
+                </tr>
+
+
+
+
+
+                <tr>
+                    <td> csaptools: 
+                        <a class="simple" th:href="@{/os/performance(test=dev)}"> SNTC3_dev </a>
+                        <a class="simple" th:href="@{/os/performance(test=prod)}"> SNTC3_prod </a>
+                    </td>
+                    <td>Web App</td>
+                    <td>Force view to  ssp dev</td>
+                </tr>
+
+
+
+                <tr>
+                    <td> csaptools: 
+                        <a class="simple" 
+                           th:href="@{/os/performance(test=dev,host='v01app-dev010',report=graphJmx,project='CSAP Desktop',service=CsAgent,appId=csapeng.gen,appGraph=appGraph)}">
+                            CsAgent_APP</a>
+                        <a class="simple" 
+                           th:href="@{/os/performance(test=dev,host='v01app-dev010',report=graphJmx,project='CSAP Desktop',service=CsAgent,appId=csapeng.gen)}">
+                            CsAgent_JMX</a>
+                    </td>
+
+                    <td>Web App</td>
+                    <td>Direct: show csagent cross launches</td>
+                </tr>
+
+                <tr>
+                    <td>csaptools:
+                        <a class="simple" 
+                           th:href="@{/os/performance(test=dev,report='service/detail',project='CSAP Desktop',service=CsAgent,appId=csapeng.gen)}">
+                            CsAgent_OS</a>
+                        <a class="simple" 
+                           th:href="@{/os/performance(test=dev,report='jmxCustom/detail',project='CSAP Desktop',service=CsAgent,appId=csapeng.gen)}">
+                            CsAgent_APP</a></td>
+
+                    <td>Web App</td>
+                    <td>Direct: show csagent analytics</td>
+                </tr>
+
+
+
+            </tbody>
+
+        </table>
+
+
+
+
+        <table id="metrics" class="simple" >
+            <thead>
+
+                <tr>
+                    <th><div class="title">Metrics Graphs</div> Click to test</th>
+                    <th>returns</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td><a class="simple" th:href="@{/os/metricsData(metricChoice=resource)}">host data</a></td>
+                    <td>json</td>
+                    <td>View  data for host shared resources</td>
+                </tr>
+
+                <tr>
+                    <td><a class="simple" th:href="@{/os/shared(hosts=${ host })}">host graphs</a></td>
+                    <td>html</td>
+                    <td>View graphs for host shared resources</td>
+                </tr>
+
+                <tr>
+                    <td><a class="simple" th:href="@{/os/metricsData(metricChoice=service)}">process data</a></td>
+                    <td>json</td>
+                    <td>View  data for os process resources</td>
+                </tr>
+
+                <tr>
+                    <td>
+						<a class="simple" th:href="@{/os/process(hosts=${ host })}">process graphs</a>, <br/> 
+						<a class="simple" th:href="@{/os/process(hosts=${host},graph='diskWriteKb')}">diskWriteKb</a><br/> 
+						<a class="simple" th:href="@{/os/process(hosts=${host},graph='rssMemory',service='CsAgent')}">rss Csagent</a><br/> 
+						<a class="simple" th:href="@{/os/process(hosts=${host},graph='topCpu',service='CsAgent')}">topCpu Csagent</a><br/> 
+						<a class="simple" th:href="@{/os/process(hosts=${host},graph='diskWriteKb',service='CsAgent')}">diskWriteKb Csagent</a>
+					</td>
+                    <td>html</td>
+                    <td>View graphs for os process resources</td>
+                </tr>
+
+
+
+                <tr>
+                    <td><a class="simple" th:href="@{/os/metricsData(metricChoice=jmx)}">java data</a></td>
+                    <td>json</td>
+                    <td>View  data for java resources</td>
+                </tr>
+
+                <tr>
+                    <td><a class="simple" th:href="@{/os/java(hosts=${host})}">java graphs: All</a></td>
+                    <td>html</td>
+                    <td>View graphs for java resources, all services</td>
+                </tr>
+
+                <tr>
+                    <td><a class="simple" th:href="@{/os/java(hosts=${host},service=CsAgent_8011)}">java graphs: CsAgent</a></td>
+                    <td>html</td>
+                    <td>View graphs for java resources - CsAgent only</td>
+                </tr>
+
+
+
+
+                <tr>
+                    <td><a class="simple" th:href="@{/os/metricsData(metricChoice=jmxCsAgent,hostName=localhost,serviceName=CsAgent_8011)}">CsAgent Custom Data</a></td>
+                    <td>json</td>
+                    <td>View  data for custom collection - CsAgent</td>
+                </tr>
+
+                <tr>
+                    <td><a class="simple" th:href="@{/os/application(hosts=${host},service=CsAgent_8011)}">Application graphs: CsAgent</a></td>
+                    <td>html</td>
+                    <td>View graphs for custom collection - CsAgent</td>
+                </tr>
+
+                <tr>
+                    <td><a class="simple" th:href="@{/os/application(hosts=${host},service=BootEnterprise_8321)}">Application graphs: BootEnterprise</a></td>
+                    <td>html</td>
+                    <td>View graphs for custom collection - BootEnterprise</td>
+                </tr>
+
+                <tr>
+                    <td><a class="simple" th:href="@{/os/application(hosts=${host},service=httpd_8080)}">Application graphs: Httpd</a></td>
+                    <td>html</td>
+                    <td>View graphs for for custom collection - Httpd</td>
+                </tr>
+
+
+            </tbody>
+
+        </table>
+
+
+
+
+        <table id="Files" class="simple" >
+            <thead>
+
+                <tr>
+                    <th><div class="title">File Manager and commands</div> Click to test</th>
+                    <th>returns</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+
+            <tbody th:with="double=__">
+
+                <tr>
+                    <td>
+						<a class="simple" th:href="@{/file/FileManager(serviceName=CsAgent_8011,fromFolder=.)}">
+							File Manager - CsAgent
+						</a>
+						
+						<br/>
+						<a class="simple" th:href="@{/file/FileMonitor(serviceName=CsAgent_8011,isLogFile=true,hostName=localhost)}">
+							File Monitor - CsAgent
+						</a>
+						
+						<br/>
+						<a class="simple" th:href="@{/file/FileManager(fromFolder=${ double + 'staging__/conf'})}">
+							File Manager - Staging
+						</a>
+					</td>
+                    <td>Web App</td>
+                    <td>File Manager used to Browse file system, with support for viewing, editing, uploading, tailing, .....</td>
+                </tr>
+
+                <tr>
+                    <td>
+						<a class="simple" th:href="@{/service/query/deployProgress(serviceName=ServletSample_8041,logFileOffset=-1,hostName=csap-dev01)}">
+							deployProgress: ServletSample_8041
+						</a>
+						<br/>
+					</td>
+                    <td>deployProgress</td>
+                    <td>deployProgress</td>
+                </tr>
+
+
+                <tr>
+                    <td><a class="simple" th:href="@{/file/browser/demo}">/file/browser</a></td>
+                    <td>Web App</td>
+                    <td>Browse file system, with support read only access for group based ACL</td>
+                </tr>
+
+                <tr>
+                    <td>
+						<a class="simple" th:href="@{/os/command(command=script,host=localhost,fromFolder=.)}">
+							run script
+						</a>
+						<br/>
+						
+						<a class="simple" th:href="@{/os/command(command=script,host=localhost,fromFolder=.,template=socketPid,pid='19453,19570,19494,19493,2813,19452')}">
+							run script - socket
+						</a>
+						<br/>
+						
+						<a class="simple" th:href="@{/os/command(command=script,host=localhost,fromFolder=.,template='cowPatch')}">
+							cow patch
+						</a>
+						<br/>
+						
+						<a class="simple" th:href="@{/os/command(command=delete,host=localhost,fromFolder=.)}">
+							delete
+						</a>
+						<br/>
+						
+						<a class="simple" th:href="@{/os/command(command=sync,host=localhost,fromFolder=.)}">
+							sync
+						</a>
+						<br/>
+						
+						<a class="simple" th:href="@{/os/command(command=upload,host=localhost,fromFolder=.)}">
+							upload
+						</a>
+						<br/>
+						
+						
+					</td>
+                    <td>Web App</td>
+                    <td>
+						OS Commands
+					</td>
+                </tr>
+
+
+
+
+            </tbody>
+
+        </table>
+
+
+        <table id="status" class="simple" >
+            <thead>
+
+                <tr>
+                    <th><div class="title">Agent Status</div> Click to test</th>
+                    <th>returns</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>
+                    	<a class="simple" th:href="@{/api/host/runtime}">/api/host/runtime</a>
+                    	<br/>
+                    	<a class="simple" th:href="@{/os/getManagerJson}">/os/getManagerJson deprecated</a>
+                    </td>
+                    <td>json</td>
+                    <td>The agent operational data - including real time meters</td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    	<a class="simple" th:href="@{/os/getVmStats}">getVmStats</a> <br/>
+                    	<a class="simple" th:href="@{/os/getLoad}">getLoad</a>
+                    </td>
+                    <td>json</td>
+                    <td>OS data</td>
+                </tr>
+
+
+                <tr>
+                    <td><a class="simple" th:href="@{/os/lastCollected}">/os/lastCollected</a></td>
+                    <td>json</td>
+                    <td>The last collected value for all services.</td>
+                </tr>
+                <tr>
+                    <td><a class="simple" th:href="@{/os/diskActivity}">/os/diskActivity</a></td>
+                    <td>json</td>
+                    <td>diskActivity.</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+
+
+
+    </body>
+
+</html>

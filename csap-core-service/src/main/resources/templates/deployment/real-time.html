@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+
+		<title th:replace="~{ deployment/real-time-head :: pageContent }"></title>
+
+
+	</head>
+
+	<body  style="min-width: 69em">
+
+		<header
+			style="text-align: left; padding-left: 8em; margin-bottom: 0em; clear: both">
+			Csap Real Time Meters:
+			<div class="noteHighlight">[[ ${
+				csapApp.getName() } ]]</div>
+		</header>
+
+
+		<div id="analyticsMeters"></div>
+
+		<span id="collectionTime">Auto refresh:</span>
+		<div id="progressbar"></div>
+
+		<br/>
+
+		<div id="meterTable">
+
+			<table id="vmTable" class="bordered reports fixed">
+				<thead>
+					<tr>
+						<th>Host</th>
+					</tr>
+				</thead>
+
+				<tbody></tbody>
+
+				<tfoot>
+
+					<tr class="totalRow">
+						<td style="text-align: right" data-math="col-count"
+							data-suffix=" Hosts" data-prefix=" Totals: "></td>
+					</tr>
+
+
+					<tr class="meanRow">
+						<td style="text-align: right">Average:</td>
+					</tr>
+
+				</tfoot>
+			</table>
+		</div>
+
+
+		<div id="meterHistogram"></div>
+
+
+	</body>
+
+</html>

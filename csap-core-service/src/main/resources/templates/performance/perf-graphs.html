@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<head><title>Sub page with templates</title></head>
+	<body th:fragment="pageContent" th:remove="tag">
+
+
+
+
+
+		<div id="catContainer" style="display: none">Needed for graph interface</div>
+
+
+		<div th:replace="/graphs/template :: pageContent"></div>
+
+		<div id="resourceGraphDiv" class="graphsContainer"></div>
+		<div id="serviceGraphDiv" class="graphsContainer" ></div>
+		<div id="jmxGraphDiv"   class="graphsContainer"></div>
+
+
+
+
+		<div id="appMetricsTemplate"  style="display: none">
+			<section id="appMetricsSection">
+				<div class="title">Application Metrics</div>
+
+				<div class="svcDiv">
+
+					<label class="" style="">
+						<input data-servicename="standard"  class="jmxRadio" type="radio" name="jmxMetricsRadio" 
+							   checked="checked"
+							   title="Standard java and tomcat settings, including heap, cpu, http listeners, etc" />
+						Default Jmx Attributes
+					</label>
+					<div
+						style="display: inline-block; font-size: 0.9em; margin-left: 2em; font-style: italic">
+						or Application attributes for selected service:</div>
+				</div>
+
+				<div id="jmxCustomServicesDiv">
+					name<input data-id=" name" class="jmxRadio" type="radio"
+							   name="jmxMetricsRadio"
+							   title="Custom JMX attributes specified in service definition" />
+				</div>
+
+				<span id="jmxCustomWhenClassSet" style="display: none"></span>
+			</section>
+
+		</div>
+
+
+		<div id="graphCustomizeDiv">
+
+			<div id="hostSelection" style="display: none;font-size: 0.8em;">
+
+				<label data-qtip="Select Host(s) for display. If multiple hosts are selected, graphs may be viewed per VM or stacked into a single panel">
+					<button  id="hostCustomize" class="pushButton" style="font-size: 0.8em; font-weight: bold; line-height: 1.2em">
+						Select Hosts (<span id="hostSelectCount">0</span>)</button>
+				</label>
+
+				<label id="applicationNameLabel"></label>
+
+				<label id="multiHostCustomize"  data-qtip="Graph display mode: separate each host into its own region, or combine host series">
+					Host Graphs:
+					<select id="isStackHosts" style="margin-left: 0.5em;vertical-align: middle;">
+						<option value="-1" >1 per graph</option>
+						<option value="99" >Merge: All</option>
+						<option value="0" selected="selected" >Merge: series 1</option>
+						<option value="1" >Merge: series 2</option>
+						<option value="2" >Merge: series 3</option>
+						<option value="3" >Merge: series 4</option>
+					</select>
+
+				</label>
+
+				<div id="hostDialogContainer" style="display: none">
+					<div id="hostCusomizeDialog">
+
+
+						<div class="info">
+
+							<label> All:
+								<a id="hostUnCheckAll" href="#" 
+								   class="pushButton">Clear</a> 
+
+								<a id="hostCheckAll" href="#" class="pushButton">Select</a>
+							</label>
+
+							<label class="entry">
+								Cluster: 
+								<select id="lcSelect" name="hosts"
+										style="margin: 0; padding: 0; width: 5em;">
+								</select> 
+							</label>
+
+							<label title="Select hosts using one or more performance attributes">Smart Select:</label>
+
+
+							<select id="vmSelectAttribute" title="Find hosts based on selected criteria"  >
+							</select>
+							<!-- Host attributes are always added-->
+							<select id="vmSelectTemplate" style="display: none" >
+								<option value="vm.coresActive">Host - Active Cpus</option>
+								<option value="vm.totalLoad">Host - Cpu Load</option>
+								<option value="vm.alertsCount">Host - Compute Alerts</option>
+								<option value="vm.totActivity">Host - User Activity</option>
+								<option value="vm.csapThreadsTotal">Host - Application Threads</option>
+								<option value="vm.socketTotal">Host - Open Sockets</option>
+								<option value="0" selected="selected">Attribute ...</option>
+							</select>
+
+							<label data-qtip="Select by top consumers"> Top: 
+								<select id="topVmSelect"  >
+									<option >0</option>
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option selected="selected">5</option>
+									<option>10</option>
+									<option>20</option>
+									<option value="999">All</option>
+								</select>
+
+							</label>
+							<label data-qtip="Select by lowest consumers">Bottom: 
+
+								<select id="lowVmSelect" >
+									<option selected="selected">0</option>
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option >5</option>
+									<option>10</option>
+									<option>20</option>
+									<option value="999">All</option>
+								</select>
+
+							</label>
+						</div>
+
+						<div id="hostDisplay">
+							<input data-host="" class="instanceCheck"
+								   style="margin-right: 0.2em" type="checkbox"
+								   title="Select to include in operations" />
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<div id="serviceGraphs" class="graphDiv" style="font-size: 1.0em">
+			</div>
+			<div id="resourceGraphs" class="graphDiv" style="font-size: 1.0em">
+			</div>
+			<div id="jmxGraphs" class="graphDiv" style="font-size: 1.0em">
+			</div>
+
+		</div>
+
+
+
+
+
+
+
+
+	</body>
+</html>

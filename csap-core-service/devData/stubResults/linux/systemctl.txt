@@ -1,0 +1,196 @@
+systemctl status --no-pager --full
+● csap-dev04
+    State: degraded
+     Jobs: 0 queued
+   Failed: 4 units
+    Since: Thu 2017-07-13 14:27:20 CDT; 2 weeks 5 days ago
+   CGroup: /
+           ├─1 /usr/lib/systemd/systemd --system --deserialize 30
+           ├─user.slice
+           │ ├─user-1001.slice
+           │ │ └─session-5527.scope
+           │ │   ├─18915 sshd: ssadmin [priv]
+           │ │   ├─18925 sshd: ssadmin@pts/0 
+           │ │   ├─18926 -bash
+           │ │   └─20050 systemctl status --no-pager --full
+           │ └─user-0.slice
+           │   └─session-5421.scope
+           │     └─20748 /usr/bin/perl -x /usr/local/tools/trends2
+           └─system.slice
+             ├─docker-0d92e24059525724c531016342460b65952c3348ff184159cf741458712c4c12.scope
+             │ └─1007 java -Xms256M -Xmx256M -Dspring.profiles.active=embedded -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.rmi.port=7086 -Dcom.sun.management.jmxremote.port=7086 -Djava.rmi.server.hostname=localhost -DcsapDockerJava -jar /csapTest.jar
+             ├─systemd-machined.service
+             │ └─19234 /usr/lib/systemd/systemd-machined
+             ├─docker-a813ba66385e850df692ca66713cc920ec733dbfbbac2011dbf2e91c4888894d.scope
+             │ ├─19211 /bin/sh -c echo use csap service log viewer; java -version ;java -Xms128M -Xmx133M -XX:MaxMetaspaceSize=96M  -XX:+ExitOnOutOfMemoryError -Djava.rmi.server.hostname=csap-dev04 -Dcom.sun.management.jmxremote.port=8366 -Dcom.sun.management.jmxremote.rmi.port=8366 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false  -DcsapProcessId=BootInDocker_8361  -Djava.security.egd=file:/dev/./urandom -DcsapDockerJava org.springframework.boot.loader.JarLauncher --spring.profiles.active=dev --server.context-path=/BootInDocker --server.port=8361 >> logs/consoleLogs.txt 2>&1
+             │ └─19272 java -Xms128M -Xmx133M -XX:MaxMetaspaceSize=96M -XX:+ExitOnOutOfMemoryError -Djava.rmi.server.hostname=csap-dev04 -Dcom.sun.management.jmxremote.port=8366 -Dcom.sun.management.jmxremote.rmi.port=8366 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -DcsapProcessId=BootInDocker_8361 -Djava.security.egd=file:/dev/./urandom -DcsapDockerJava org.springframework.boot.loader.JarLauncher --spring.profiles.active=dev --server.context-path=/BootInDocker --server.port=8361
+             ├─docker-latest.service
+             │ ├─  971 /usr/libexec/docker/docker-proxy-latest -proto tcp -host-ip 0.0.0.0 -host-port 7080 -container-ip 172.17.0.3 -container-port 8080
+             │ ├─  983 /usr/libexec/docker/docker-proxy-latest -proto tcp -host-ip 0.0.0.0 -host-port 7086 -container-ip 172.17.0.3 -container-port 7086
+             │ ├─  988 /usr/bin/docker-containerd-shim-latest 0d92e24059525724c531016342460b65952c3348ff184159cf741458712c4c12 /var/run/docker/libcontainerd/0d92e24059525724c531016342460b65952c3348ff184159cf741458712c4c12 /usr/libexec/docker/docker-runc-latest
+             │ ├─14672 /usr/bin/dockerd-latest --add-runtime docker-runc=/usr/libexec/docker/docker-runc-latest --default-runtime=docker-runc --authorization-plugin=rhel-push-plugin --exec-opt native.cgroupdriver=systemd --userland-proxy-path=/usr/libexec/docker/docker-proxy-latest --seccomp-profile=/etc/docker-latest/seccomp.json --config-file=/etc/docker-latest/daemon.json -g /var/lib/docker-latest --selinux-enabled --storage-driver=devicemapper --log-driver=journald --signature-verification=false --graph=/home/ssadmin/dockerStorage --host unix:///var/run/docker.sock -H tcp://0.0.0.0:4243 --add-registry registry.access.redhat.com --insecure-registry csap-dev04.yourcompany.com:5000
+             │ ├─14682 /usr/bin/docker-containerd-latest -l unix:///var/run/docker/libcontainerd/docker-containerd.sock --metrics-interval=0 --start-timeout 2m --state-dir /var/run/docker/libcontainerd/containerd --shim docker-containerd-shim --runtime docker-runc --runtime-args --systemd-cgroup=true
+             │ ├─19166 /usr/libexec/docker/docker-proxy-latest -proto tcp -host-ip 0.0.0.0 -host-port 8366 -container-ip 172.17.0.2 -container-port 8366
+             │ ├─19178 /usr/libexec/docker/docker-proxy-latest -proto tcp -host-ip 0.0.0.0 -host-port 8362 -container-ip 172.17.0.2 -container-port 8362
+             │ ├─19189 /usr/libexec/docker/docker-proxy-latest -proto tcp -host-ip 0.0.0.0 -host-port 8361 -container-ip 172.17.0.2 -container-port 8361
+             │ └─19194 /usr/bin/docker-containerd-shim-latest a813ba66385e850df692ca66713cc920ec733dbfbbac2011dbf2e91c4888894d /var/run/docker/libcontainerd/a813ba66385e850df692ca66713cc920ec733dbfbbac2011dbf2e91c4888894d /usr/libexec/docker/docker-runc-latest
+             ├─ssadmin.service
+             │ ├─ 7606 /home/ssadmin/processing/mongoArbiter_29017/mongodatabase/bin/mongod --config /home/ssadmin/processing/mongoArbiter_29017/conf/mongodb.conf --wiredTigerCacheSizeGB 4 --setParameter enableTestCommands=1
+             │ ├─ 7996 bin/redis-server *:6379         
+             │ ├─ 8211 bin/redis-sentinel *:26379 [sentinel]
+             │ ├─ 8530 /opt/java/jdk1.8.0_121/bin/java -DcsapJava8 -Xms128M -Xmx133M -XX:MaxMetaspaceSize=96M -Dserver.context-path=/RedisServices -Djava.rmi.server.hostname=csap-dev04 -Dcom.sun.management.jmxremote.port=8316 -Dcom.sun.management.jmxremote.rmi.port=8316 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/RedisServices_8311/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/RedisServices_8311/jmxremote.access -DcsapProcessId=RedisServices_8311 -DcsapEnvironmentVariables=arePresent -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.io.tmpdir=temp org.springframework.boot.loader.JarLauncher --spring.profiles.active=dev --server.port=8311
+             │ ├─ 9565 /opt/java/jdk1.8.0_121/bin/java -Djava.util.logging.config.file=/home/ssadmin/processing/jenkins_8271/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Xms512M -Xmx512M -XX:MaxPermSize=128m -Djava.awt.headless=true -Djava.rmi.server.hostname=csap-dev04 -Dcom.sun.management.jmxremote.port=8276 -Dcom.sun.management.jmxremote.rmi.port=8276 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/jenkins_8271/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/jenkins_8271/jmxremote.access -DcsapProcessId=jenkins_8271 -DcsapEnvironmentVariables=arePresent -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djdk.tls.ephemeralDHKeySize=2048 -Djava.endorsed.dirs=/home/ssadmin/processing/appsTomcat/apache-tomcat-8.0.35/endorsed -classpath /home/ssadmin/processing/appsTomcat/apache-tomcat-8.0.35/bin/bootstrap.jar:/home/ssadmin/processing/appsTomcat/apache-tomcat-8.0.35/bin/tomcat-juli.jar -Dcatalina.base=/home/ssadmin/processing/jenkins_8271 -Dcatalina.home=/home/ssadmin/processing/appsTomcat/apache-tomcat-8.0.35 -Djava.io.tmpdir=/home/ssadmin/processing/jenkins_8271/temp org.apache.catalina.startup.Bootstrap start
+             │ ├─11464 jstatd -J-Djava.security.policy=/home/ssadmin/.jstatd.all.policy
+             │ ├─12498 /opt/java/jdk1.8.0_121/bin/java -DcsapJava8 -Xms128M -Xmx133M -XX:MaxMetaspaceSize=96M -Dserver.context-path=/demoJava -Djava.rmi.server.hostname=csap-dev04 -Dcom.sun.management.jmxremote.port=8346 -Dcom.sun.management.jmxremote.rmi.port=8346 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/demoJava_8341/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/demoJava_8341/jmxremote.access -DcsapProcessId=demoJava_8341 -DcsapEnvironmentVariables=arePresent -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.io.tmpdir=temp org.springframework.boot.loader.JarLauncher --spring.profiles.active=dev --server.port=8341
+             │ ├─19643 /opt/java/jdk1.8.0_121/bin/java -DcsapJava8 -Dspring.profiles.active=dev,agent,limits -Dsun.rmi.transport.tcp.responseTimeout=3000 -XX:MaxMetaspaceSize=96M -Xms256M -Xmx256M -Djava.rmi.server.hostname=csap-dev04 -Dcom.sun.management.jmxremote.port=8016 -Dcom.sun.management.jmxremote.rmi.port=8016 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/CsAgent_8011/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/CsAgent_8011/jmxremote.access -DcsapProcessId=CsAgent_8011 -DcsapEnvironmentVariables=arePresent -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.io.tmpdir=temp org.springframework.boot.loader.JarLauncher --server.port=8011
+             │ ├─19733 top -b -d 15
+             │ ├─19794 mpstat 30
+             │ ├─19838 /usr/bin/sudo /home/ssadmin/staging/bin/scriptRunAsRoot.sh /home/ssadmin/staging/bin/servicePidStat.sh root
+             │ ├─19839 /bin/bash /home/ssadmin/staging/bin/scriptRunAsRoot.sh /home/ssadmin/staging/bin/servicePidStat.sh root
+             │ ├─19850 /bin/bash /home/ssadmin/staging/bin/servicePidStat.sh
+             │ ├─19851 pidstat -hd 15 1
+             │ ├─19852 sed s/  */ /g
+             │ ├─20147 mpstat 3600
+             │ └─20392 mpstat 300
+             ├─rpcbind.service
+             │ └─24874 /sbin/rpcbind -w
+             ├─rhel-push-plugin.service
+             │ └─9153 /usr/libexec/docker/rhel-push-plugin
+             ├─tuned.service
+             │ └─13075 /usr/bin/python -Es /usr/sbin/tuned -l -P
+             ├─irqbalance.service
+             │ └─13023 /usr/sbin/irqbalance --foreground
+             ├─polkit.service
+             │ └─12994 /usr/lib/polkit-1/polkitd --no-debug
+             ├─auditd.service
+             │ └─12643 /sbin/auditd -n
+             ├─vmtoolsd.service
+             │ └─12603 /usr/bin/vmtoolsd
+             ├─ntpd.service
+             │ └─12581 /usr/sbin/ntpd -u ntp:ntp -u ntp:ntp -p /var/run/ntpd.pid -g
+             ├─sshd.service
+             │ └─12555 /usr/sbin/sshd -D
+             ├─lvm2-lvmetad.service
+             │ └─12491 /usr/sbin/lvmetad -f
+             ├─systemd-udevd.service
+             │ └─10329 /usr/lib/systemd/systemd-udevd
+             ├─crond.service
+             │ └─10108 /usr/sbin/crond -n
+             ├─rsyslog.service
+             │ └─1060 /usr/sbin/rsyslogd -n
+             ├─rhnsd.service
+             │ └─1073 rhnsd
+             ├─puppet.service
+             │ └─4311 /usr/bin/ruby /usr/bin/puppet agent --no-daemonize
+             ├─rhsmcertd.service
+             │ └─1053 /usr/bin/rhsmcertd
+             ├─postfix.service
+             │ ├─ 1819 /usr/libexec/postfix/master -w
+             │ ├─ 1855 qmgr -l -t unix -u
+             │ └─18244 pickup -l -t unix -u
+             ├─atd.service
+             │ └─804 /usr/sbin/atd -f
+             ├─abrt-oops.service
+             │ └─766 /usr/bin/abrt-watch-log -F BUG: WARNING: at WARNING: CPU: INFO: possible recursive locking detected ernel BUG at list_del corruption list_add corruption do_IRQ: stack overflow: ear stack overflow (cur: eneral protection fault nable to handle kernel ouble fault: RTNL: assertion failed eek! page_mapcount(page) went negative! adness at NETDEV WATCHDOG ysctl table check failed : nobody cared IRQ handler type mismatch Machine Check Exception: Machine check events logged divide error: bounds: coprocessor segment overrun: invalid TSS: segment not present: invalid opcode: alignment check: stack segment: fpu exception: simd exception: iret exception: /var/log/messages -- /usr/bin/abrt-dump-oops -xtD
+             ├─gssproxy.service
+             │ └─792 /usr/sbin/gssproxy -D
+             ├─NetworkManager.service
+             │ └─763 /usr/sbin/NetworkManager --no-daemon
+             ├─dbus.service
+             │ ├─  754 /bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation
+             │ └─18948 /usr/sbin/abrt-dbus -t133
+             ├─abrtd.service
+             │ └─753 /usr/sbin/abrtd -d -s
+             ├─smartd.service
+             │ └─752 /usr/sbin/smartd -n -q never
+             ├─systemd-logind.service
+             │ └─744 /usr/lib/systemd/systemd-logind
+             ├─libstoragemgmt.service
+             │ └─743 /usr/bin/lsmd -d
+             ├─systemd-journald.service
+             │ └─581 /usr/lib/systemd/systemd-journald
+             ├─system-serial\x2dgetty.slice
+             │ └─serial-getty@ttyS0.service
+             │   └─8474 /sbin/agetty --keep-baud 115200 38400 9600 ttyS0 vt220
+             └─system-getty.slice
+               └─getty@tty1.service
+                 └─8473 /sbin/agetty --noclear tty1 linux
+csap-dev04:/home/ssadmin> 
+
+
+  UNIT                                                 LOAD   ACTIVE SUB     DESCRIPTION
+  abrt-ccpp.service                                    loaded active exited  Install ABRT coredump hook
+  abrt-oops.service                                    loaded active running ABRT kernel log watcher
+  abrtd.service                                        loaded active running ABRT Automated Bug Reporting Tool
+  atd.service                                          loaded active running Job spooling tools
+  auditd.service                                       loaded active running Security Auditing Service
+  cloud-config.service                                 loaded active exited  Apply the settings specified in cloud-config
+  cloud-final.service                                  loaded active exited  Execute cloud user/final scripts
+  cloud-init-local.service                             loaded active exited  Initial cloud-init job (pre-networking)
+  cloud-init.service                                   loaded active exited  Initial cloud-init job (metadata service crawler)
+  crond.service                                        loaded active running Command Scheduler
+  dbus.service                                         loaded active running D-Bus System Message Bus
+● docker-latest-storage-setup.service                  loaded failed failed  Docker Storage Setup
+  docker-latest.service                                loaded active running Docker Application Container Engine
+● docker-storage-setup.service                         loaded failed failed  Docker Storage Setup
+  getty@tty1.service                                   loaded active running Getty on tty1
+  gssproxy.service                                     loaded active running GSSAPI Proxy Daemon
+  irqbalance.service                                   loaded active running irqbalance daemon
+  kdump.service                                        loaded active exited  Crash recovery kernel arming
+  kmod-static-nodes.service                            loaded active exited  Create list of required static device nodes for the current kernel
+  libstoragemgmt.service                               loaded active running libstoragemgmt plug-in server daemon
+  lvm2-lvmetad.service                                 loaded active running LVM2 metadata daemon
+  lvm2-monitor.service                                 loaded active exited  Monitoring of LVM2 mirrors, snapshots etc. using dmeventd or progress polling
+  network.service                                      loaded active exited  LSB: Bring up/down networking
+  NetworkManager-wait-online.service                   loaded active exited  Network Manager Wait Online
+  NetworkManager.service                               loaded active running Network Manager
+  ntpd.service                                         loaded active running Network Time Service
+● ovirt-guest-agent.service                            loaded failed failed  oVirt Guest Agent
+  polkit.service                                       loaded active running Authorization Manager
+  postfix.service                                      loaded active running Postfix Mail Transport Agent
+  puppet.service                                       loaded active running Puppet agent
+  rc-local.service                                     loaded active exited  /etc/rc.d/rc.local Compatibility
+  rhel-dmesg.service                                   loaded active exited  Dump dmesg to /var/log/dmesg
+  rhel-import-state.service                            loaded active exited  Import network configuration from initramfs
+  rhel-push-plugin.service                             loaded active running Docker Block RHEL push plugin authZ Plugin
+  rhel-readonly.service                                loaded active exited  Configure read-only root support
+  rhnsd.service                                        loaded active running LSB: Starts the Spacewalk Daemon
+  rhsmcertd.service                                    loaded active running Enable periodic update of entitlement certificates.
+● rngd.service                                         loaded failed failed  Hardware RNG Entropy Gatherer Daemon
+  rpcbind.service                                      loaded active running RPC bind service
+  rsyslog.service                                      loaded active running System Logging Service
+  serial-getty@ttyS0.service                           loaded active running Serial Getty on ttyS0
+  smartd.service                                       loaded active running Self Monitoring and Reporting Technology (SMART) Daemon
+  ssadmin.service                                      loaded active running LSB: ActiveMQ is a JMS Messaging Queue Server.
+  sshd.service                                         loaded active running OpenSSH server daemon
+  sysstat.service                                      loaded active exited  Resets System Activity Logs
+  systemd-binfmt.service                               loaded active exited  Set Up Additional Binary Formats
+  systemd-fsck@dev-cstg_volume_group-extraLV.service   loaded active exited  File System Check on /dev/cstg_volume_group/extraLV
+  systemd-fsck@dev-cstg_volume_group-ssadminLV.service loaded active exited  File System Check on /dev/cstg_volume_group/ssadminLV
+  systemd-journal-flush.service                        loaded active exited  Flush Journal to Persistent Storage
+  systemd-journald.service                             loaded active running Journal Service
+  systemd-logind.service                               loaded active running Login Service
+  systemd-machined.service                             loaded active running Virtual Machine and Container Registration Service
+  systemd-random-seed.service                          loaded active exited  Load/Save Random Seed
+  systemd-remount-fs.service                           loaded active exited  Remount Root and Kernel File Systems
+  systemd-sysctl.service                               loaded active exited  Apply Kernel Variables
+  systemd-tmpfiles-setup-dev.service                   loaded active exited  Create Static Device Nodes in /dev
+  systemd-tmpfiles-setup.service                       loaded active exited  Create Volatile Files and Directories
+  systemd-udev-settle.service                          loaded active exited  udev Wait for Complete Device Initialization
+  systemd-udev-trigger.service                         loaded active exited  udev Coldplug all Devices
+  systemd-udevd.service                                loaded active running udev Kernel Device Manager
+  systemd-update-utmp.service                          loaded active exited  Update UTMP about System Boot/Shutdown
+  systemd-user-sessions.service                        loaded active exited  Permit User Sessions
+  systemd-vconsole-setup.service                       loaded active exited  Setup Virtual Console
+  tuned.service                                        loaded active running Dynamic System Tuning Daemon
+  vmtoolsd.service                                     loaded active running Service for virtual machines hosted on VMware
+  yum-update.service                                   loaded active exited  yum-update on startup
+
+LOAD   = Reflects whether the unit definition was properly loaded.
+ACTIVE = The high-level unit activation state, i.e. generalization of SUB.
+SUB    = The low-level unit activation state, values depend on unit type.
+
+66 loaded units listed. Pass --all to see loaded but inactive units, too.
+To show all installed unit files use 'systemctl list-unit-files'.
+csap-dev04:/home/ssadmin> 
+

@@ -1,0 +1,211 @@
+{
+
+	"packageDefinition": {
+		"name": "Supporting Sample A",
+		"architect": "someUser@yourCompany.com",
+		"emailNotifications": "support@notConfigured.com"
+	}, 
+
+	"clusterDefinitions": {
+		"dev": {
+			"middlewareA": {
+				"jvmPorts": {
+					"Factory2Sample": [
+						"804x"
+					],
+					"PackageAJvm": [
+						"805x"
+					]
+				},
+				"osProcessesList": [
+					"oracle"
+				],
+				"multiVm": {
+					"1": {
+						"hosts": [
+							"pkgaHost1"
+						],
+						"vdcImage": "factory-64bit-1.0"
+					}
+				}
+			},
+			"WebServer": {
+				"jvmPorts": {
+					"Factory2Sample": [
+						"804x"
+					],
+					"PackageAJvm": [
+						"805x"
+					]
+				},
+				"osProcessesList": [
+					"oracle"
+				],
+				"multiVm": {
+					"1": {
+						"hosts": [
+							"pkgaHost2"
+						],
+						"vdcImage": "factory-64bit-1.0"
+					}
+				}
+			}
+		}
+	},
+	"jvms": {
+
+		"Factory2Sample": {
+			"description": "Provides cssp-2.x reference implementation for engineering, along with core platform regression tests.",
+			"docUrl": "https://github.com/csap-platform/csap-core/wiki#/Code+Samples",
+			"java": "-XX:-UseSplitVerifier -Xms128M -Xmx128M -XX:MaxPermSize=128m",
+			"server": "cssp-2.x",
+			"autoStart": "55",
+			"source": {
+				"scm": "svn",
+				"path": "http://yourSvnOrGit/yourPathToSource/CsspFactorySample",
+				"branch": "HEAD"
+			},
+			"maven": {
+				"dependency": "com.your.group:Cssp2FactorySample:2.0.21:war"
+			},
+			"customMetrics": {
+				"TotalVmCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"attribute": "SystemCpuLoad"
+				},
+				"ProcessCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"attribute": "ProcessCpuLoad"
+				},
+				"SpringJmsListeners": {
+					"mbean": "org.csap.:application=csap,name=SpringBeans",
+					"attribute": "JmsActive"
+				},
+				"SpringJmsOnMessage": {
+					"simonCounter": "zmetrics.Demo_JmsListener.onMessage()"
+				},
+				"SpringDbcpActive": {
+					"mbean": "org.csap.:application=csap,name=SpringBeans",
+					"attribute": "DbActive"
+				},
+				"SpringDbcpIdle": {
+					"mbean": "org.csap.:application=csap,name=SpringBeans",
+					"attribute": "DbIdle"
+				},
+				"DBAddItem": {
+					"simonCounter": "zmetrics.Demo_DataAccessObject.addSchedule()"
+				},
+				"DBShowItem": {
+					"simonCounter": "zmetrics.Demo_DataAccessObject.showScheduleItemsJpql()"
+				}
+			},
+			"version": {
+				"1": {
+					"dev": {},
+					"stage": {},
+					"lt": {},
+					"prod": {}
+				},
+				"2": {}
+			},
+			"servletThreadCount": "48",
+			"servletAccept": "0",
+			"servletMaxConnections": "47",
+			"servletTimeoutMs": "5000",
+			"metaData": "-nio"
+		}, 
+
+		"PackageAJvm": {
+			"description": "Provides cssp-2.x reference implementation for engineering, along with core platform regression tests.",
+			"docUrl": "https://github.com/csap-platform/csap-core/wiki#/Code+Samples",
+			"java": "-XX:-UseSplitVerifier -Xms128M -Xmx128M -XX:MaxPermSize=128m",
+			"server": "cssp-2.x",
+			"autoStart": "55",
+			"source": {
+				"scm": "svn",
+				"path": "http://yourSvnOrGit/yourPathToSource/CsspFactorySample",
+				"branch": "HEAD"
+			},
+			"maven": {
+				"dependency": "com.your.group:Cssp2FactorySample:2.0.21:war"
+			},
+			"version": {
+				"1": {
+					"dev": {},
+					"stage": {},
+					"lt": {},
+					"prod": {}
+				},
+				"2": {}
+			},
+			"customMetrics": {
+				"TotalVmCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"title": "Title from releasePackageA.json",
+					"attribute": "SystemCpuLoad"
+				}
+			},
+			"servletThreadCount": "48",
+			"servletAccept": "0",
+			"servletMaxConnections": "47",
+			"servletTimeoutMs": "5000",
+			"metaData": "-nio"
+		}
+	},
+	"osProcesses": {
+		"oracle": {
+			"description": "Oracle provides a data persistence services.",
+			"docUrl": "http://www.oracle.com/",
+			"port": "1521",
+			"autoStart": "10",
+			"deployTimeoutMinutes": "60",
+			"logDirectory": "/home/oracle/base/diag/rdbms/$hsuffix/$hsuffix/trace",
+			"propDirectory": "/home/oracle",
+			"logRegEx": ".*\\.log",
+			"url": "http://$host.yourcompany.com:8011/CsAgent/ui/FileManager?fromFolder=/home/oracle",
+			"user": "oracle",
+			"disk": "oracleLV",
+			"server": "wrapper",
+			"metaData": "isOsWrapper,skipJmxCollection,isDataStore",
+			"maven": {
+				"dependency": "com.yourcompany.csap:OracleWrapper:11.2.0.3.1:zip"
+			},
+			"source": {
+				"scm": "svn",
+				"path": "http://yourSvnOrGit/svn/csap/trunk/OracleWrapper",
+				"branch": "HEAD"
+			},
+			"version": {
+				"1": {
+					"dev": {
+					},
+					"stage": {
+					},
+					"lt": {
+					},
+					"prod": {
+					}
+				},
+				"2": {
+					"dev": {
+					},
+					"stage": {
+					},
+					"lt": {
+					},
+					"prod": {
+					}
+				}
+			},
+			"processFilter": ".*oracle.*",
+			"jmxPort": "-1",
+			"monitors": {
+				"max_diskUtil": "30g",
+				"max_threadCount": "100",
+				"max_fileCount": "150",
+				"max_topCpu": "100",
+				"max_rssMemory": "10g"
+			}
+		}
+	}
+}

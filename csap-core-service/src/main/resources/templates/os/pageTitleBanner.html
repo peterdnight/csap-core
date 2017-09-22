@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>TODO supply a title</title>
+	</head>
+	<body th:fragment="pageContent" th:remove="tag" >
+
+
+
+		<header>
+			CSAP Command Runner: <div class="noteHighlight">[[ ${ command } ]]</div>
+			Primary: <div class="noteHighlight">[[ ${ host } ]]</div>
+
+			<a id="helpButton" class="simple" href="#"
+			   style="font-size: 0.7em; font-weight: normal; display: inline-block; float: right; margin-left: 3em; margin-right: 1em"
+			   title=""
+			   >
+				<img class="but" src="../images/16x16/help.png"/>Help
+			</a>
+
+			<select id="quickSearch" style="margin-left: 2em" title="Select a template for common searches">
+				<option value="none">Search Templates...</option>
+				<option value="lastException">Last Exception</option>
+				<option value="allException">All Exceptions</option>
+				<option value="last100Exception">Exceptions in Last 100 Lines</option>
+				<option value="Server startup">Last Tomcat start</option>
+				<option value="StartupInfoLogger.logStarted">Last Spring Boot start</option>
+				<option value="CsapBootConfig.java">@CsapMicroService Configuration</option>
+				<option value="last10Lines">Last 10 Lines</option>
+				<option value="Exception">Last Exception</option>
+				<option value="ERROR">Last ERROR</option>
+				<option value="WARN">Last WARN</option>
+				<option value="OutOfMemoryError">Last OutOfMemoryError</option>
+			</select>
+
+			<div id="helpNotes" class="options"
+				 style="position: absolute; z-index: 2; font-size: 0.7em; text-align: left; right: 0; width: 400px; display: none;"
+
+				 >
+				<ol class="decimal">
+					<li>Be very certain you have correctly information correctly. The "undo" command consists of opening a case
+						with IT (48 hours).</li>
+					<li>Host Admin allows the deployment of any zip file to a given host. It is HIGHLY recommended that only zips
+						built using maven assemblies be deployed</li>
+					<li>Once deployed to a single host, the target folder can be replicated across the entire life cycle</li>
+					<li>Use of the file browser is recommended to validate results.</li>
+				</ol>
+			</div>
+
+			<span th:with="double='__'" >
+				<a id="browseButton" class="simple" target="_blank" th:href="@{/file/FileManager(fromFolder=${ double + 'staging__/conf'})}"
+				   style="font-size: 0.7em; font-weight: normal; display: inline-block; float: right;" title=""
+				   >
+					<img class="but" src="../images/16x16/logs.png">Browse Files
+				</a>
+			</span>
+			<div id="nonAdminWarning" class="infoWarn" th:if='${adminRole == false && !command.equals("logSearch") } '>
+				OS Commands disabled as your userid is not a member of admin group: [[ ${ adminGroup } ]]
+			</div>
+		</header>
+
+	</body>
+</html>

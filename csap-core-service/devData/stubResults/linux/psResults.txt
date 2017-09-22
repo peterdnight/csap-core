@@ -1,0 +1,290 @@
+Run the following on csap-dev01: ps -e --no-heading --sort -rss -o pcpu,rss,vsz,nlwp,ruser,pid,nice,args | sed 's/  */ /g'
+
+
+6.2 243616 3707984 32 ssadmin 31239 0 java -DcsapJava8 -Xms128M -Xmx133M -XX:MaxMetaspaceSize=96M -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8296 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -DredirectOutput=true -DredirectOutput=true -Dcom.yourcompany.ca.csp.cso.platform.service.name=SpringBootRest -Dcom.yourcompany.ca.csp.cso.platform.service.httpport=8291 -Dcom.yourcompany.ca.csp.cso.platform.service.jmxport=8296 -Dcom.yourcompany.ca.csp.cso.platform.service.loadBalanceUrl=http://csap-secure.yourcompany.com -Dcom.yourcompany.ca.csp.cso.platform.service.life=dev -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/SpringBootRest_8291/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/SpringBootRest_8291/jmxremote.access -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -jar /home/ssadmin/staging/warDist/SpringBootRest.jar --server.port=8291
+ 0.1 387144 4449820 37 ssadmin 24676 0 /opt/java/jdk1.8.0_60/bin/java -Djava.util.logging.config.file=/home/ssadmin/processing/SpringBootUI_8251/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -DcsapJava8 -Xms128M -Xmx133M -XX:MaxMetaspaceSize=96M -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8256 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -DredirectOutput=true -DredirectOutput=true -Dcom.yourcompany.ca.csp.cso.platform.service.name=SpringBootUI -Dcom.yourcompany.ca.csp.cso.platform.service.httpport=8251 -Dcom.yourcompany.ca.csp.cso.platform.service.jmxport=8256 -Dcom.yourcompany.ca.csp.cso.platform.service.loadBalanceUrl=http://csap-secure.yourcompany.com -Dcom.yourcompany.ca.csp.cso.platform.service.life=dev -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/SpringBootUI_8251/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/SpringBootUI_8251/jmxremote.access -Dcom.yourcompany.ca.csp.cso.platform.service.version=0.0.1-SNAPSHOT -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.endorsed.dirs=/home/ssadmin/processing/tomcat8Linux-8.0.26/endorsed -classpath /home/ssadmin/processing/tomcat8Linux-8.0.26/bin/bootstrap.jar:/home/ssadmin/processing/tomcat8Linux-8.0.26/bin/tomcat-juli.jar -Dcatalina.base=/home/ssadmin/processing/SpringBootUI_8251 -Dcatalina.home=/home/ssadmin/processing/tomcat8Linux-8.0.26 -Djava.io.tmpdir=/home/ssadmin/processing
+ 0.5 221880 5073696 83 mquser 6383 -5 java -Dactivemq.home=../.. -Dactivemq.base=../.. -Djavax.net.ssl.keyStorePassword=password -Djavax.net.ssl.trustStorePassword=password -Djavax.net.ssl.keyStore=../../conf/broker.ks -Djavax.net.ssl.trustStore=../../conf/broker.ts -Dcom.sun.management.jmxremote -Dorg.apache.activemq.UseDedicatedTaskRunner=true -Djava.util.logging.config.file=logging.properties -Dactivemq.conf=../../conf -Dactivemq.data=../../data -Dcom.sun.management.jmxremote.port=8166 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Xmx512m -Djava.library.path=../../bin/linux-x86-64/ -classpath ../../bin/wrapper.jar:../../bin/activemq.jar -Dwrapper.key=qtU6tRdg15RiQ4UF -Dwrapper.port=32000 -Dwrapper.jvm.port.min=31000 -Dwrapper.jvm.port.max=31999 -Dwrapper.pid=6381 -Dwrapper.version=3.2.3 -Dwrapper.native_library=wrapper -Dwrapper.service=TRUE -Dwrapper.cpu.timeout=10 -Dwrapper.jvmid=1 org.tanukisoftware.wrapper.WrapperSimpleApp org.apache.activemq.console.Main start
+ 1.4 5161636 56960240 69 ssadmin 23124 0 /home/ssadmin/processing/mongoDb_27017/mongodatabase/bin/mongod --config /home/ssadmin/processing/mongoDb_27017/conf/mongodb.conf --setParameter enableTestCommands=1 --quiet
+ 0.2 595480 6561836 78 ssadmin 20110 0 /opt/java/jdk1.8.0_25/bin/java -Djava.util.logging.config.file=/home/ssadmin/processing/analytics_8231/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -DcsapJava8 -Xms768M -Xmx768M -XX:MaxMetaspaceSize=96M -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8236 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -DredirectOutput=true -DredirectOutput=true -Dcom.yourcompany.ca.csp.cso.platform.service.name=analytics -Dcom.yourcompany.ca.csp.cso.platform.service.httpport=8231 -Dcom.yourcompany.ca.csp.cso.platform.service.jmxport=8236 -Dcom.yourcompany.ca.csp.cso.platform.service.loadBalanceUrl=http://csap-secure.yourcompany.com -Dcom.yourcompany.ca.csp.cso.platform.service.life=dev -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/analytics_8231/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/analytics_8231/jmxremote.access -Dcom.yourcompany.ca.csp.cso.platform.service.version=1.0.4.4 -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.endorsed.dirs=/home/ssadmin/processing/cssp3-3.0.19/endorsed -classpath /home/ssadmin/processing/cssp3-3.0.19/bin/bootstrap.jar:/home/ssadmin/processing/cssp3-3.0.19/bin/tomcat-juli.jar -Dcatalina.base=/home/ssadmin/processing/analytics_8231 -Dcatalina.home=/home/ssadmin/processing/cssp3-3.0.19 -Djava.io.tmpdir=/home/ssadmin/processing/analytics_8231/temp org.apache.catalina.startup.Bootstrap start
+
+ 0.1 699096 5691084 51 ssadmin 27284 0 /opt/java/jdk1.8.0_101/bin/java -DcsapJava8 -Xms256M -Xmx256M -XX:MaxMetaspaceSize=96M -XX:+ExitOnOutOfMemoryError -Dserver.context-path=/BootEnterprise-dev01 -Djava.rmi.server.hostname=csapdb-dev01 -Dcom.sun.management.jmxremote.port=8326 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/BootEnterprise_8321/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/BootEnterprise_8321/jmxremote.access -DcsapProcessId=BootEnterprise_8321 -DcsapEnvironmentVariables=arePresent -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.io.tmpdir=temp org.springframework.boot.loader.JarLauncher --spring.profiles.active=dev --server.port=8321
+#csagent
+15.1 556080 6055256 88 ssadmin 4149 -12 /opt/java/jdk1.8.0_101/bin/java -DcsapJava8 -Dsun.rmi.transport.tcp.responseTimeout=3000 -XX:MaxMetaspaceSize=96M -Xms256M -Xmx256M -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8016 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/CsAgent_8011/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/CsAgent_8011/jmxremote.access -DcsapProcessId=CsAgent_8011 -DcsapEnvironmentVariables=arePresent -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.io.tmpdir=temp org.springframework.boot.loader.JarLauncher --spring.profiles.active=dev --server.port=8011
+
+# docker
+0.1 49480 1983176 26 root 6985 0 /usr/bin/dockerd-current --add-runtime docker-runc=/usr/libexec/docker/docker-runc-current --default-runtime=docker-runc --authorization-plugin=rhel-push-plugin --exec-opt native.cgroupdriver=systemd --userland-proxy-path=/usr/libexec/docker/docker-proxy-current --selinux-enabled --log-driver=journald --signature-verification=false -g /home/ssadmin/dockerStorage -H unix:///var/run/docker.sock -H tcp://0.0.0.0:4243 --add-registry registry.access.redhat.com --insecure-registry csap-dev04.yourcompany.com:5000
+
+
+# CsapTestDocker
+ 1.2 509364 5981672 72 root 10133 0 java -Xms256M -Xmx256M -Dspring.profiles.active=embedded -Djava.security.egd=file:/dev/./urandom -DcsapJava8 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.rmi.port=7086 -Dcom.sun.management.jmxremote.port=7086 -Djava.rmi.server.hostname=csap-dev01 -DcsapJmxPort=7086 -jar /csapTest.jar
+ 
+#admin
+ 0.4 530788 5607180 54 ssadmin 4823 0 /opt/java/jdk1.8.0_72/bin/java -DcsapJava8 -XX:MaxMetaspaceSize=96M -Xms256M -Xmx256M -DmgrUi=mgrUi -Dserver.context-path=/admin -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8916 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/admin_8911/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/admin_8911/jmxremote.access -DcsapProcessId=admin_8911 -DcsapEnvironmentVariables=arePresent -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.io.tmpdir=temp org.springframework.boot.loader.JarLauncher --spring.profiles.active=dev --server.port=8911
+
+#analytics
+0.2 1038280 7404888 70 ssadmin 23528 0 /opt/java/jdk1.8.0_72/bin/java -DcsapJava8 -DcsapLegacy -Xms1500m -Xmx1500m -XX:MaxMetaspaceSize=96M -Dserver.context-path=/analytics -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8236 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/analytics_8231/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/analytics_8231/jmxremote.access -DcsapProcessId=analytics_8231 -DcsapEnvironmentVariables=arePresent -Dcom.sun.management.jmxremote.port=8236 -DredirectOutput=true -Dcom.yourcompany.ca.csp.cso.platform.service.name=analytics -Dcom.yourcompany.ca.csp.cso.platform.service.host=csap-dev01 -Dcom.yourcompany.ca.csp.cso.platform.service.httpport=8231 -Dcom.yourcompany.ca.csp.cso.platform.service.jmxport= -Dcom.yourcompany.ca.csp.cso.platform.service.cluster=dev-dataServices-1 -Dcom.yourcompany.ca.csp.cso.platform.service.loadBalanceUrl=http://csap-secure.yourcompany.com -Dcom.yourcompany.ca.csp.cso.platform.service.life=dev -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.io.tmpdir=temp org.springframework.boot.loader.JarLauncher --spring.profiles.active=dev --server.port=8231
+
+#data
+ 0.1 635064 6018192 71 ssadmin 8480 0 /opt/java/jdk1.8.0_72/bin/java -DcsapJava8 -DcsapLegacy -Xms256M -Xmx256M -XX:MaxMetaspaceSize=96M -Dserver.context-path=/data -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8286 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/data_8281/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/data_8281/jmxremote.access -DcsapProcessId=data_8281 -DcsapEnvironmentVariables=arePresent 
+
+#mongo
+1.7 7250808 8107612 66 ssadmin 29094 0 /home/ssadmin/processing/mongoDb_27017/mongodatabase/bin/mongod --config /home/ssadmin/processing/mongoDb_27017/conf/mongodb3.conf 
+
+#Bootreference
+ 85.0 354684 5666024 58 ssadmin 27480 0 /opt/java/jdk1.8.0_91/bin/java -DcsapJava8 -Xms128M -Xmx133M -XX:MaxMetaspaceSize=96M -Dserver.context-path=/CsapSimple -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8336 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/CsapSimple_8331/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/CsapSimple_8331/jmxremote.access -DcsapProcessId=CsapSimple_8331 -DcsapEnvironmentVariables=arePresent -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.io.tmpdir=temp org.springframework.boot.loader.JarLauncher --spring.profiles.active=dev --server.port=8331
+ 20.9 318772 5066948 48 ssadmin 27688 0 /opt/java/jdk1.8.0_91/bin/java -DcsapJava8 -Xms128M -Xmx133M -XX:MaxMetaspaceSize=96M -Dserver.context-path=/CsapSimple -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8296 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/CsapSimple_8291/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/CsapSimple_8291/jmxremote.access -DcsapProcessId=CsapSimple_8291 -DcsapEnvironmentVariables=arePresent -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.io.tmpdir=temp org.springframework.boot.loader.JarLauncher --spring.profiles.active=dev --server.port=8291
+
+#ServletSample
+ 80.0 159072 3969192 36 ssadmin 17094 2 /opt/java/jdk1.8.0_101/bin/java -Djava.util.logging.config.file=/home/ssadmin/processing/ServletSample_8041/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -DcsapJava8 -Xms128M -Xmx128M -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8046 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/ServletSample_8041/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/ServletSample_8041/jmxremote.access -DcsapProcessId=ServletSample_8041 -DcsapEnvironmentVariables=arePresent -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djdk.tls.ephemeralDHKeySize=2048 -Djava.endorsed.dirs=/home/ssadmin/processing/appsTomcat/apache-tomcat-8.0.35/endorsed -classpath /home/ssadmin/processing/appsTomcat/apache-tomcat-8.0.35/bin/bootstrap.jar:/home/ssadmin/processing/appsTomcat/apache-tomcat-8.0.35/bin/tomcat-juli.jar -Dcatalina.base=/home/ssadmin/processing/ServletSample_8041 -Dcatalina.home=/home/ssadmin/processing/appsTomcat/apache-tomcat-8.0.35 -Djava.io.tmpdir=/home/ssadmin/processing/ServletSample_8041/temp org.apache.catalina.startup.Bootstrap start
+
+
+
+ 0.1 444084 5119396 55 ssadmin 4164 0 /opt/java/jdk1.7.0_71/bin/java -Djava.util.logging.config.file=/home/ssadmin/processing/jenkins_8201/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Xms512M -Xmx512M -XX:MaxPermSize=128m -Djava.awt.headless=true -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8206 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -DredirectOutput=true -DredirectOutput=true -Dcom.yourcompany.ca.csp.cso.platform.service.name=jenkins -Dcom.yourcompany.ca.csp.cso.platform.service.httpport=8201 -Dcom.yourcompany.ca.csp.cso.platform.service.jmxport=8206 -Dcom.yourcompany.ca.csp.cso.platform.service.loadBalanceUrl=http://csap-secure.yourcompany.com -Dcom.yourcompany.ca.csp.cso.platform.service.life=dev -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/jenkins_8201/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/jenkins_8201/jmxremote.access -Dcom.yourcompany.ca.csp.cso.platform.service.version=1.564 -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.endorsed.dirs=/home/ssadmin/processing/tomcatLinux-7.0.56/endorsed -classpath /home/ssadmin/processing/tomcatLinux-7.0.56/bin/bootstrap.jar:/home/ssadmin/processing/tomcatLinux-7.0.56/bin/tomcat-juli.jar -Dcatalina.base=/home/ssadmin/processing/jenkins_8201 -Dcatalina.home=/home/ssadmin/processing/tomcatLinux-7.0.56 -Djava.io.tmpdir=/home/ssadmin/processing/jenkins_8201/temp org.apache.catalina.startup.Bootstrap start
+
+ 0.1 410820 5896876 55 ssadmin 27563 0 /opt/java/jdk1.8.0_101/bin/java -Djava.util.logging.config.file=/home/ssadmin/processing/Cssp3ReferenceMq_8241/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -DcsapJava8 -Xms16M -Xmx256M -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints -Djava.rmi.server.hostname=csapdb-dev01 -Dcom.sun.management.jmxremote.port=8246 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/Cssp3ReferenceMq_8241/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/Cssp3ReferenceMq_8241/jmxremote.access -DcsapProcessId=Cssp3ReferenceMq_8241 -DcsapEnvironmentVariables=arePresent -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.endorsed.dirs=/home/ssadmin/processing/appsTomcat/cssp3-3.1.4/endorsed -classpath /home/ssadmin/processing/appsTomcat/cssp3-3.1.4/bin/bootstrap.jar:/home/ssadmin/processing/appsTomcat/cssp3-3.1.4/bin/tomcat-juli.jar -Dcatalina.base=/home/ssadmin/processing/Cssp3ReferenceMq_8241 -Dcatalina.home=/home/ssadmin/processing/appsTomcat/cssp3-3.1.4 -Djava.io.tmpdir=/home/ssadmin/processing/Cssp3ReferenceMq_8241/temp org.apache.catalina.startup.Bootstrap start
+
+0.2 298480 4310152 53 ssadmin 5454 0 /opt/java/jdk1.7.0_71/bin/java -Djava.util.logging.config.file=/home/ssadmin/processing/MetricCollector_8291/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Xms128M -Xmx133M -XX:MaxPermSize=128m -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8296 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -DredirectOutput=true -DredirectOutput=true -Dcom.yourcompany.ca.csp.cso.platform.service.name=MetricCollector -Dcom.yourcompany.ca.csp.cso.platform.service.httpport=8291 -Dcom.yourcompany.ca.csp.cso.platform.service.jmxport=8296 -Dcom.yourcompany.ca.csp.cso.platform.service.loadBalanceUrl=http://csap-secure.yourcompany.com -Dcom.yourcompany.ca.csp.cso.platform.service.life=dev -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/MetricCollector_8291/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/MetricCollector_8291/jmxremote.access -Dcom.yourcompany.ca.csp.cso.platform.service.version=1.0.0-SNAPSHOT -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.endorsed.dirs=/home/ssadmin/processing/cssp3-3.0.19/endorsed -classpath /home/ssadmin/processing/cssp3-3.0.19/bin/bootstrap.jar:/home/ssadmin/processing/cssp3-3.0.19/bin/tomcat-juli.jar -Dcatalina.base=/home/ssadmin/processing/MetricCollector_8291 -Dcatalina.home=/home/ssadmin/processing/cssp3-3.0.19 -Djava.io.tmpdir=/home/ssadmin/processing/MetricCollector_8291/temp org.apache.catalina.startup.Bootstrap start
+ 0.2 295200 3577948 42 ssadmin 4981 0 /opt/java/jdk1.7.0_71/bin/java -Djava.util.logging.config.file=/home/ssadmin/processing/CsapGlobalAnalytics_8251/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Xms128M -Xmx133M -XX:MaxPermSize=128m -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8256 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -DredirectOutput=true -DredirectOutput=true -Dcom.yourcompany.ca.csp.cso.platform.service.name=CsapGlobalAnalytics -Dcom.yourcompany.ca.csp.cso.platform.service.httpport=8251 -Dcom.yourcompany.ca.csp.cso.platform.service.jmxport=8256 -Dcom.yourcompany.ca.csp.cso.platform.service.loadBalanceUrl=http://csap-secure.yourcompany.com -Dcom.yourcompany.ca.csp.cso.platform.service.life=dev -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/CsapGlobalAnalytics_8251/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/CsapGlobalAnalytics_8251/jmxremote.access -Dcom.yourcompany.ca.csp.cso.platform.service.version=1.0.1 -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.endorsed.dirs=/home/ssadmin/processing/cssp3-3.0.19/endorsed -classpath /home/ssadmin/processing/cssp3-3.0.19/bin/bootstrap.jar:/home/ssadmin/processing/cssp3-3.0.19/bin/tomcat-juli.jar -Dcatalina.base=/home/ssadmin/processing/CsapGlobalAnalytics_8251 -Dcatalina.home=/home/ssadmin/processing/cssp3-3.0.19 -Djava.io.tmpdir=/home/ssadmin/processing/CsapGlobalAnalytics_8251/temp org.apache.catalina.startup.Bootstrap start
+ 0.1 281048 3497380 39 ssadmin 6831 0 /opt/java/jdk1.7.0_71/bin/java -Djava.util.logging.config.file=/home/ssadmin/processing/spring-PetClinic_8221/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Xms128M -Xmx128M -XX:MaxPermSize=128m -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8226 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -DredirectOutput=true -DredirectOutput=true -Dcom.yourcompany.ca.csp.cso.platform.service.name=spring-PetClinic -Dcom.yourcompany.ca.csp.cso.platform.service.httpport=8221 -Dcom.yourcompany.ca.csp.cso.platform.service.jmxport=8226 -Dcom.yourcompany.ca.csp.cso.platform.service.loadBalanceUrl=http://csap-secure.yourcompany.com -Dcom.yourcompany.ca.csp.cso.platform.service.life=dev -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/spring-PetClinic_8221/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/spring-PetClinic_8221/jmxremote.access -Dcom.yourcompany.ca.csp.cso.platform.service.version=1.0.0 -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.endorsed.dirs=/home/ssadmin/processing/tomcatLinux-7.0.56/endorsed -classpath /home/ssadmin/processing/tomcatLinux-7.0.56/bin/bootstrap.jar:/home/ssadmin/processing/tomcatLinux-7.0.56/bin/tomcat-juli.jar -Dcatalina.base=/home/ssadmin/processing/spring-PetClinic_8221 -Dcatalina.home=/home/ssadmin/processing/tomcatLinux-7.0.56 -Djava.io.tmpdir=/home/ssadmin/processing/spring-PetClinic_8221/temp org.apache.catalina.startup.Bootstrap start
+ 0.1 245428 3239312 37 ssadmin 23457 0 /opt/java/jdk1.7.0_71/bin/java -Djava.util.logging.config.file=/home/ssadmin/processing/Cssp1Reference_8021/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Xms128M -Xmx133M -XX:MaxPermSize=128m -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8026 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -DredirectOutput=true -DredirectOutput=true -Dcom.yourcompany.ca.csp.cso.platform.service.name=Cssp1Reference -Dcom.yourcompany.ca.csp.cso.platform.service.httpport=8021 -Dcom.yourcompany.ca.csp.cso.platform.service.jmxport=8026 -Dcom.yourcompany.ca.csp.cso.platform.service.loadBalanceUrl=http://csap-secure.yourcompany.com -Dcom.yourcompany.ca.csp.cso.platform.service.life=dev -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/Cssp1Reference_8021/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/Cssp1Reference_8021/jmxremote.access -Dcom.yourcompany.ca.csp.cso.platform.service.version=1.0.0 -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.endorsed.dirs=/home/ssadmin/processing/cssp-1.0.24/endorsed -classpath /home/ssadmin/processing/cssp-1.0.24/bin/bootstrap.jar:/home/ssadmin/processing/cssp-1.0.24/bin/tomcat-juli.jar -Dcatalina.base=/home/ssadmin/processing/Cssp1Reference_8021 -Dcatalina.home=/home/ssadmin/processing/cssp-1.0.24 -Djava.io.tmpdir=/home/ssadmin/processing/Cssp1Reference_8021/temp org.apache.catalina.startup.Bootstrap start
+ 0.1 233328 3430700 38 ssadmin 7071 0 /opt/java/jdk1.7.0_71/bin/java -Djava.util.logging.config.file=/home/ssadmin/processing/springmvc-showcase_8211/conf/logging.properties -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager -Xms128M -Xmx128M -XX:MaxPermSize=128m -Djava.rmi.server.hostname=csap-dev01 -Dcom.sun.management.jmxremote.port=8216 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -DredirectOutput=true -DredirectOutput=true -Dcom.yourcompany.ca.csp.cso.platform.service.name=springmvc-showcase -Dcom.yourcompany.ca.csp.cso.platform.service.httpport=8211 -Dcom.yourcompany.ca.csp.cso.platform.service.jmxport=8216 -Dcom.yourcompany.ca.csp.cso.platform.service.loadBalanceUrl=http://csap-secure.yourcompany.com -Dcom.yourcompany.ca.csp.cso.platform.service.life=dev -Dcom.sun.management.jmxremote.password.file=/home/ssadmin/processing/springmvc-showcase_8211/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/ssadmin/processing/springmvc-showcase_8211/jmxremote.access -Dcom.yourcompany.ca.csp.cso.platform.service.version=1.0.0 -Dyourcompany.life=dev -DSTAGING=/home/ssadmin/staging -Djava.endorsed.dirs=/home/ssadmin/processing/tomcatLinux-7.0.56/endorsed -classpath /home/ssadmin/processing/tomcatLinux-7.0.56/bin/bootstrap.jar:/home/ssadmin/processing/tomcatLinux-7.0.56/bin/tomcat-juli.jar -Dcatalina.base=/home/ssadmin/processing/springmvc-showcase_8211 -Dcatalina.home=/home/ssadmin/processing/tomcatLinux-7.0.56 -Djava.io.tmpdir=/home/ssadmin/processing/springmvc-showcase_8211/temp org.apache.catalina.startup.Bootstrap start
+
+ 
+0.2 94260 6471016 25 ssadmin 6539 0 jstatd -J-Djava.security.policy=/home/ssadmin/.jstatd.all.policy
+ 
+
+0.7 44480 881276 57 ssadmin 9725 0 /home/ssadmin/processing/mongoArbiter_29017/mongodatabase/bin/mongod --config /home/ssadmin/processing/mongoArbiter_29017/conf/mongodb.conf --setParameter enableTestCommands=1 --quiet
+
+# apache web server
+ 0.0 13780 2026416 27 ssadmin 19453 0 /home/ssadmin/processing/httpd_8080/bin/httpd -k graceful
+ 0.0 13744 2026416 27 ssadmin 19570 0 /home/ssadmin/processing/httpd_8080/bin/httpd -k graceful
+ 0.0 13700 2026416 27 ssadmin 19494 0 /home/ssadmin/processing/httpd_8080/bin/httpd -k graceful
+ 0.0 13564 2026416 27 ssadmin 19493 0 /home/ssadmin/processing/httpd_8080/bin/httpd -k graceful
+ 0.0 10368 1134972 62 ssadmin 4453 0 /home/ssadmin/processing/httpdExport_8090/bin/httpd -k restart
+ 0.0 9964 43756 1 ssadmin 2813 0 /home/ssadmin/processing/httpd_8080/bin/httpd -k graceful
+ 0.0 7952 43724 1 ssadmin 19452 0 /home/ssadmin/processing/httpd_8080/bin/httpd -k graceful
+ 0.0 6952 38956 1 ssadmin 4336 0 /home/ssadmin/processing/httpdExport_8090/bin/httpd -k restart
+ 0.0 5284 251584 4 root 1986 0 /sbin/rsyslogd -i /var/run/syslogd.pid -c 5
+ 0.0 3820 97872 1 root 19044 0 sshd: ssadmin [priv]
+ 0.0 3568 59300 1 root 1748 0 /usr/sbin/vmtoolsd
+ 0.0 3268 78724 1 root 2393 0 /usr/libexec/postfix/master
+ 0.0 3220 78804 1 postfix 3209 0 pickup -l -t fifo -u
+ 0.0 3136 78976 1 postfix 2400 0 qmgr -l -t fifo -u
+ 0.0 3104 25336 1 68 2190 0 hald
+ 0.0 2904 189204 1 root 1863 0 cupsd -C /etc/cups/cupsd.conf
+ 0.0 2616 173304 1 root 4101 0 /usr/bin/sudo /home/ssadmin/staging/bin/scriptRunAsRoot.sh /home/ssadmin/staging/scripts/someDeveloper_script.sh_1428334958192 ssadmin
+ 0.0 2608 173264 1 root 4108 0 sudo su - ssadmin -c /home/ssadmin/staging/scripts/someDeveloper_script.sh_1428334958192
+ 0.0 2548 32976 1 root 5541 0 /usr/bin/perl -x /usr/local/tools/trends2
+ 0.0 2212 35328 1 ssadmin 4450 0 /home/ssadmin/processing/httpdExport_8090/bin/httpd -k restart
+ 0.0 1940 97872 1 ssadmin 19048 0 sshd: ssadmin@pts/0
+ 0.0 1936 108476 1 ssadmin 19049 0 -bash
+ 0.0 1616 385700 5 root 2255 0 automount --pid-file /var/run/autofs.pid
+ 0.0 1608 30164 1 ntp 2317 0 ntpd -u ntp:ntp -p /var/run/ntpd.pid -g
+ 0.0 1560 19364 1 root 1 0 /sbin/init
+ 0.0 1556 145348 1 root 4109 0 su - ssadmin -c /home/ssadmin/staging/scripts/someDeveloper_script.sh_1428334958192
+ 0.0 1348 15168 1 ssadmin 14889 0 top -b -d 15
+ 0.0 1296 23348 1 rpcuser 2052 0 rpc.statd
+ 0.0 1236 117216 1 root 2528 0 crond
+ 0.0 1212 106100 1 root 4102 0 /bin/bash /home/ssadmin/staging/bin/scriptRunAsRoot.sh /home/ssadmin/staging/scripts/someDeveloper_script.sh_1428334958192 ssadmin
+ 0.0 1196 110344 1 ssadmin 4147 0 ps -e --no-heading --sort -rss -o pcpu,rss,vsz,thcount,ruser,pid,nice,args
+ 0.0 1188 64120 1 root 2301 0 /usr/sbin/sshd
+ 0.0 1180 106100 1 ssadmin 4110 0 /bin/bash /home/ssadmin/staging/scripts/someDeveloper_script.sh_1428334958192
+ 0.0 1120 18108 1 root 2191 0 hald-runner
+ 0.0 1024 20224 1 root 2219 0 hald-addon-input: Listening on /dev/input/event2 /dev/input/event0
+ 0.0 1020 10888 1 root 1118 -2 /sbin/udevd -d
+ 0.0 1020 17808 1 68 2232 0 hald-addon-acpi: listening on acpid socket /var/run/acpid.socket
+ 0.0 1012 10888 1 root 1121 -2 /sbin/udevd -d
+ 0.0 988 10892 1 root 571 -4 /sbin/udevd -d
+ 0.0 932 19036 1 rpc 2034 0 rpcbind
+ 0.0 920 21404 1 dbus 2152 0 dbus-daemon --system
+ 0.0 896 22096 1 root 2309 0 xinetd -stayalive -pidfile /var/run/xinetd.pid
+ 0.0 804 105256 1 ssadmin 4148 0 sed s/ */ /g
+ 0.0 804 100944 1 ssadmin 15155 0 mpstat 300
+ 0.0 796 100944 1 ssadmin 15045 0 mpstat 30
+ 0.0 796 100944 1 ssadmin 15163 0 mpstat 3600
+ 0.0 688 10952 1 root 2015 0 irqbalance
+ 0.0 628 4080 1 root 2181 0 /usr/sbin/acpid
+ 0.0 544 4064 1 root 2564 0 /sbin/mingetty /dev/tty1
+ 0.0 544 4064 1 root 2566 0 /sbin/mingetty /dev/tty2
+ 0.0 544 4064 1 root 2570 0 /sbin/mingetty /dev/tty4
+ 0.0 540 4064 1 root 2572 0 /sbin/mingetty /dev/tty5
+ 0.0 540 4064 1 root 2574 0 /sbin/mingetty /dev/tty6
+ 0.0 536 4064 1 root 2568 0 /sbin/mingetty /dev/tty3
+ 0.0 480 21456 1 root 2545 0 /usr/sbin/atd
+ 0.0 440 6248 1 root 2275 0 /usr/sbin/mcelog --daemon
+ 0.0 0 0 1 root 2 0 [kthreadd]
+ 0.0 0 0 1 root 3 - [migration/0]
+ 0.0 0 0 1 root 4 0 [ksoftirqd/0]
+ 0.0 0 0 1 root 5 - [migration/0]
+ 0.0 0 0 1 root 6 - [watchdog/0]
+ 0.0 0 0 1 root 7 - [migration/1]
+ 0.0 0 0 1 root 8 - [migration/1]
+ 0.0 0 0 1 root 9 0 [ksoftirqd/1]
+ 0.0 0 0 1 root 10 - [watchdog/1]
+ 0.0 0 0 1 root 11 - [migration/2]
+ 0.0 0 0 1 root 12 - [migration/2]
+ 0.0 0 0 1 root 13 0 [ksoftirqd/2]
+ 0.0 0 0 1 root 14 - [watchdog/2]
+ 0.0 0 0 1 root 15 - [migration/3]
+ 0.0 0 0 1 root 16 - [migration/3]
+ 0.0 0 0 1 root 17 0 [ksoftirqd/3]
+ 0.0 0 0 1 root 18 - [watchdog/3]
+ 0.0 0 0 1 root 19 - [migration/4]
+ 0.0 0 0 1 root 20 - [migration/4]
+ 0.0 0 0 1 root 21 0 [ksoftirqd/4]
+ 0.0 0 0 1 root 22 - [watchdog/4]
+ 0.0 0 0 1 root 23 - [migration/5]
+ 0.0 0 0 1 root 24 - [migration/5]
+ 0.0 0 0 1 root 25 0 [ksoftirqd/5]
+ 0.0 0 0 1 root 26 - [watchdog/5]
+ 0.0 0 0 1 root 27 - [migration/6]
+ 0.0 0 0 1 root 28 - [migration/6]
+ 0.0 0 0 1 root 29 0 [ksoftirqd/6]
+ 0.0 0 0 1 root 30 - [watchdog/6]
+ 0.0 0 0 1 root 31 - [migration/7]
+ 0.0 0 0 1 root 32 - [migration/7]
+ 0.0 0 0 1 root 33 0 [ksoftirqd/7]
+ 0.0 0 0 1 root 34 - [watchdog/7]
+ 0.0 0 0 1 root 35 0 [events/0]
+ 0.0 0 0 1 root 36 0 [events/1]
+ 0.0 0 0 1 root 37 0 [events/2]
+ 0.0 0 0 1 root 38 0 [events/3]
+ 0.0 0 0 1 root 39 0 [events/4]
+ 0.0 0 0 1 root 40 0 [events/5]
+ 0.0 0 0 1 root 41 0 [events/6]
+ 0.0 0 0 1 root 42 0 [events/7]
+ 0.0 0 0 1 root 43 0 [cgroup]
+ 0.0 0 0 1 root 44 0 [khelper]
+ 0.0 0 0 1 root 45 0 [netns]
+ 0.0 0 0 1 root 46 0 [async/mgr]
+ 0.0 0 0 1 root 47 0 [pm]
+ 0.0 0 0 1 root 48 0 [sync_supers]
+ 0.0 0 0 1 root 49 0 [bdi-default]
+ 0.0 0 0 1 root 50 0 [kintegrityd/0]
+ 0.0 0 0 1 root 51 0 [kintegrityd/1]
+ 0.0 0 0 1 root 52 0 [kintegrityd/2]
+ 0.0 0 0 1 root 53 0 [kintegrityd/3]
+ 0.0 0 0 1 root 54 0 [kintegrityd/4]
+ 0.0 0 0 1 root 55 0 [kintegrityd/5]
+ 0.0 0 0 1 root 56 0 [kintegrityd/6]
+ 0.0 0 0 1 root 57 0 [kintegrityd/7]
+ 0.0 0 0 1 root 58 0 [kblockd/0]
+ 0.0 0 0 1 root 59 0 [kblockd/1]
+ 0.0 0 0 1 root 60 0 [kblockd/2]
+ 0.0 0 0 1 root 61 0 [kblockd/3]
+ 0.0 0 0 1 root 62 0 [kblockd/4]
+ 0.0 0 0 1 root 63 0 [kblockd/5]
+ 0.0 0 0 1 root 64 0 [kblockd/6]
+ 0.0 0 0 1 root 65 0 [kblockd/7]
+ 0.0 0 0 1 root 66 0 [kacpid]
+ 0.0 0 0 1 root 67 0 [kacpi_notify]
+ 0.0 0 0 1 root 68 0 [kacpi_hotplug]
+ 0.0 0 0 1 root 69 0 [ata/0]
+ 0.0 0 0 1 root 70 0 [ata/1]
+ 0.0 0 0 1 root 71 0 [ata/2]
+ 0.0 0 0 1 root 72 0 [ata/3]
+ 0.0 0 0 1 root 73 0 [ata/4]
+ 0.0 0 0 1 root 74 0 [ata/5]
+ 0.0 0 0 1 root 75 0 [ata/6]
+ 0.0 0 0 1 root 76 0 [ata/7]
+ 0.0 0 0 1 root 77 0 [ata_aux]
+ 0.0 0 0 1 root 78 0 [ksuspend_usbd]
+ 0.0 0 0 1 root 79 0 [khubd]
+ 0.0 0 0 1 root 80 0 [kseriod]
+ 0.0 0 0 1 root 81 0 [md/0]
+ 0.0 0 0 1 root 82 0 [md/1]
+ 0.0 0 0 1 root 83 0 [md/2]
+ 0.0 0 0 1 root 84 0 [md/3]
+ 0.0 0 0 1 root 85 0 [md/4]
+ 0.0 0 0 1 root 86 0 [md/5]
+ 0.0 0 0 1 root 87 0 [md/6]
+ 0.0 0 0 1 root 88 0 [md/7]
+ 0.0 0 0 1 root 89 0 [md_misc/0]
+ 0.0 0 0 1 root 90 0 [md_misc/1]
+ 0.0 0 0 1 root 91 0 [md_misc/2]
+ 0.0 0 0 1 root 92 0 [md_misc/3]
+ 0.0 0 0 1 root 93 0 [md_misc/4]
+ 0.0 0 0 1 root 94 0 [md_misc/5]
+ 0.0 0 0 1 root 95 0 [md_misc/6]
+ 0.0 0 0 1 root 96 0 [md_misc/7]
+ 0.0 0 0 1 root 97 0 [khungtaskd]
+ 0.0 0 0 1 root 98 0 [kswapd0]
+ 0.0 0 0 1 root 99 5 [ksmd]
+ 0.0 0 0 1 root 100 19 [khugepaged]
+ 0.0 0 0 1 root 101 0 [aio/0]
+ 0.0 0 0 1 root 102 0 [aio/1]
+ 0.0 0 0 1 root 103 0 [aio/2]
+ 0.0 0 0 1 root 104 0 [aio/3]
+ 0.0 0 0 1 root 105 0 [aio/4]
+ 0.0 0 0 1 root 106 0 [aio/5]
+ 0.0 0 0 1 root 107 0 [aio/6]
+ 0.0 0 0 1 root 108 0 [aio/7]
+ 0.0 0 0 1 root 109 0 [crypto/0]
+ 0.0 0 0 1 root 110 0 [crypto/1]
+ 0.0 0 0 1 root 111 0 [crypto/2]
+ 0.0 0 0 1 root 112 0 [crypto/3]
+ 0.0 0 0 1 root 113 0 [crypto/4]
+ 0.0 0 0 1 root 114 0 [crypto/5]
+ 0.0 0 0 1 root 115 0 [crypto/6]
+ 0.0 0 0 1 root 116 0 [crypto/7]
+ 0.0 0 0 1 root 121 0 [kthrotld/0]
+ 0.0 0 0 1 root 122 0 [kthrotld/1]
+ 0.0 0 0 1 root 123 0 [kthrotld/2]
+ 0.0 0 0 1 root 124 0 [kthrotld/3]
+ 0.0 0 0 1 root 125 0 [kthrotld/4]
+ 0.0 0 0 1 root 126 0 [kthrotld/5]
+ 0.0 0 0 1 root 127 0 [kthrotld/6]
+ 0.0 0 0 1 root 128 0 [kthrotld/7]
+ 0.0 0 0 1 root 129 0 [pciehpd]
+ 0.0 0 0 1 root 131 0 [kpsmoused]
+ 0.0 0 0 1 root 132 0 [usbhid_resumer]
+ 0.0 0 0 1 root 163 0 [kstriped]
+ 0.0 0 0 1 root 363 0 [scsi_eh_0]
+ 0.0 0 0 1 root 364 0 [scsi_eh_1]
+ 0.0 0 0 1 root 372 0 [scsi_eh_2]
+ 0.0 0 0 1 root 373 0 [vmw_pvscsi_wq_2]
+ 0.0 0 0 1 root 455 0 [kdmflush]
+ 0.0 0 0 1 root 457 0 [kdmflush]
+ 0.0 0 0 1 root 474 0 [jbd2/dm-0-8]
+ 0.0 0 0 1 root 475 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 476 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 477 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 478 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 479 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 480 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 481 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 482 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 532 0 [kauditd]
+ 0.0 0 0 1 root 1119 0 [kdmflush]
+ 0.0 0 0 1 root 1122 0 [kdmflush]
+ 0.0 0 0 1 root 1140 0 [flush-253:2]
+ 0.0 0 0 1 root 1155 0 [jbd2/sda1-8]
+ 0.0 0 0 1 root 1156 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1157 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1158 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1159 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1160 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1161 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1162 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1163 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1164 0 [jbd2/dm-2-8]
+ 0.0 0 0 1 root 1165 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1166 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1167 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1168 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1169 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1170 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1171 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1172 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1173 0 [jbd2/dm-3-8]
+ 0.0 0 0 1 root 1174 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1175 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1176 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1177 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1178 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1179 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1180 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1181 0 [ext4-dio-unwrit]
+ 0.0 0 0 1 root 1400 0 [flush-253:0]
+ 0.0 0 0 1 root 1564 0 [vmmemctl]
+ 0.0 0 0 1 root 12830 0 [flush-253:3]

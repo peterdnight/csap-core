@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<script th:replace="~{ /deployment/service-head :: pageContent }"></script>
+
+		<title></title>
+	</head> 
+
+	<body style="min-width: 65em">
+		<header id="header" style="vertical-align: top">
+			<div id="clusterDiv">
+				<span
+					style="vertical-align: top; position: relative; top: 2px; font-weight: normal; font-size: 0.8em">View:</span>
+				<select id="clusterSelect" style="width: 11em"></select>
+
+				<a id="showClusterDialog" href="#" class="pushButton"
+				   title="Hosts Operations: View files, run commands, view host resource trends, ...">
+					<img  alt="cluster" src="" th:src="@{/images/16x16/networkAdd.png}" />
+				</a>
+
+			</div>
+
+
+			<div style="float: left; margin-left: 2em;" >
+				<span th:text="${name}"></span></div>
+
+			<div class="packageControls">
+				<select id="releaseSelect"  class="releasePackage" style="width: 14em">
+					<option th:each="name : ${packageNames}" 
+
+							th:selected="${name == selectedRelease }"
+							th:value="${name}"
+							th:text="${name}">Credit card</option>
+					<option th:value="${T(org.csap.agent.model.Application).ALL_PACKAGES}"
+							th:selected="${ T(org.csap.agent.model.Application).ALL_PACKAGES == selectedRelease }">All Packages</option>
+				</select>
+
+				<a class="" title="Package Catalog" href="services">
+					<img class="butImage" src="images/16x16/packages.png" />
+				</a>
+			</div>
+
+
+			<div th:replace="~{ /deployment/menus :: pageContent }" ></div>
+
+
+			<a class="pushButton serviceNavigate"
+			   title="View/edit the definition for the capability"
+			   th:href="@{/edit/application(releasePackage=${selectedRelease})}">
+				<img src="images/16x16/preferences-system.png" />Editor
+			</a>
+
+			<a class="pushButton serviceNavigate"
+			   title="Switch to host view for deployment"
+			   th:href="@{/hosts(releasePackage=${selectedRelease})}" >
+				<img src="images/16x16/network-workgroup.png" />Host
+			</a>
+
+
+		</header>
+
+
+		<div id="mainDisplayArea" >  
+
+			<div id="mainDisplayNav" >
+				<a id="refreshButton" title="Force server to refresh cached server status" class="simple" href="#" >
+					<img class="" height="12px" src="images/16x16/view-refresh.png"/>Refresh</a>
+				Hosts:<span id="hostSummary" style="font-weight: bold; margin-right: 2em"></span>
+				Services:<span id="serviceSummary" style="font-weight: bold; margin-right: 1em"></span>
+
+				<select id="osSelect" title="Select attribute to view last 24 hours in service summary table.">
+					<option value="topCpu">topCpu</option>
+				</select>
+				Totals: <input id="isShowTotals" name="isAllVms" type="checkbox" title="By default averages are shown" />
+
+
+
+				<span style="display: inline-block; float: right; font-style: italic; font-size: 0.8em; margin-right: 2em">
+					<span id="messageTs" style=" color: green; font-style: italic; font-size: 1em"> </span>
+					[[${T(org.csap.agent.model.Application).HOST_NAME}]]
+				</span>
+
+				<a  id="showBatchDialog"  title="Open batch service deploy dialog"
+					class="simple" href="#deploy"><img class="butImage" src="images/16x16/user-desktop.png">Batch Admin</a>
+
+				<span id="appBrowsers" th:if="${ lifeCycleSettings.getBrowseDisks().size() > 0 }"
+					  title="Browse file system with restricted file permissions. Contact admin if you do not have permissions to view.">
+					Disks: 
+
+					<span th:each="diskEntry : ${ lifeCycleSettings.getBrowseDisks() }"> 
+						<a target="_blank" class="simple" th:href="${diskEntry.value}">[[${diskEntry.key}]]</a>
+					</span>
+				</span>
+
+
+			</div>
+
+			<div style="position: relative">
+				<input class="inset serviceFilter"  type="text" name="dummy" placeholder="Filter"
+					   title="Use filter to reduce rows displayed. Filter is case-insensitive">
+			</div>
+
+			<div id="summaryTableDiv" class="iblock" style="">	
+
+				<table id="summaryTable" class="bordered fixed hoverIn"  style="">
+					<thead id="summaryHeader" style=""> 
+
+						<tr>
+							<th class="summaryColumn1">Service</th>
+							<th class="summaryColumn2">Status</th>
+							<th class="summaryColumn3">24hrs</th>
+						</tr>
+					</thead>
+
+					<tbody style=""></tbody>
+				</table>
+
+			</div>
+
+
+			<div th:replace="~{ /deployment/service-news :: pageContent }"></div>	
+
+
+
+			<div id="instanceTableDiv" class="iblock" style="display:none; position: relative">
+
+				<div id="instanceFilterDiv" style="position: absolute;">
+					<input class="instanceFilter inset "  type="text" name="dummy" placeholder="Filter"
+						   title="Use filter to reduce rows displayed. Filter is case-insensitive">
+				</div>
+
+				<table id="instanceTable" class="bordered fixed hoverIn" >
+					<thead id="instanceHeader">
+						<tr>
+							<th class="instanceColumn2">Host</th>
+							<th class="instanceVersion">Version</th>
+							<th class="instanceLoad">VM Load</th>
+							<th class="instanceDisk">Disk Mb</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><td colspan="5" >Loading</td></tr>
+					</tbody>
+				</table>
+
+			</div>
+
+		</div>
+
+
+		<div id="footer" >
+			<span id="users" style="display: inline-block;">
+			</span>
+			<span id="lastOp" 
+				  style="float: right;display: inline-block;">
+			</span>
+		</div>
+
+
+	</body>
+
+</html>

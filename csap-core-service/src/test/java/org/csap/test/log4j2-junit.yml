@@ -1,0 +1,197 @@
+# why yaml http://jessenoller.com/blog/2009/04/13/yaml-aint-markup-language-completely-different
+
+status: warn
+
+appenders:
+  
+  console:
+    name: consoleAppender
+    target: SYSTEM_OUT
+    PatternLayout:
+      Pattern: "%d ==== %F ==== thread: %t ==== %-8p>%n%C.%M() => %x (line: %L)%n\t%m%n%n"
+        
+  RollingFile: 
+    - name: errorsAppender
+      fileName: target/logs/warnings.log
+      filePattern: "target/logs/warning-%i.log.gz"
+      append: true
+      DefaultRolloverStrategy:
+        max: 3
+      policies:
+        SizeBasedTriggeringPolicy:
+          size: "5 MB"
+      PatternLayout:
+        Pattern: "%d ==== %F ==== thread: %t ==== %-8p>%n%C.%M() => %x (line: %L)%n\t%m%n%n"
+        
+    - name: junitAppender
+      fileName: target/logs/junit-logs.txt
+      filePattern: "target/logs/junit-%i.log.gz"
+      append: true
+      DefaultRolloverStrategy:
+        max: 3
+      policies:
+        SizeBasedTriggeringPolicy:
+          size: "5 MB"
+      PatternLayout:
+        Pattern: "%d ==== %F ==== thread: %t ==== %-8p>%n%C.%M() => %x (line: %L)%n\t%m%n%n"
+        
+        
+#        Pattern: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+
+loggers:
+      
+  root: { level: info , AppenderRef: [ ref: consoleAppender ] }
+
+  logger:
+    - name: org.apache.catalina
+      level: warn
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: errorsAppender
+      
+    - name: org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: errorsAppender
+      
+    - name: org.csap
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: junitAppender
+      - ref : errorsAppender
+        level: warn
+        
+    - name: org.springframework.boot
+      level: warn
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+        
+    - name: org.springframework.boot.autoconfigure.logging
+      level: debug 
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+        
+    - name: com.github.dockerjava
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: junitAppender
+      - ref : errorsAppender
+        level: debug
+        
+      
+    - name: org.csap.agent.model.Application
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+        
+        
+    - name: org.csap.agent.services.OsManager
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+        
+        
+    - name: org.csap.integations
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: junitAppender
+      - ref : errorsAppender
+        level: warn
+      
+    - name: org.csap.agent.services.ServiceManager
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: errorsAppender
+        level: warn
+      
+    - name: org.csap.agent.linux.HostStatusManager
+      level: INFO
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: errorsAppender
+        level: warn
+      
+    - name: org.csap.agent.misc.CsapEventClient
+      level: INFO
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: errorsAppender
+        level: warn
+        
+    - name: org.csap.agent.stats.ServiceCollector
+      level: INFO
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: errorsAppender
+        level: warn
+      
+    - name: org.csap.security
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: errorsAppender
+        level: warn
+      
+    - name: org.sample
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: errorsAppender
+        level: warn
+      
+    - name: org.springframework
+      level: warn
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: errorsAppender
+        level: warn
+      
+    - name: org.springframework.security
+      level: warn
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: errorsAppender
+        level: warn
+        
+    - name: org.springframework.boot.autoconfigure.security
+      level: warn
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+        
+    - name: test
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: junitAppender
+        
+
+      
+   

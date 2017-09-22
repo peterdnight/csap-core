@@ -1,0 +1,5 @@
+{
+	"SampleJvmInA": {
+		"dev": "org.demo:TestForVersionReleaseFile:9.9.9-SNAPSHOT:jar"
+	}
+}

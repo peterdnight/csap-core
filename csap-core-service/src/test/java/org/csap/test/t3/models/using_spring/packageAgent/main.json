@@ -1,0 +1,776 @@
+{
+	"packageDefinition":{
+		"name":"SampleDefaultPackage",
+		"architect":"someUser@yourCompany.com",
+		"emailNotifications" : "support@notConfigured.com"
+	},
+	
+	"capability": {
+		"name":"TestDefinitionWithMultipleServices",
+		"releasePackages":[
+			"packageA.json",
+			"packageB.json"
+		],
+		"ajpSecret": "junitAjp",
+		"scm": "https://github.com/csap-platform/sample-definition.git",
+		"repoUrl": "https://repo.maven.apache.org/maven2/",
+		"helpMenuItems": {
+			"Release Notes": "https://github.com/csap-platform/csap-core/wiki#updateRefConsole+Release+Notes"
+		}
+	},
+	
+	"clusterDefinitions":{
+		"dev":{
+
+			"settings": {
+				"agent": {
+					"maxJmxCollectionMs": 10000,
+					"numberWorkerThreads": "4",
+					"adminToAgentTimeoutInMs": 6000,
+					"lsofIntervalMins": 1,
+					"duIntervalMins": 1,
+					"apiLocal": true,
+					"apiUser": "agentUser",
+					"apiPass": "CSAP Developmentdev",
+					"infraTests": {
+						"cpuIntervalMinutes": 10,
+						"cpuLoopsMillions": 1,
+						"diskIntervalMinutes": 10,
+						"diskWriteMb": 500 
+					}
+				},
+				"operatorNotifications": [
+					"someUser@yourCompany.com",
+					"asdfsd@sdfsd.com"
+				],
+				"newsItems": [
+					"Simple News"
+				],
+				"portRange": {
+					"start": 9200,
+					"end": 9300
+				},
+				"csapData": {
+					"eventUrl": "disabled",
+					"eventApiUrl": "$eventApiUrl",
+					"eventMetricsUrl": "$eventMetricsUrl",
+					"analyticsUiUrl": "$analyticsUiUrl",
+					"historyUiUrl": "$historyUiUrl",
+					"user": "$user",
+					"pass": "$pass"
+				},
+
+				"lbUrl": "https://csap-secure.yourcompany.com",
+				"autoRestartHttpdOnClusterReload": "no",
+
+				"launchUrls": {
+					"1 tomcat http": "default"
+				},
+				"metricsPublication": [
+					{
+						"type": "nagios",
+						"intervalInSeconds": 300,
+						"url": "https://nagiosprovider.yourcompany.com:8443/nrdp/",
+						"token": "yourToken",
+						"user": "updateUser",
+						"pass": "updatePass"
+					},
+					{
+						"type": "csapCallHome",
+						"intervalInSeconds": 300,
+						"url": "http://csaptools.yourcompany.com/CsapGlobalAnalytics/rest/vm/health",
+						"user": "$csapUser1",
+						"pass": "$csapPass1"
+					}
+				],
+				"monitorDefaults": {
+					"maxDiskPercent": 60,
+					"maxHostCpuLoad": 77,
+					"maxHostCpuIoWait": 11,
+					"minFreeMemoryMb": 500,
+					"max_diskWriteKb": 15
+				},
+				"metricsCollectionInSeconds": {
+					"processDumps": {
+						"resouceInterval": 30,
+						"maxInInterval": 3,
+						"lowMemoryInMb": 5000
+					},
+					"resource": [],
+					"service": [],
+					"jmx": []
+				}
+			},
+
+
+			"cssp":{
+				"jvmPorts":{
+					"CsspSample":[
+						"812x"
+					],
+					"FactorySample":[
+						"813x"
+					],
+					"ServletSample":[
+						"814x"
+					],
+					"springmvc-showcase":[
+						"806x"
+					]
+				}
+				,
+				"osProcessesList":[
+					"httpd",
+					"redis",
+					"oracleDriver"
+				],
+				"version":{
+					"1":{
+						"hosts":[
+							"mainHostA",
+							"mainHostB",
+							"mainHostC"
+						],
+						"vdcImage":"cssp-64bit-1.0"
+					}
+					
+				}
+				
+			}
+			
+		},
+		"stage":{
+			"defaultUiDisplayVersion":"all",
+			"defaultUiDisplayCluster":"all",
+			"lbUrl":"http://yourlb.yourcompany.com",
+			"consoleHistoryUi":"/SLWebReqService/smartlogger.html",
+			
+			"useCsapAudit":"no",
+			"cssp":{
+				"jvmPorts":{
+					"CsspSample":[
+						"802x"
+					]
+					
+				},
+				"version":{
+					"1":{
+						"hosts":[
+							"xcssp-qa01",
+							"xcssp-qa02"
+						],
+						"vdcImage":"cssp-64bit-1.0"
+					}
+					
+				}
+				
+			},
+			"factory":{
+				"jvmPorts":{
+					"FactorySample":[
+						"802x"
+					]
+					
+				},
+				"osProcessesList":[
+					"RedHatLinux"
+				],
+				"version":{
+					"1":{
+						"hosts":[
+							"xfactory-qa01"
+						],
+						"vdcImage":"factory-64bit-1.0"
+					},
+					"2":{
+						"hosts":[
+							"xfactory-qa02"
+						],
+						"vdcImage":"factory-64bit-1.0"
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+	},
+	"jvms":{
+		"CsAgent":{
+			"description":"CsAgent provides core service management capabilities, along with runtimes. admin services uses it extensively.",
+			"docUrl":"https://github.com/csap-platform/csap-core/wiki#updateRefCsAgent",
+			"autoStart":"04",
+			"java":"-DcsapJava8  -Dsun.rmi.transport.tcp.responseTimeout=3000 -DskipPlatformEscape=y -Xms256M -Xmx256M",
+			"server":"cssp-3.x",
+			"servletMaxConnections":"400",
+			"servletTimeoutMs":"10000",
+			"servletThreadCount":"100",
+			"source":{
+				"scm":"svn",
+				"path":"http://yourSvnOrGit/svn/csap/trunk/CsAgent",
+				"branch":"HEAD"
+			},
+			"maven":{
+				"dependency":"com.yourcompany.csap:CsAgent:3.5.2-SNAPSHOT:war"
+			},
+			"version":{
+				"1":{
+					"dev":{
+						
+					},
+					"stage":{
+						
+					},
+					"lt":{
+						
+					},
+					"prod":{
+						"maven":{
+							"dependency":"com.yourcompany.csap:CsAgent:3.5.1.3:war"
+						},
+						"java":"-Dsun.rmi.transport.tcp.responseTimeout=3000 -Xms256M -Xmx256M -XX:MaxPermSize=128m"
+					}
+					
+				},
+				"2":{
+					"dev":{
+						
+					},
+					"stage":{
+						
+					},
+					"lt":{
+						
+					},
+					"prod":{
+						
+					}
+					
+				}
+				
+			},
+			"osProcessPriority":"-12",
+			"standardJmx":{
+				"cpuPercent":{
+					"max":40
+				},
+				"openFiles":{
+					"max":300
+				},
+				"minorGcInMs":{
+					"max":10
+				},
+				"majorGcInMs":{
+					"max":10
+				},
+				"heapUsed":{
+					"max":500
+				},
+				"heapMax":{
+					"max":500
+				},
+				"tomcatConnections":{
+					"max":5
+				},
+				"tomcatThreadCount":{
+					"max":20
+				},
+				"tomcatThreadsBusy":{
+					"max":5
+				},
+				"jvmThreadCount":{
+					"max":100
+				},
+				"jvmThreadsMax":{
+					"max":110
+				}
+				
+			},
+			"customMetrics":{
+				"TotalVmCpu":{
+					"mbean":"java.lang:type=OperatingSystem",
+					"attribute":"SystemCpuLoad",
+					"max":50
+				},
+				"ProcessCpu":{
+					"mbean":"java.lang:type=OperatingSystem",
+					"attribute":"ProcessCpuLoad",
+					"max":10
+				},
+				"JmxCollectionMs":{
+					"simonMedianTime":"java.JmxMetricsRunnable.jmxCollection",
+					"divideBy":"1000000",
+					"max":200
+				},
+				"LogRotationMs":{
+					"simonMedianTime":"java.LogRoller",
+					"divideBy":"1000000",
+					"max":200
+				},
+				"OsCommandsCounter":{
+					"simonCounter":"java.OsCommandRunner.execute",
+					"max":10
+				},
+				"OsCommandsMeanMs":{
+					"simonMedianTime":"java.OsCommandRunner.execute",
+					"divideBy":"1000000",
+					"max":350
+				},
+				"OsCommandsMaxTimeMs":{
+					"simonMaxTime":"java.OsCommandRunner.execute",
+					"divideBy":"1000000",
+					"max":2000
+				},
+				"AdminPingsMeanMs":{
+					"simonMedianTime":"http.CsAgent.os.getManagerJson.GET",
+					"divideBy":"1000000",
+					"max":25
+				},
+				"AdminPingsMaxTimeMs":{
+					"simonMaxTime":"http.CsAgent.os.getManagerJson.GET",
+					"divideBy":"1000000",
+					"max":50
+				},
+				"VmStats":{
+					"simonCounter":"java.pojo.OsManager.getVmStats()",
+					"max":10
+				},
+				"getVmStatsMeanMs":{
+					"simonMedianTime":"java.pojo.OsManager.getVmStats()",
+					"divideBy":"1000000",
+					"max":40
+				},
+				"getVmStatsMaxTimeMs":{
+					"simonMaxTime":"java.pojo.OsManager.getVmStats()",
+					"divideBy":"1000000",
+					"max":100
+				}
+				
+			},
+			"monitors":{
+				"max_diskUtil":"50",
+				"max_threadCount":"100",
+				"max_fileCount":"280",
+				"max_socketCount":"30",
+				"max_rssMemory":"500m",
+				"max_tomcatConnections":"40",
+				"max_topCpu":"20",
+				"nagiosCommand":"check_http! -v -u /CsAgent/api/CapabilityHealth --regex \".*Healthy.*true.*\"  -t 3   "
+			}
+			
+		},
+		"admin":{
+			"description":"CsManager provides UI for capability management",
+			"docUrl":"https://github.com/csap-platform/csap-core/wiki#updateRefCsAgent",
+			"autoStart":"01",
+			"java":"-XX:-UseSplitVerifier -Xms32M -Xmx128M -XX:MaxPermSize=128m -XX:+UseG1GC  -XX:MaxHeapFreeRatio=20 -XX:MinHeapFreeRatio=10 -DmgrUi=mgrUi",
+			"server":"cssp-2.x",
+			"source":{
+				"scm":"svn",
+				"path":"http://yourSvnOrGit/yourPathToSource",
+				"branch":"HEAD"
+			},
+			"maven":{
+				"dependency":"org.csap:csap-core-service:6.0.0:jar"
+			},
+			"version":{
+				"1":{
+					"dev":{
+						
+					},
+					"stage":{
+						
+					},
+					"lt":{
+						
+					},
+					"prod":{
+						
+					}
+					
+				},
+				"2":{
+					"dev":{
+						
+					},
+					"stage":{
+						
+					},
+					"lt":{
+						
+					},
+					"prod":{
+						
+					}
+					
+				}
+				
+			}
+			
+		},
+		"CsspSample":{
+			"description":"Provides reference implementation for engineering, along with core platform regression tests.",
+			"docUrl":"https://github.com/csap-platform/csap-core/wiki#/Code+Samples",
+			"context":"csspSample",
+			"java":"-Xms128M -Xmx128M -XX:MaxPermSize=128m",
+			"server":"cssp-1.x",
+			"source":{
+				"scm":"svn",
+				"path":"http://yourSvnOrGit/svn/smartservices/coreservices/trunk/cssp/CsspSampleJms",
+				"branch":"HEAD"
+			},
+			"maven":{
+				"dependency":"com.your.group:CsspSampleJms:1.0.23:war"
+			},
+			"version":{
+				"1":{
+					"dev":{
+						
+					},
+					"stage":{
+						
+					},
+					"lt":{
+						
+					},
+					"prod":{
+						
+					}
+					
+				}
+				
+			}
+			
+		},
+		"FactorySample":{
+			"description":"Provides reference implementation for engineering, along with core platform regression tests.",
+			"docUrl":"https://github.com/csap-platform/csap-core/wiki#/Code+Samples",
+			"java":"-Xms256M -Xmx256M -XX:MaxPermSize=192m",
+			"server":"cssp-1.x",
+			"source":{
+				"scm":"svn",
+				"path":"http://yourSvnOrGit/svn/smartservices/coreservices/trunk/cssp/CsspFactorySample",
+				"branch":"HEAD"
+			},
+			"maven":{
+				"dependency":"com.your.group:CsspFactorySample:1.0.24:war"
+			},
+			"version":{
+				"1":{
+					"dev":{
+						
+					},
+					"stage":{
+						
+					},
+					"lt":{
+						
+					},
+					"prod":{
+						
+					}
+					
+				},
+				"2":{
+					"dev":{
+						
+					},
+					"stage":{
+						
+					},
+					"lt":{
+						
+					},
+					"prod":{
+						
+					}
+					
+				}
+				
+			}
+			
+		},
+		"ServletSample":{
+			"description":"ServletSample provides a simple tomcat 7 implementation to validate the tomcat runtime",
+			"docUrl":"https://github.com/csap-platform/csap-core/wiki#/CSAP+-+CsAgent",
+			"java":"-Xms128M -Xmx128M -XX:MaxPermSize=128m",
+			"server":"tomcat7.x",
+			"source":{
+				"scm":"svn",
+				"path":"http://yourSvnOrGit/svn/smartservices/coreservices/trunk/cssp/Servlet3Sample",
+				"branch":"HEAD"
+			},
+			"maven":{
+				"dependency":"com.your.group:Servlet3Sample:1.0.0:war"
+			},
+			"version":{
+				"1":{
+					"dev":{
+						
+					},
+					"stage":{
+						"java":"-Xms192M -Xmx192M -XX:MaxPermSize=128m"
+					},
+					"lt":{
+						
+					},
+					"prod":{
+						
+					}
+					
+				}
+				
+			}
+			
+		},
+		"springmvc-showcase":{
+			"description":"SpringMVC showcase",
+			"docUrl":"https://github.com/spring-projects/spring-mvc-showcase",
+			"java":"-Xms128M -Xmx128M -XX:MaxPermSize=128m",
+			"autoStart":"91",
+			"server":"tomcat7.x",
+			"source":{
+				"scm":"git",
+				"path":"https://github.com/spring-projects/spring-mvc-showcase.git",
+				"branch":"HEAD"
+			},
+			"maven":{
+				"dependency":"com.your.group:SpringMvcShowCases:1.0.0:war"
+			},
+			"version":{
+				"1":{
+					"dev":{
+						
+					},
+					"stage":{
+						"java":"-Xms192M -Xmx192M -XX:MaxPermSize=128m"
+					},
+					"lt":{
+						
+					},
+					"prod":{
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+	},
+	"osProcesses":{
+		"httpd":{
+			"description":"httpd includes modjk for routing to services.  It will use the $STAGING/httpConf files without the *Export*",
+			"docUrl":"https://github.com/csap-platform/csap-core/wiki#updateRefHttpd+Wrapper",
+			"url":"http://$host.yourcompany.com:8080/server-status,http://$host.yourcompany.com:8080/status,http://$host.yourcompany.com:8080",
+			"autoStart":"05",
+			"propDirectory":"/home/ssadmin/staging/httpdConf",
+			"processFilter":".*httpd_8080.*httpd.*",
+			"deployTimeoutMinutes":"10",
+			"port":"8080",
+			"server":"wrapper",
+			"source":{
+				"scm":"svn",
+				"path":"http://yourSvnOrGit/svn/csap/trunk/HttpdWrapper",
+				"branch":"HEAD"
+			},
+			"maven":{
+				"dependency":"org.csap.web:HttpdWrapper:2.4.6:zip"
+			},
+			"version":{
+				"1":{
+					"dev":{
+						
+					},
+					"stage":{
+						
+					},
+					"lt":{
+						
+					},
+					"prod":{
+						
+					}
+					
+				},
+				"2":{
+					"dev":{
+						
+					},
+					"stage":{
+						
+					},
+					"lt":{
+						
+					},
+					"prod":{
+						
+					}
+					
+				}
+				
+			},
+			"jmxPort":"-1",
+			"metaData":"skipJmxCollection,generateWorkerProperties"
+		},
+		"oracleDriver":{
+			"description":"Oracle 64 bit driver and generate TNS Entries",
+			"docUrl":"https://github.com/csap-platform/csap-core/wiki",
+			"autoStart":"03",
+			"url":"http://www.oracle.com/technetwork/database/features/instant-client/index.html",
+			"port":"1521",
+			"scmVersion":"none",
+			"user":"someUser",
+			"disk":"someOsDiskName",
+			"server":"wrapper",
+			"metaData":"isScript",
+			"logDirectory":"/opt/oracleInstant64_11_2",
+			"propDirectory":"/opt/oracleInstant64_11_2",
+			"maven":{
+				"dependency":"com.yourcompany.test1:SSP_OracleDriverWrapper:11.2.0.3.5:zip"
+			},
+			"source":{
+				"scm":"svn",
+				"path":"http://yourSvnOrGit/svn/smartservices/coreservices/trunk/SSP_DbConfigWrapper/",
+				"branch":"HEAD"
+			},
+			"version":{
+				"1":{
+					
+				}
+				
+			}
+			
+		},
+		"jdk":{
+			"description":"Oracle JDK",
+			"docUrl":"http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html",
+			"autoStart":"02",
+			"url":"http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html",
+			"port":"7999",
+			"scmVersion":"none",
+			"user":"ssadmin",
+			"disk":"/home/ssadmin",
+			"server":"wrapper",
+			"metaData":"isScript",
+			"logDirectory":"/opt/java",
+			"propDirectory":"/opt/java",
+			"maven":{
+				"dependency":"com.yourcompany.csap:JavaDevKitPackage:7u25.3:zip"
+			},
+			"source":{
+				"scm":"svn",
+				"path":"http://yourSvnOrGit/svn/csap/trunk/JavaDevKitPackage",
+				"branch":"HEAD"
+			},
+			"version":{
+				"1":{
+					
+				}
+				
+			},
+			"jmxPort":"-1"
+		},
+		"RedHatLinux":{
+			"description":"RedHat Linux",
+			"docUrl":"http://www.redhat.com/products/enterprise-linux/server/",
+			"autoStart":"01",
+			"url":"http://$host.yourcompany.com:8011/CsAgent/ui/getStats",
+			"port":"7998",
+			"scmVersion":"none",
+			"user":"ssadmin",
+			"disk":"/home/ssadmin",
+			"server":"wrapper",
+			"metaData":"isScript",
+			"logDirectory":"/opt/java",
+			"propDirectory":"/opt/java",
+			"maven":{
+				"dependency":"com.yourcompany.csap:RedHatLinux:1.0.0:zip"
+			},
+			"source":{
+				"scm":"svn",
+				"path":"http://yourSvnOrGit/svn/csap/trunk/RedHatLinux",
+				"branch":"HEAD"
+			},
+			"version":{
+				"1":{
+					
+				}
+				
+			},
+			"jmxPort":"-1"
+		},
+		"redis":{
+			"processFilter":".*bin/redis-server.*",
+			"environmentVariables":{
+				"redisMaster":"$serviceRef:redis",
+				"redisCredential":"$lifeCycleRef:redisCredential"
+			},
+			"description":"redis dist",
+			"docUrl":"http://redis.io/topics/quickstart",
+			"autoStart":"24",
+			"url":"http://redis.io/topics/quickstart",
+			"port":"6379",
+			"server":"wrapper",
+			"defaultLogToShow":"consoleLogs.txt",
+			"metaData":"skipJmxCollection,killWarnings",
+			"propDirectory":".",
+			"monitors":{
+				"nagiosCommand":"check_http! -v -u /some/app/url --regex \".*Healthy.*true.*\"  -t 3  ",
+				"max_diskWriteKb":"5",
+				"max_diskUtil":"30",
+				"max_threadCount":"100",
+				"max_fileCount":"300",
+				"max_socketCount":"10",
+				"max_rssMemory":"768m",
+				"max_tomcatConnections":"40",
+				"max_topCpu":"150"
+			},
+			"maven":{
+				"dependency":"org.csap.packages:redis:3.0.4.1-SNAPSHOT:zip"
+			},
+			"source":{
+				"scm":"svn",
+				"path":"http://yourSvnOrGit/svn/csap/trunk/redis",
+				"branch":"trunk"
+			},
+			"version":{
+				"1":{
+					
+				}
+				
+			},
+			"customMetrics":{
+				"config":{
+					"httpCollectionUrl":"http://localhost:8311/RedisServices/redis/info",
+					"patternMatch":"JSON"
+				},
+				"numberOfKeys":{
+					"attribute":"/numberOfKeys",
+					"delta":"delta",
+					"title":"Keys Stored: Change"
+				},
+				"numberOfKeysTotal":{
+					"attribute":"/numberOfKeys",
+					"title":"Keys Stored: Active"
+				},
+				"memoryUsed":{
+					"attribute":"/used_memory_rss",
+					"decimals":"1",
+					"divideBy":1024,
+					"title":"Memory (Kb)"
+				},
+				"keyspaceHits":{
+					"attribute":"/keyspace_hits",
+					"delta":"delta",
+					"title":"Key Space Hits: Change"
+				}
+				
+			}
+			
+		}
+		
+	}
+}

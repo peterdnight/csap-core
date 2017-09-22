@@ -1,0 +1,3 @@
+/dev/cstg_volume_group/mqLV /home/mquser ext3 ro,data=ordered 0 0
+/dev/cstg_volume_group/denodoLV /home/denodo ext3 ro,data=ordered 0 0
+/dev/cstg_volume_group/ssadminLV /home/ssadmin ext3 ro,data=ordered 0 0

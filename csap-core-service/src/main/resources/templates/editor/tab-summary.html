@@ -1,0 +1,150 @@
+
+<!-- 
+	- Summary Tab included in ClusterManager.jsp
+-->
+
+<div class="heading" style="padding-top: 0; font-size: 1.0em">
+
+	<div th:if="${ ( infraRole == null) }" class="news">
+		Operations Disabled: your account is not a member of infra admins
+	</div>
+	
+	<button id="showReloadButton"
+		th:if="${ ( infraRole != null) }"
+			title="Reloads the definition (hosts, services, java options, etc.)"
+			class="pushButton"
+			style="padding-left: 0em; margin-top: 1.0em; font-size: 1.2em">
+		<img th:src="@{/images/16x16/view-refresh.png}">Reload Application Definition
+	</button>
+
+	[[ ${lifecycle} ]] Hosts
+
+
+	<a id="cleanFsButton" title="Remove the application definition build location. Needed when items have been deleted or renamed" 
+	   class="simple"
+	   href="#cleanDefButton">
+		<img  class="butImage" th:src="@{/images/16x16/clean.png}">Clean Application Definition
+	</a>
+
+</div>
+
+
+<div id="reloadDiv" style="font-size: 1em; display: none"
+	 th:if="${ ( infraRole != null) }">
+
+	userid:
+	<input id="scmUserid" style="width: 8em" name="scmUserid"
+		   th:value="${userid}">
+	password:
+	<input id="scmPass" style="width: 8em; font-size: 0.7em" name="scmPass"
+		   value="" type="password" />
+	branch:
+	<input id="scmBranch" style="width: 10em" name="scmBranch"
+		   th:value="${ applicationBranch }" title="Either trunk, or branches/yourbranchName" />
+	<br> <span style="padding-left: 12em;"></span>
+</div>
+
+
+
+<table class="simple">
+	<thead>
+
+		<tr>
+			<th style="width: 18em; text-align: left">Summary Attributes</th>
+			<th style="text-align: left"><a id="defButton" class="simple"
+											style="display: inline" href="showSummary" target="_blank"
+											title="View Application Summary Report">View Full Report</a></th>
+		</tr>
+	</thead>
+
+
+
+
+	<tr>
+		<td>Application</td>
+		<td>Name: <div class="noteHighlight">[[ ${ csapApp.getName() } ]]</div>, 
+			Source: <div class="noteHighlight"><a class="simple" style="display: inline" target="_blank"
+												  th:href="${csapApp.getSourceLocation()}"> [[
+					${csapApp.getSourceLocation()} ]] </a></div>
+		</td>
+	</tr>
+
+	<tr>
+		<td>Infrastructure Provider: </td>
+		<td>
+			Provider: 
+			<div class="noteHighlight">
+				<a class="simple" style="display: inline" target="_blank"
+				   th:href="${ csapApp.getRootModel().getInfraProvider() }"> [[
+					${ csapApp.getRootModel().getInfraProvider() } ]] </a>
+			</div>
+			Catalog: 
+			<div class="noteHighlight">
+				<a class="simple" style="display: inline" target="_blank"
+				   th:href="${ csapApp.getRootModel().getInfraCatalog() }"> 
+				Browse
+				</a>
+			</div>
+			Configuration: 
+			<div class="noteHighlight">
+				<a class="simple" style="display: inline" target="_blank"
+				   th:href="${ csapApp.getRootModel().getInfraAddHost() }">
+					Browse
+				</a>
+			</div>
+		</td>
+	</tr>
+
+
+	<tr>
+		<td>[[ ${
+			csapApp.getActiveModel().getReleasePackageName() } ]]</td>
+		<td><span class="current">[[
+				${csapApp.getSvcToConfigMap().size()} ]] </span> Services on <span
+				class="current">[[ ${csapApp.getActiveModel().getHostToAdminMap().size()} ]]
+			</span> Hosts, using 
+			<span class="current">[[ ${csapApp.lifeCycleSettings().getNumberWorkerThreads() } ]] </span> VM Worker Threads to distribute CSAP operations</td>
+	</tr>
+
+
+	<tr>
+		<td>Life Cycles</td>
+		<td>Current: <span class="current"> 
+				[[ ${lifecycle} ]]</span>
+			All: <span
+				th:each="entry : ${csapApp.getActiveModel().getLifeCycleToGroupMap()}">
+				[[ ${entry.key} ]] </span></td>
+	</tr>
+
+
+	<tr>
+		<td>Default Monitors for [[ ${lifecycle} ]]</td>
+		<td>Max Cpu Load: <span class="current"> [[ ${
+				lifeCycleSettings.getMaxHostCpuLoad("dummy") } ]]</span> Max Cpu Use: <span
+				class="current"> [[ ${
+				lifeCycleSettings.getMaxHostCpu("dummy") } ]]</span> Max Cpu IoWait: <span
+				class="current"> [[ ${
+				lifeCycleSettings.getMaxHostCpuIoWait("dummy") } ]]</span> Max Disk %: <span
+				class="current"> [[ ${
+				lifeCycleSettings.getMaxDiskPercent("dummy") } ]]</span> Min Memory Mb:<span
+				class="current"> [[ ${
+				lifeCycleSettings.getMinFreeMemoryMb("dummy") } ]]</span></td>
+	</tr>
+
+</table>
+
+<div class="heading"
+	 style="padding-top: 2em; padding-bottom: 0.5em; font-size: 1em;">
+	<a class="simple"
+	   href="https://github.com/csap-platform/csap-core/wiki#updateRefDomain+Model"
+	   title="Click to view Operator Guide" style="" target="opGuide">
+		Editor Overview <img title="Read about domain model" class="but"
+							 th:src="@{/images/16x16/help.png}">
+	</a>
+</div>
+
+<div style="margin-top: 0em;">
+
+	<img th:src="@{/images/editorIntro.jpg}" width="800">
+
+</div>

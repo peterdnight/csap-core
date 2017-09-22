@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+
+		<script th:replace="~{ /deployment/service-host-head :: pageContent }"></script>
+
+		<title></title>
+	</head>
+
+	<body>
+
+		<div id="resultsSection" style="display: none">
+
+			<pre id="resultPre">[[ ${result} ]]</pre>
+
+		</div>
+
+
+		<header id="header" style="vertical-align: top">
+			<div id="clusterDiv">
+				<span
+					style="vertical-align: top; position: relative; top: 2px; font-weight: normal; font-size: 0.8em">View:</span>
+				<select id="clusterSelect" style="width: 11em"></select>
+				<a id="showClusterDialog" href="#" class="pushButton"
+				   style="margin-left: 1em" title="Hosts Operations: View files, run commands, view host resource trends, ...">
+					<img style="top: 2px;width: 14px" src="images/16x16/networkAdd.png"/>
+				</a>
+			</div>
+
+			<div style="float: left; margin-left: 2em;" >
+				<span th:text="${name}"></span>:</div>
+
+			<div class="packageControls"
+				 th:if="${param.releasePackage}">
+				<select id="releaseSelect" class="releasePackage" style="width: 14em">
+					<option th:each="name : ${packageNames}" 
+
+							th:selected="${name == selectedRelease }"
+							th:value="${name}"
+							th:text="${name}">Credit card</option>
+					<option th:value="${T(org.csap.agent.model.Application).ALL_PACKAGES}"
+							th:selected="${ T(org.csap.agent.model.Application).ALL_PACKAGES == selectedRelease }">All Packages</option>
+				</select>
+
+				<a class="" title="Package Catalog" href="services">
+					<img class="butImage" src="images/16x16/packages.png" />
+				</a>
+			</div>
+
+
+			<div th:replace="/deployment/menus :: pageContent"></div>
+
+
+			<a class="pushButton serviceNavigate"
+			   title="View/edit the definition for the capability"
+			   style="margin-right: 1em" th:href="@{/edit/application(releasePackage=${selectedRelease})}">
+				<img src="images/16x16/preferences-system.png" />Editor
+			</a>
+
+			<a class="pushButton serviceNavigate"
+			   title="Switch to service view for deployment"
+			   style="margin-right: 2em" 
+			   th:href="@{/services(releasePackage=${selectedRelease})}">
+				<img src="images/16x16/internet-web-browser.png"/>Services
+			</a>
+
+
+		</header>
+
+
+		<div id="mainDisplayArea" style="overflow-y: visible; min-width: 72em;">  
+
+			<div th:replace="/deployment/service-host-deploy :: pageContent"></div>
+
+			<div style="position: relative">
+				<input class="inset hostFilter"  type="text" name="dummy" placeholder="Filter"
+					   title="Use filters to reduce rows displayed. Filter is case-insensitive"/>
+			</div>
+			<div id="summaryTableDiv" class="iblock" style="">
+
+				<table id="summaryTable" class="fixed bordered hoverIn">
+					<thead id="summaryHeader">
+
+						<tr>
+							<th class="summaryColumn1">Host</th>
+							<th class="summaryColumn2">Services</th>
+							<th class="summaryColumn3">Load</th>
+							<th class="summaryColumn4">Disk Mb</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr>
+							<td colspan="4">loading</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div id="summaryTotal" class=""
+					 style="font-size: 0.8em; margin-top: 0.5em; margin-left: 2em;">
+					Hosts:<span id="hostSummary"
+								style="font-weight: bold; margin-right: 5em"></span> Services:<span
+								id="serviceSummary" style="font-weight: bold; margin-right: 1em"></span>
+				</div>
+			</div>
+
+
+
+			<div th:replace="~{ /deployment/service-news :: pageContent }"></div>
+
+
+
+			<div style="position: relative; display: inline-block;">
+				<input class="instanceFilter inset "  type="text" name="dummy" placeholder="Filter"
+					   title="Use filters to reduce rows displayed. Filter is case-insensitive" />
+			</div>
+
+			<div id="instanceTableDiv" class="iblock"  style="display:none; position: relative">
+
+				<div id="instanceFilterDiv" style="position: absolute;">
+					<input class="instanceFilter inset "  type="text" name="dummy" placeholder="Filter"
+						   title="Use filter to reduce rows displayed. Filter is case-insensitive"/>
+				</div>
+
+				<table id="instanceTable" class="bordered fixed ">
+
+					<thead id="instanceHeader">
+						<tr>
+							<th class="instanceService" style=""
+								title="Service Name">Service</th>
+							<th class="instanceColumn3" style=""
+								title="Startup Order (99 means autostart disabled)">Order</th>
+							<th class="instanceColumn4" style="">Port</th>
+							<th class="instanceVersion" style="">Cur. Version</th>
+							<th class="mavenId" style="">Dep.
+								Version</th>
+							<th class="instanceDisk" style="">Disk</th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr>
+							<td colspan="7">loading</td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+		</div>
+
+
+		<div id="footer" >
+			<span id="users" style="display: inline-block;">
+			</span>
+			<span id="lastOp" 
+				  style="float: right;display: inline-block;">
+			</span>
+		</div>
+
+		<div id="reImageDialog" 
+			 title="Rebuild Confirmation"
+			 style="display: none;">
+
+			
+			<br/>
+			
+			<img class="butImage" style="vertical-align: middle"
+				 th:src="@{/images/32x32/process-stop.png}" />
+			
+			All Java processes will be killed, and files deleted from
+			$PROCESSING. 
+			<br/>
+			<br/> 
+			All services marked with autostart in the definition file
+			will be deployed and started using the version and ordering specified in the
+			application definition.
+			<div id="stackDiv" style="padding-top: 1em;">
+				Select the additional stacks to be re-installed: 
+				<br/> 
+				<select
+					class="customSelect" id="reImageSelect" name="reImage"
+					multiple="multiple">
+				</select>
+			</div>
+		</div>
+
+
+	</body>
+
+</html>

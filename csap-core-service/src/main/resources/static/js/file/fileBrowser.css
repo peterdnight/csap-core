@@ -1,0 +1,245 @@
+
+#fileTree .fancytree-container{
+	
+	min-height: 800px;
+	
+}
+#fileTree .fileHidden {
+	display: none;
+}
+
+#filterControls {
+	display: inline-block;
+	margin-left: 3em;
+	font-size: 8pt;
+	border: 1px dashed grey;
+}
+
+
+#fileControls {
+	display: inline-block;
+	margin-left: 3em;
+	font-size: 8pt;
+	border: 1px dashed grey;
+	padding-left: 1em;
+}
+
+#fileTree span.fancytree-node.run > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/folder.png');
+}
+
+#fileTree span.fancytree-node.ft_docker > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/docker.png');
+}
+
+#fileTree span.fancytree-node.root > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/16x16/logs.png');
+}
+
+
+#fileTree span.fancytree-node.boot > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/bootSmall.png');
+}
+
+#fileTree span.fancytree-node.logs > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/format-justify-center.png');
+}
+
+#fileTree span.fancytree-node.properties > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/16x16/run2.png');
+}
+
+#fileTree span.fancytree-node.shell > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/16x16/os.png');
+}
+
+#fileTree span.fancytree-node.compressed > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/zipIcon.png');
+}
+
+#fileTree span.fancytree-node.java > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/javaSmall.png');
+}
+
+#fileTree span.fancytree-node.json > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/dbSmall.png');
+}
+
+#newWindow {
+	padding: 0;
+	margin-left: 3em;
+	height: 18px;
+	vertical-align: middle;
+}
+
+#newWindow img {
+	
+}
+
+#fileOptions {
+	font-size: 8pt;
+	vertical-align: middle;
+	display: inline-block;
+	padding: 0px;
+	margin-top: 2px;
+}
+
+#fileFilter {
+	padding: 0px;
+	padding-left: 3px;
+	padding-right: 3px;
+	width: 6em;
+	font-size: 8pt;
+	margin-top: 2px;
+	margin-right: 0.5em;
+}
+
+input.customCheck {
+	margin-right: 1em;
+	margin-left: 0em;
+	vertical-align: middle;
+}
+
+
+input.custom {
+	vertical-align: middle;
+	margin-right: 0em;
+	margin-left: 0.5em;
+}
+
+label {
+	display: inline-block;
+	font-weight: bold;
+	margin-left: 1.5em;
+}
+
+label.radio {
+	font-weight: bold;
+	margin-left: 0em;
+}
+
+.resourceConfig {
+	font-size: 0.7em;
+	font-weight: bold;
+	display: inline-block;
+	margin-left: 2em;
+	border-bottom: 1px solid #bbb;
+}
+
+.commands {
+	position: absolute;
+	display: block;
+	border: 1px solid #bbb;
+	padding: 1em;
+	padding-left: 0.5em;
+	border-radius: 10px;
+	font-size: 0.8em;
+	background-color: #FFFFFF;
+	box-shadow: 5px 5px 2px #888;
+	top: 10em;
+	left: 20em;
+	z-index: 99;
+	width: 12em;
+}
+
+.close {
+	position: absolute;
+	top: 5px;
+	right: 12px;
+	width: 20px;
+	z-index: 98;
+}
+
+.ui-widget {
+	font-size: 0.9em;
+}
+
+.meta {
+	display: inline-block;
+	padding-left: 1em;
+	font-style: italic;
+	color: black;
+}
+
+.metaSize {
+	display: inline-block;
+	padding-left: 2em;
+	min-width: 5em;
+	text-align: right;
+	margin-right: 1em;
+}
+
+.metaExtra {
+	display: inline-block;
+	padding-left: 2em;
+}
+
+
+.metaTitle {
+	display: inline-block;
+	min-width: 10em;
+}
+
+.radio {
+	margin-left: 1em;
+}
+
+#popName {
+	margin: 0;
+	padding: 0;
+	font-style: italic;
+	font-size: 0.9em;
+}
+
+#adminStatus {
+	color: red;
+}
+
+#uploadSection {
+	display: none;
+	position: absolute;
+	top: 4em;
+	left: 10em;
+	width: 30em;
+}
+
+.context-menu-item span {
+	vertical-align: middle;
+}
+
+.context-menu-item.icon-quickView {
+	background-image: url(../../images/maxWindow.gif);
+}
+
+.context-menu-item.icon-view {
+	background-image: url(../../images/16x16/internet-web-browser.png);
+}
+
+.context-menu-item.icon-script {
+	background-image: url(../../images/16x16/shell.png);
+}
+
+.context-menu-item.icon-download {
+	background-image: url(../../images/16x16/download.png);
+}
+
+.context-menu-item.icon-delFolder {
+	background-image: url(../../images/16x16/deleteFolder.png);
+}
+
+.alertify.ajs-closable .ajs-commands button.ajs-close {
+	background-image: url('../../images/16x16/close.jpg');
+	height: 1.8em;
+	width: 37px;
+	background-position: 2px 3px ;
+}

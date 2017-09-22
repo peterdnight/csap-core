@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<head>
+
+		<title th:inline="text">Cluster Dialog</title>
+
+		<script th:replace="~{ csap/fragments/libsAndStyles :: pageContent }"></script>
+
+
+		<link th:href="@{/js/editor/dialog-cluster.css}" rel="stylesheet"
+			  type="text/css" media="screen" />
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/editor/editor.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+
+
+
+		<link th:href="@{/js/csapLibs/qtip/jquery.qtip.min.css}" rel="stylesheet"
+			  type="text/css" media="screen" />
+		<script th:src="@{/js/csapLibs/qtip/jquery.qtip.min.js}"></script>
+
+		<script th:src="@{/js/csapLibs/lineNums/jquery-linedtextarea.js}"></script>
+		<link th:href="@{/js/csapLibs/lineNums/jquery-linedtextarea.css}" rel="stylesheet"
+			  type="text/css" media="screen" />
+
+
+
+
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+
+			var baseUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).BASE_URL }} ]];
+			var clusterEditUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).EDIT_URL}}]] + '/clusterDialog';
+			var clusterDefUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).DEFINITION_URL}}]] + '/cluster';
+			// initialize is done in service-test
+			/*]]>*/
+		</script>
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/commonJQ.js')} }"></script>
+
+		<script  th:attr="data-main=@{ ${csapApp.requiresUrl('/js/editor/modules/dialog-cluster-test.js')}   }" 
+		th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script>
+	</head>
+
+	<body th:inline="text">
+
+
+		<header th:replace="csap/fragments/page :: header"></header>
+
+		<button  id="showButton" class="pushButton">Show Cluster Dialog</button>
+
+
+
+
+		<section id='dialogContents' class='editDialog'>
+
+			<div class="clusterLoading loadingLargePanel">
+				Loading <br/>Cluster
+			</div>
+
+			<div id='dialogResult' class='editDialog' >
+
+
+				<div >
+					Updated: <div class="noteAlt"></div>. 
+					<br/><br/> Changes will be loaded once they have been applied or checked in.
+				</div>
+
+			</div>
+
+			<div id="dialogOpsContainer">
+				<label > 
+					<span> Cluster:</span>
+					<select
+						th:if="${ param.newService == null }"
+						id="dialogClusterSelect"
+						class="dialogClusterSelect"
+						style="width: 14em">
+						<option
+							th:each="cluster : ${ clusterNames  }"
+							th:selected="${ cluster == param.clusterName[0] }"
+							th:value="${ cluster }"
+							th:text="${ cluster }">Will be updated with cluster names</option>
+					</select>
+					<input 
+						th:if="${ param.newService != null }"
+						id="dialogClusterSelect"
+						class="dialogClusterSelect"
+						style="width: 14em" th:value=" ${ param.clusterName[0] } "/>
+
+				</label>
+				<button class="pushButton notifyButton" title="Send changes to infrastructure admin for review and provisioning.">
+					Request
+				</button>
+				<div th:if="${ ( infraRole == null) }" class="news" title="Your userid is not a member of infra admins, so request will be sent for review">
+					Review Required
+				</div>
+				<span th:if="${ ( infraRole != null) }">
+					<span
+						th:if="${ param.newService == null }" >
+						<button class="pushButton updateDefButton">
+							Update
+						</button>
+						<button id="rename" class="pushButton renameDefButton">
+							Rename
+						</button>
+
+						<button id="copy" class="pushButton copyDefButton">
+							Copy
+						</button>
+
+						<button class="pushButton deleteDefButton">
+							Delete
+						</button>
+					</span>
+					<span
+						th:if="${ param.newService != null }" >
+						<button class="pushButton addDefButton">
+							Add
+						</button>
+					</span>
+
+					<label id="validateOnly" title="Changes will be validated, but not updated">
+						Validate Only:
+						<input id="validateOnlyCheckbox" type="checkbox" />
+					</label>
+				</span>
+			</div>
+
+			<div id='clusterEditor'>
+				<ul>
+					<li><a href="#assign">Service Assignment</a></li>
+					<li><a href="#alerts">Alerts Configuration</a></li>
+					<li><a href="#jsonEditor">Json Editor</a></li>
+				</ul>
+
+
+				<div id="jsonEditor" class="group serviceDef">
+					<textarea id="serviceJson" name="serviceJson" spellcheck=false >Loading</textarea> 
+					<br/>
+				</div>
+
+				<div id="assign"  class="group">
+					<label class="lastModified" >
+						<span>Last Modified By:</span> <div class="noteAlt" >not found</div> 
+					</label>
+
+					<div class="greenSection">
+						<label title="Display options: high, normal, low, ... are used to highlight on display" >
+							<span>Display: </span> 
+							<input class="" placeholder="normal" data-path="display" />
+						</label>
+
+
+						<label title="Description" ><span>Notes:</span> 
+							<input class="wide" placeholder="add a short description of contacts, functions, etc" data-path="notes" />
+						</label>
+
+						<label>
+							<span>Cluster Type: </span>
+							<select class="clusterTypeSelect">
+								<option
+									th:each="clusterEntry : ${ clusterEntries }"
+									th:value="${ clusterEntry.key }"
+									th:text="${ clusterEntry.value }">
+									Will be updated cluster types</option>
+							</select>
+
+						</label>
+
+					</div>
+					<div class="blueSection">
+
+						<div class="heading">
+							Add:
+							<select
+								class="jeeAddSelect"
+								style="width: 14em">
+								<option value="default">Java Enterprise Service</option>
+								<option
+									th:each="jeeServiceEntry : ${ jeeServices }"
+									th:value="${ jeeServiceEntry.key }"
+									th:text="${ jeeServiceEntry.key + ':' +  jeeServiceEntry.value }"
+									th:attr="data-port=${jeeServiceEntry.value}">
+									Will be updated with service names</option>
+							</select>
+
+							Java Enterprise Services And Ports: It is recommended that a single jvm instance is deployed per host.
+
+							<select title="If port conflict occurs, the following are unassigned and available"
+									style="width: 8em">
+								<option value="default">Free Ports</option>
+								<option
+									th:each="port : ${ jeeFreePorts }"
+									th:text="${ port }">
+									Will be updated with available ports</option>
+							</select>
+
+						</div>
+						<textarea   id="jeeClusterText" rows="2" spellcheck=false  
+									data-json="true" data-path="jvmPorts"
+									data-removenewlines="true" data-fit="true" data-sort="true" ></textarea>
+
+					</div>
+					<div class="greySection">
+						<div class="heading">
+							Add:
+							<select
+								class="osAddSelect"
+								style="width: 14em">
+								<option value="default">OS Service</option>
+								<option
+									th:each="osService : ${ osServices }"
+									th:value="${osService}"
+									th:text="${osService}">Will be updated with service names</option>
+							</select>OS Services - implemented using CSAP packages or OS wrappers
+						</div>
+						<textarea id="osClusterText"   rows="2" spellcheck=false
+								  data-json="true" data-path="osProcessesList"
+								  data-sort="true" data-removenewlines="true"  data-fit="true"   ></textarea>
+
+					</div>
+
+					<div class="redSection">
+
+						<div class="heading">
+							Add: 
+							<select
+								class="hostAddSelect"
+								style="width: 14em">
+								<option value="default">Existing Host</option>
+								<option
+									th:each="host : ${ hosts }"
+									th:value="${host}"
+									th:text="${host}">Will be updated with service names</option>
+							</select>
+							or
+
+							<button class="pushButton addHostButton dialog">
+								New Host
+							</button>
+							<a id="reconfigureHosts" 
+							   th:if="${ csapApp.getRootModel().getInfraAddHost().startsWith('http')  }"
+							   th:href="${ csapApp.getRootModel().getInfraAddHost()  }" 
+							   class="simple" target="_blank">
+								<img th:src="@{/images/16x16/preferences-system.png}">Manage Infrastructure
+							</a>
+
+						</div>
+						<textarea id="hostText" class="clusterHostText"  
+								  data-json="true" data-path="upatedInJavascript"
+								  data-sort="true"  data-removenewlines="true" data-fit="true" 
+								  spellcheck=false  ></textarea>
+
+					</div>
+					<div class="heading">
+						Learn more about http clustering:  <a class="simple" href="https://github.com/csap-platform/csap-core/wiki#updateRefCSAP+Httpd+Package" target="_blank">
+							CSAP Clustering Reference Guide
+						</a></div>
+
+				</div>
+
+
+				<div id="peter"  class="group">
+
+
+
+				</div>
+
+				<div id="alerts"  class="group">
+
+					<div class="greenSection">
+						<div class="heading">
+							Defaults are defined in the lifecycle settings. They can be selectively overridden
+							if custom behavior is desired on services and hosts in a cluster.
+						</div>
+						<br/>
+						<label class="alerts" title="">
+							<span>Disk Full(%):</span> <input class="" data-path="monitors.maxDiskPercent" />
+						</label>
+						<label class="" title="Comma separated list of disks that will not trigger alerts. Regex supports">
+							<span>Disks Ignored:</span> <input class="medium" placeholder="eg. /auto/usrpattern.*" data-path="monitors.maxDiskPercentIgnorePatterns" />
+						</label>
+						<br/>
+						<label class="alerts" title="">
+							<span>Cpu (%):</span> <input class="" placeholder="" data-path="monitors.maxHostCpu" />
+						</label>
+						<label class="alerts" title="">
+							<span>Cpu Load:</span> <input class="" placeholder="" data-path="monitors.maxHostCpuLoad" />
+						</label>
+						<label class="alerts" title="">
+							<span>Cpu IO Wait:</span> <input class="" placeholder="" data-path="monitors.maxHostCpuIoWait" />
+						</label>
+						<label class="alerts" title="">
+							<span>Minimum Memory(MB):</span> <input class="" placeholder="" data-path="monitors.minFreeMemoryMb" />
+						</label>
+
+					</div>
+
+					<div class="blueSection">
+
+						<div class="heading">
+							Service Defaults  
+						</div>
+						<label class="alerts" title="">
+							<span>Cpu (%)</span> <input class="" data-path="monitors.max_topCpu" />
+						</label>
+						<label class="alerts" title="">
+							<span>Thread Count:</span> <input class="" data-path="monitors.max_threadCount" />
+						</label>
+						<label class="alerts" title="Default unit is bytes. Add m for MB or g for GB">
+							<span>RSS Memory:</span> <input class="" data-path="monitors.max_rssMemory" />
+						</label>
+						<label class="alerts" title="">
+							<span>Disk Used (MB):</span> <input class="" data-path="monitors.max_diskUtil" />
+						</label>
+						<label class="alerts" title="">
+							<span>File Count:</span> <input class="" data-path="monitors.max_fileCount" />
+						</label>
+						<label class="alerts" title="">
+							<span>Socket Count:</span> <input class="" data-path="monitors.max_socketCount" />
+						</label>
+						<label class="alerts" title="">
+							<span>Tomcat Connections:</span> <input class="" data-path="monitors.max_tomcatConnections" />
+						</label>
+
+
+
+						<label class="alerts" title="">
+							<span>Heartbeat Enabled:</span> <input class="" data-path="monitorDefaults.jvm_jmxHeartbeat" />
+						</label>
+						<label class="alerts" title="">
+							<span>Ignore Stopped:</span> <input class="" data-path="monitorDefaults.jvm_jmxHeartbeatIgnoreStopped" />
+						</label>
+
+					</div>
+
+
+				</div>
+
+			</div>
+
+		</section>
+
+
+
+
+
+		<footer th:replace="csap/fragments/page :: footer"></footer>
+	</body>
+
+</html>

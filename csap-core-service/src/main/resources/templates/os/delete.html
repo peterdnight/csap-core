@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>TODO supply a title</title>
+	</head>
+	<body th:fragment="pageContent" th:remove="tag" >
+
+
+
+		<div id="delete" class="commandSection">
+
+			<section>
+
+				<div class="title">Delete from File System</div>
+				<div class="note" style="">
+					Notes:<br/> Be very certain you have correctly entered the Location. The "undo" command consists of opening a
+					case with IT (48 hours) and request filesystem recovery.
+				</div>
+				<form action="delete" method="post">
+					Location:
+					<input name="location" th:value="${ defaultLocation}" style="width: 60em;" />
+					<br/>
+					<button id="deleteButton" class="pushButton">Recursive Delete</button>
+					Use Root:
+					<input name="runAsRoot" type="checkbox"/>
+
+					<span id="hostButtonTarget"></span>
+
+					Time Out:
+					<input type="number" name="timeoutSeconds" style="width: 4em" value="30"
+						   title="Commands will be aborted if not completed in specified interval"
+						   />
+					seconds
+				</form>
+			</section>
+
+		</div>
+
+
+
+	</body>
+</html>

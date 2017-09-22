@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<title>test</title>
+	</head>
+
+	<body th:fragment="pageContent" th:remove="tag">
+
+
+		<div id="mainDisplayNav">
+
+			<a id="refreshButton" title="Refresh host statistics" class="simple"
+			   href="#">
+				<img src="images/16x16/view-refresh.png"/>Refresh
+			</a>
+
+			<a id="reImageButton" th:if="${scmRole} != null"
+			   title="Host working directory will be cleaned, and all services redeployed."
+			   class="simple" href="#">
+				<img th:src="@{ /images/16x16/goWiki.png }"/>Rebuild
+			</a>
+			<div class="note" style="" th:if="${scmRole} == null">ReDeploy
+				not auth</div>
+
+			<a id="hostFilesButton"
+			   title="Browse files and execute shell commands on selected host(s)"
+			   class="simple" href="#">
+				<img src="images/16x16/logs.png"/>Files
+			</a>
+			<a id="hostDashboardButton" class="simple" href="#"
+			   title="Opens a dashboard showing key OS utilization ">
+				<img src="images/16x16/sysMon.png"/>Dashboard
+			</a>
+			<span id="messageTs"
+				  style="display: inline-block; width: 5em; color: green; font-style: italic; font-size: 1em">
+			</span>
+
+
+			<div id="serviceOps" th:if="${adminRole} != null"
+				 style="margin-left: 2em; display: none;">
+
+				<a id="deployOptionsButton" th:if="${scmRole} != null"
+				   title="Deploy options" class="simple" href="#">
+					<img src="images/16x16/preferences-system.png"/>Deploy...
+				</a>
+
+				<div class="note" th:if="${scmRole} == null" style="">Deploy
+					Not Auth</div>
+
+				<a id="startOptionsButton" title="Start Options" class="simple"
+				   href="#">
+					<img src="images/16x16/start.jpg"/>Start...
+				</a>
+				<a id="stopOptionsButton" title="Stop Options" class="simple"
+				   href="#">
+					<img src="images/16x16/Error.gif"/>Stop...
+				</a>
+				<a id="selectAllHosts" href="#" class="simple" title="Select All">
+					<img src="images/16x16/edit-select-all.png"/>All
+				</a>
+				<a id="deselectAllHosts" href="#" class="simple"
+				   style="margin-right: 0em" title="Clear All">
+					<img src="images/16x16/document-new.png"/>Clear
+				</a>
+
+			</div>
+			<span
+				style="display: inline-block; float: right; font-style: italic; font-size: 0.8em; margin-right: 2em">
+				[[${T(org.csap.agent.model.Application).HOST_NAME}]]</span>
+		</div>
+
+		<div id="commandOptionsDiv" style="display: none">
+			<div id="deployOptions" class="options" style="display: none;">
+				
+				<div class="heading">Deploy selected services using: </div>
+				
+				<a id="deployWarButton" title="Deploy War from maven" class="button"
+				   href="#" style="margin-right: 3em; font-size: 0.9em;">
+					<img height="12px" src="images/16x16/preferences-system.png"/>Maven
+					Deploy
+				</a>
+				<span style="font-weight: bold">Note: Use of editor Release
+					Manager is strongly recommended to ensure SCM best practices are
+					followed.</span>
+
+				<div id="sourceOptions" style="padding-top: 2em;">
+
+					<a id="rebuildJvmButton" class="imageButton" href="#"
+					   style="font-size: 0.9em;">
+						<img class="but" src="images/16x16/start.jpg"/>Source Deploy
+					</a>
+					userid:
+					<input id="scmUserid" style="width: 8em" name="scmUserid"
+						   th:value="${user}" /> password:
+					<input id="scmPass" style="width: 8em; font-size: 0.7em"
+						   name="scmPass" value="" type="password" />
+					branch:
+					<input id="scmBranch" style="width: 10em" name="scmBranch"
+						   value="trunk" />
+					<br/> 
+					<span style="padding-left: 12em;"></span> upload:
+					<input id="isScmUpload" name="isScmUpload" type="checkbox"
+						   title="Adds deploy to maven command"/>
+					buildCommand:
+					<input id="scmCommand" style="width: 25em" name="scmCommand"
+						   value="-Dmaven.test.skip=true clean package" />
+				</div>
+
+
+			</div>
+
+			<div id="startOptions" class="options" style="display: none;">
+
+				<div class="title">Start Options</div>
+				<a id="startButton" class="imageButton" href="#"
+				   style="margin-right: 0; margin-left: 3em;"
+				   title="This will kill the service if it is already running, and re-extracts the war and property files. See options for quickstart, etc.">
+					<img class="but" src="images/16x16/start.jpg" />Start
+				</a>
+				Quick Deploy:
+				<input id="noDeploy"
+					   title="If checked, service will NOT be extracted from war/zip"
+					   name="noDeploy" type="checkbox" />
+				<br/>
+
+			</div>
+
+			<div id="stopOptions" class="options" style="display: none;">
+				<div class="title">Stop Options</div>
+				<a id="killButton" class="imageButton"  href="#"
+				   style="margin-right: 0; margin-left: 3em;"
+				   title="Does an OS kill, then removes the files. Use options to skip file removal">
+					<img class="but" src="images/16x16/Error.gif" />Kill
+				</a>
+				Clean:
+				<input id="isClean"
+					   title="If checked, service working folder will be deleted"
+					   name="clean" type="checkbox" checked="checked" />
+
+				<a id="stopButton" class="imageButton" href="#"
+				   style="margin-right: 0; margin-left: 3em;"
+				   title="Does an Stop - may take a while">
+					<img class="but" src="images/16x16/Error.gif"/>Stop
+				</a>
+
+			</div>
+
+			<div class="note" th:if="${adminRole} == null" style="">
+				Admin Commands disabled as your userid is not a member of admin group
+			</div>
+
+		</div>
+	</body>

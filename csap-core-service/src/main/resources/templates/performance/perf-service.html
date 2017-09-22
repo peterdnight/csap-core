@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title> Template for services</title>
+	</head>
+
+	<body th:fragment="pageContent" th:remove="tag">
+
+
+
+		<div id="serviceDiv" >
+
+			<div id="serviceCustomize">
+
+				<a id="showAllServicesButton" class="pushButton"
+				   title="Show All Services">Show All Services</a>
+
+				<label id="serviceLabel">OS Resources</label>
+
+
+				<label  data-qtip="Switches between OS and JMX resource collections">
+					<input id="isShowJmx" name="isShowJmx" type="checkbox" />
+					Java Metrics
+				</label>
+
+				<a id="showAppMetricsButton" class="simple"
+				   title="Show Service Specific JMX meters used to capture workload">
+					<img class="" src="../images/16x16/sysMon.png"/>
+					Application Metrics
+				</a>
+
+
+				<div class="tip">Tip: Use customize to select columns to be displayed.</div>
+
+			</div>
+
+			<div class="metricHistogram"></div>
+
+			<table id="serviceSummaryTable" class="bordered reports fixed">
+				<thead>
+
+					<tr>
+						<th class="projectColumn" >Project</th>
+						<th  >Service</th>
+						<th class="num " >Instances</th>
+						<th class="num alt" >Samples</th>
+							<th class="num" ><span style="margin-right: 1em;">Cpu</span></th>
+						<th class="num" >Threads</th>
+						<th class="num" >Memory Mb</th>
+						<th class="num" >Disk Mb</th>
+						<th class="num" >Writes Kb/s</th>
+						<th class="num" >Reads Kb/s</th>
+						<th class="num" >Open Files</th>
+						<th class="num" >Open Sockets</th>
+					</tr>
+
+				</thead>
+
+				<tbody></tbody>
+
+
+				<tfoot>
+					<tr>
+						<td class="projectColumn" ></td>
+						<td  style="text-align: right" data-math="col-count" data-suffix=" Services"></td>
+						<td class="num " data-math="col-sum"></td>
+						<td class="num alt" data-math="col-sum"></td>
+						<td class="num" data-math="col-sum"></td>
+						<td class="num" data-math="col-sum"></td>
+						<td class="num" data-math="col-sum"></td>
+						<td class="num" data-math="col-sum"></td>
+						<td class="num" data-math="col-sum"></td>
+						<td class="num" data-math="col-sum"></td>
+						<td class="num" data-math="col-sum"></td>
+						<td class="num" data-math="col-sum"></td>
+					</tr>
+					<tr class="averageRow">
+						<td class="projectColumn" ></td>
+						<td  style="text-align: right"  > Average</td>
+						<td class="num " data-math="col-mean"></td>
+						<td class="num alt" data-math="col-mean"></td>
+						<td class="num" data-math="col-mean"></td>
+						<td class="num" data-math="col-mean"></td>
+						<td class="num" data-math="col-mean"></td>
+						<td class="num" data-math="col-mean"></td>
+						<td class="num" data-math="col-mean"></td>
+						<td class="num" data-math="col-mean"></td>
+						<td class="num" data-math="col-mean"></td>
+						<td class="num" data-math="col-mean"></td>
+					</tr>
+					<tr class="averageRow">
+						<td class="projectColumn" ></td>
+						<td  style="text-align: right"  > median </td>
+						<td class="num " data-math="col-median"></td>
+						<td class="num alt" data-math="col-median"></td>
+						<td class="num" data-math="col-median"></td>
+						<td class="num" data-math="col-median"></td>
+						<td class="num" data-math="col-median"></td>
+						<td class="num" data-math="col-median"></td>
+						<td class="num" data-math="col-median"></td>
+						<td class="num" data-math="col-median"></td>
+						<td class="num" data-math="col-median"></td>
+						<td class="num" data-math="col-median"></td>
+					</tr>
+
+
+				</tfoot>
+
+			</table>
+
+
+			<div id="serviceDetailDiv" >
+				<label id="serviceDetailLabel"></label>
+				<table id="serviceDetailTable" class="bordered fixed reports">
+					<thead>
+
+						<tr>
+							<th class="projectColumn" >Project</th>
+							<th  >Host</th>
+							<th class="num" >Samples</th>
+							<th class="num" ><span style="margin-right: 1em;">Cpu</span></th>
+							<th class="num" >Threads</th>
+							<th class="num" >Memory Mb</th>
+							<th class="num" >Disk Mb</th>
+							<th class="num" >Writes Kb/s</th>
+							<th class="num" >Reads Kb/s</th>
+							<th class="num" >Open Files</th>
+							<th class="num" >Open Sockets</th>
+						</tr>
+
+					</thead>
+
+					<tbody></tbody>
+
+
+					<tfoot>
+						<tr>
+							<td class="projectColumn" ></td>
+							<td  style="text-align: right" data-math="col-count" data-suffix=" Hosts"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+						</tr>
+
+
+						<tr class="averageRow">
+							<td class="projectColumn" ></td>
+							<td  style="text-align: right"  > Average</td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+						</tr>
+
+						<tr class="averageRow">
+							<td class="projectColumn" ></td>
+							<td  style="text-align: right"  > Median</td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+						</tr>
+
+					</tfoot>
+				</table>
+
+			</div>
+
+
+			<div id="jmxSummaryDiv" >
+				<table id="jmxSummaryTable" class="bordered fixed reports">
+					<thead>
+
+						<tr>
+							<th class="projectColumn" >Project</th>
+							<th  >Service</th>
+							<th class="  " >Instances</th>
+							<th class="  alt" >Samples</th>
+							<th class=" " >Cpu</th>
+							<th class=" " >Tomcat Conns </th> 
+
+							<th class=" " title="Tomcat Http Sessions">Sessions Total </th>
+							<th class=" " title="Tomcat Http Sessions">Sessions Active </th>
+							<th class=" " >Http Requests </th>
+							<th class=" " >Http Time </th>
+							<th class=" " >Http Kb In </th>
+							<th class=" " >Http Kb out </th>
+
+							<th class=" " >Open Files</th>
+							<th class=" " >Jvm Threads</th>
+							<th class=" " title="Tomcat busy threads and (Total Threads)">Tomcat Bz </th>
+							<th class=" " title="Tomcat busy threads and (Total Threads)">Tomcat Threads</th>
+							<th class=" " >Heap Used</th>
+							<th class=" " >Heap Max</th>
+							<th class=" " >GC Minor Ms</th>
+							<th class=" " >GC Major Ms</th>
+						</tr>
+
+					</thead>
+
+					<tbody></tbody>
+
+
+					<tfoot>
+						<tr>
+							<td class="projectColumn" ></td>
+							<td  style="text-align: right" data-math="col-count" data-suffix=" Services"></td>
+							<td class="num "  data-math="col-sum"></td>
+							<td class="num alt" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+						</tr>
+
+						<tr class="averageRow">
+							<td class="projectColumn" ></td>
+							<td  style="text-align: right"  > Average</td>
+							<td class="num "  data-math="col-mean"></td>
+							<td class="num alt" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+						</tr>
+
+						<tr class="averageRow">
+							<td class="projectColumn" ></td>
+							<td  style="text-align: right"  > Median</td>
+							<td class="num "  data-math="col-median"></td>
+							<td class="num alt" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+						</tr>
+
+					</tfoot>
+
+				</table>
+
+			</div>
+
+
+			<div id="jmxDetailDiv" >
+
+				<label id="jmxDetailLabel"></label>
+
+				<table id="jmxDetailTable" class="bordered fixed reports">
+					<thead>
+
+						<tr>
+							<th class="projectColumn" >Project</th>
+							<th  >Host</th>
+							<th class="num" >Samples</th>
+							<th class="num" >Cpu</th>
+
+							<th class="num" >Tomcat Connections </th>
+
+							<th class="num" title="Tomcat Http Sessions">Sessions Total </th>
+							<th class="num" title="Tomcat Http Sessions">Sessions Active </th>
+
+							<th class="num" >Http Requests </th>
+							<th class="num" >Http Time </th>
+							<th class="num" >Http Kb In </th>
+							<th class="num" >Http Kb out </th>
+
+
+							<th class="num" >Open Files</th>
+							<th class="num" >Jvm Thread</th>
+							<th class="num" title="active tomcate threads">Tomcat Busy</th>
+							<th class="num" >Tomcat Threads</th>
+							<th class="num" >Heap Used</th>
+							<th class="num" >Heap Max</th>
+							<th class="num" >GC Minor</th>
+							<th class="num" >GC Major</th>
+						</tr>
+
+					</thead>
+
+					<tbody></tbody>
+
+
+					<tfoot>
+						<tr>
+							<td class="projectColumn" ></td>
+							<td  style="text-align: right" data-math="col-count" data-suffix=" Hosts"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+						</tr>
+
+
+						<tr class="averageRow">
+							<td class="projectColumn" ></td>
+							<td  style="text-align: right"  > Average</td>
+							<td class="num"  data-math="col-mean"></td>
+							<td class="num"  data-math="col-mean"></td>
+							<td class="num"  data-math="col-mean"></td>
+							<td class="num"  data-math="col-mean"></td>
+							<td class="num"  data-math="col-mean"></td>
+							<td class="num"  data-math="col-mean"></td>
+							<td class="num"  data-math="col-mean"></td>
+							<td class="num"  data-math="col-mean"></td>
+							<td class="num"  data-math="col-mean"></td>
+							<td class="num"  data-math="col-mean"></td>
+							<td class="num"  data-math="col-mean"></td>
+							<td class="num"  data-math="col-mean"></td>
+							<td class="num"  data-math="col-mean"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+							<td class="num"  data-math="col-sum"></td>
+						</tr>
+
+						<tr class="averageRow">
+							<td class="projectColumn" ></td>
+							<td  style="text-align: right"  > Median</td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+							<td class="num"  data-math="col-median"></td>
+						</tr>
+
+
+					</tfoot>
+
+				</table>
+
+			</div>
+
+
+
+
+			<div id="jmxCustomDiv" >
+
+				<label id="jmxCustomLabel"></label>
+
+				<table id="jmxCustomTable" class="bordered fixed reports">
+
+					<thead><tr></tr></thead>
+
+					<tbody></tbody>
+
+
+					<tfoot>
+						<tr class="totalRow"></tr>
+						<tr class="averageRow"></tr>
+						<tr class="medianRow"></tr>
+					</tfoot>
+
+				</table>
+
+			</div>
+
+		</div>
+
+
+
+
+
+
+
+	</body>
+</html>

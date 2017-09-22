@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+
+		<title th:inline="text">CSAP Summary</title>
+
+		<script th:replace="~{ csap/fragments/libsAndStyles :: pageContent }"></script>
+		<style>
+			table th {
+				text-align: left;
+			}
+
+
+
+			div.service {
+				font-size: 9pt;
+				word-break: break-all;
+			}
+
+			table td {
+				word-wrap: break-word
+			}
+
+			.clusterType {
+				font-size: 0.8em;
+				color: red;
+			}
+
+			h1 {
+				margin-top: 2em;
+				padding-top: 1em;
+				padding-left: 2em;
+				border-top: 3px solid black;
+				font-weight: bold;
+			}
+
+			#serviceLimits td, #serviceLimits th {
+				text-align: center;
+			}
+
+			#serviceLimits td, #serviceLimits th {
+				text-align: center;
+			}
+
+			#serviceLimits td:nth-child(1), #serviceLimits th:nth-child(1) {
+				text-align: left;
+			}
+
+			#serviceLimits .simple {
+				float: right
+			}
+
+			#life {
+				margin: 2em;  
+			}
+
+			#life td:nth-child(1), #life th:nth-child(1) {
+				width: 10em;
+			}
+			#life td:nth-child(2), #life th:nth-child(2) {
+				word-break: break-all;
+			}
+		</style>
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/editor/summary.js')} }"></script>
+
+	</head>
+
+	<body th:inline="text">
+
+
+		<header id="header">
+
+			Definition Summary: [[ ${name} ]] <select class="releasePackage"
+													  style="width: 14em">
+				<option th:each="name : ${packageNames}" th:value="${name}"
+						th:selected="${name == #httpServletRequest.getParameter('releasePackage') }" th:text="${name}">Credit
+					card</option>
+			</select>
+
+
+
+			<a class="simple hbutton serviceNavigate"
+			   title="Switch to service view for deployment"
+			   style="margin-right: 2em" href="hosts">
+				<img class="but" th:src="@{/images/16x16/network-workgroup.png}"/>Hosts
+			</a>
+
+			<a class="simple hbutton serviceNavigate"
+			   title="Switch to service view for deployment"
+			   style="margin-right: 2em" href="services">
+				<img class="but" th:src="@{/images/16x16/internet-web-browser.png}"/>Services
+			</a>
+
+		</header>
+
+
+		<!-- 
+			- Summary
+		-->
+
+		<table class="simple">
+			<thead>
+
+				<tr>
+					<th style="width: 10em">Capability Attribute</th>
+					<th>Navigation Link(s)</th>
+				</tr>
+			</thead>
+
+			<tr>
+				<td>Release Packages</td>
+				<td><a
+						th:each="modelName : ${csapApp.getPackageNames()}"
+						class="pushButton" target="_blank"
+						th:href="@{${'/api/package/' + modelName}}"> [[ ${ modelName
+						}]]</a></td>
+			</tr>
+
+			<tr>
+				<td>Menu Links</td>
+				<td><a
+						th:each="menuEntry : ${csapApp.getHelpMenuMap() }"
+						class="pushButton" target="_blank" th:href="@{${menuEntry.value}}">
+						[[ ${ menuEntry.key } ]] </a></td>
+			</tr>
+
+			<tr>
+				<td>Services</td> 
+				<td><a class="pushButton" href="#services"> [[ ${
+						releasePackage.getServiceToAllInstancesMap().size() } ]]
+						Services</a> on [[ ${ releasePackage.getHostToAdminMap().size() }
+					]] Hosts</td>
+			</tr>
+
+
+			<tr>
+				<td>Lifecycles</td>
+				<td><a class="pushButton"
+					   th:each="lc : ${ releasePackage.getLifeCycleToGroupMap().keySet() }"
+					   th:href="${ '#' + lc }"> [[ ${ lc } ]] </a></td>
+			</tr>
+
+
+			<tr>
+				<td>Capability Source URl</td>
+				<td><a class="pushButton"
+					   th:href="${ csapApp.getSourceLocation() }"> [[ ${
+						csapApp.getSourceLocation() } ]] </a></td>
+			</tr>
+
+
+			<tr>
+				<td>JMX Authentication Required:</td>
+				<td> [[ ${  csapApp.getJmxAuth() } ]] </td>
+			</tr>
+
+		</table>
+
+		<div th:replace="~{ /editor/summary-limits :: pageContent }"></div>
+		<div th:replace="~{ /editor/summary-version :: pageContent }"></div>
+
+
+
+		<!-- 
+			Service Sections with instances 
+		-->
+
+
+		<a class="button" href="#summary" title="Navigate back to summary table">Top</a>
+
+		<section style="margin-top: 2em;"
+				 th:each="serviceEntry : ${ releasePackage.getServiceToAllInstancesMap () }"
+				 th:with="svcInstanceList = ${ releasePackage.getServiceToAllInstancesMap().get( serviceEntry.key ) }"
+				 >
+
+			<div class="service" th:if=" ${ svcInstanceList } != null "
+				 th:with="firstServiceInstance = ${svcInstanceList.get(0)} " >
+
+				<div th:id="${ serviceEntry.key }" class="title">Service Name: [[ ${ serviceEntry.key } ]]</div>
+
+				<br/>
+				<table class="simple">
+					<thead>
+
+						<tr>
+							<th style="width: 8em">Attribute</th>
+							<th style="">Value</th>
+						</tr>
+					</thead>
+
+					<tr>
+						<td>Description</td>
+						<td>[[ ${ firstServiceInstance.getDescription() } ]] </td>
+					</tr>
+
+
+					<tr>
+						<td>Doc Url</td>
+						<td>
+
+							<span th:if="null != ${ firstServiceInstance.getDocUrl() }">
+								<a th:href="${ firstServiceInstance.getDocUrl() }" target="_blank"> link </a> </span>
+							<span th:if="null == ${ firstServiceInstance.getDocUrl() }">none</span>
+
+						</td>
+					</tr>
+					<tr>
+						<td>Process Filter</td>
+						<td>[[ ${ firstServiceInstance.getProcessFilter() } ]] </td>
+					</tr>
+					<tr>
+						<td>Metadata</td>
+						<td>[[ ${ firstServiceInstance.getMetaData() } ]] </td>
+					</tr>
+					<tr>
+						<td>Maven (extra)</td>
+						<td>[[ ${ firstServiceInstance.getMavenId() +" (" + firstServiceInstance.getMavenSecondary() +")" } ]] </td>
+					</tr>
+					<tr>
+						<td>Cookie Custom:</td>
+						<td>[[ ${ firstServiceInstance.getCookieName() + " " +
+							firstServiceInstance.getCookiePath() + " " +
+							firstServiceInstance.getCookieDomain() + " " } ]] </td>
+					</tr>
+					<tr>
+						<td>Scm</td>
+						<td><a class="button"
+							   th:href="${ firstServiceInstance.getScmLocation() } ">
+								[[ ${ firstServiceInstance.getScmLocation() } ]]
+							</a></td>
+					</tr>
+					<tr>
+						<td>customMetrics</td>
+						<td>[[ ${ firstServiceInstance.getPerformanceConfiguration() } ]] </td>
+					</tr>
+					<tr>
+						<td>Raw First Instance</td>
+						<td>[[ ${ firstServiceInstance.toString() } ]] </td>
+					</tr>
+				</table>
+
+				<table class="simple">
+					<thead>
+
+						<tr>
+							<th style="width: 8em">Host/port</th>
+							<th style="width: 6em">Server Type</th>
+							<th style="width: 4em">Version</th>
+							<th style="width: 10em">Lifecycle</th>
+							<th style="width: 10em">Context</th>
+							<th>Parameters</th>
+						</tr>
+					</thead>
+
+					<tr
+						th:each="svcInstance : ${ svcInstanceList }">
+						<td>
+							[[ ${ svcInstance.getHostName() } ]] / [[ ${ svcInstance.getPort() } ]]
+						</td>
+						<td> [[ ${ svcInstance.getServerType() } ]]</td>
+						<td> [[ ${ svcInstance.getPlatformVersion() } ]]</td>
+						<td> [[ ${ svcInstance.getLifecycle() } ]]</td>
+						<td> [[ ${ svcInstance.getContext() } ]]</td>
+						<td> [[ ${ svcInstance.getAttribute( T(org.csap.agent.model.ServiceAttributes).parameters ) } ]] </td>
+					</tr>
+				</table>
+			</div>
+		</section>
+
+
+
+
+		<!-- 
+			- Clusters
+		-->
+
+		<a class="button" href="#summary" title="Navigate back to summary table">Top</a>
+
+
+		<section style="margin-top: 2em;"
+				 th:each="lcEntry : ${ releasePackage.getLifeCycleToGroupMap()  }"
+				 th:if="${ ! lcEntry.key.contains('-') }" >
+
+
+			<div th:id="${ lcEntry.key }" class="title" >Lifecycle: [[ ${ lcEntry.key } ]]</div>
+
+			<table class="simple">
+
+
+				<thead>
+
+					<tr>
+						<th style="width: 8em">Cluster Name</th>
+						<th style="width: 8em">Version / <span class="clusterType">Clustering
+								Model</span></th>
+						<th style="width: 12em">Hosts</th>
+						<th>Services</th>
+					</tr>
+				</thead>
+
+
+				<tbody >
+					<tr 
+						th:each="cluster : ${ releasePackage.getLifeCycleToGroupMap().get( lcEntry.key )  }"
+						th:if="${ releasePackage.getGroupToVersionMap() == null or releasePackage.getGroupToVersionMap().get( lcEntry.key + cluster ) == null }" >
+						<td colspan="99">Warning: did not find items for Lifecycle: [[ ${ lcEntry.key } ]] cluster: [[ ${ cluster } ]]</td>
+
+					</tr>
+				</tbody>
+				<tbody 
+					th:each="cluster : ${ releasePackage.getLifeCycleToGroupMap().get( lcEntry.key )  }"
+					th:if="${ releasePackage.getGroupToVersionMap() != null and releasePackage.getGroupToVersionMap().get( lcEntry.key + cluster ) != null }" >
+
+					<tr
+						th:each="version : ${ releasePackage.getGroupToVersionMap().get( lcEntry.key + cluster )  }">
+						<td> [[ ${ cluster } ]] </td>
+
+
+						<td>
+							[[ ${ version } ]] 
+							<br/> 
+							<span class="clusterType">
+								[[ ${ csapApp.getClusterType(lcEntry.key+cluster+version) } ]] 
+							</span></td>
+
+
+						<td>
+							<span> [[ ${ releasePackage.getLcGroupVerToHostMap().get(lcEntry.key +cluster+version) } ]]</span>
+						</td>
+
+						<td>
+							<span
+								th:each="groupToVersionEntry : ${ releasePackage.getLcGroupVerToJvmMap().get(lcEntry.key+cluster+version)  }">
+								<span
+									th:each="jvm : ${ groupToVersionEntry.key  }">
+
+									<a class="simple" style="display: inline-block; width: 12em"
+									   th:href="${'#' + jvm }">[[ ${ jvm } ]]</a>
+								</span>
+
+							</span>
+							<span
+								th:each="osName : ${ releasePackage.getLcGroupVerToOsMap().get(lcEntry.key+cluster+version)  }">
+
+								<a class="simple" style="display: inline-block; width: 12em"
+								   th:href="${'#' + osName }">[[ ${ osName } ]]</a>
+
+
+							</span>
+						</td>
+
+					</tr>
+
+				</tbody>
+
+			</table>
+
+
+			<table id="life" class="simple">
+				<thead>
+
+					<tr>
+						<th >Metadata Property</th>
+						<th >Value</th>
+					</tr>
+				</thead>
+
+
+				<tr>
+					<td>LB Url</td>
+					<td>[[ ${ lifeCycleSettings.getLbUrl() } ]],    Worker Threads: [[ ${ lifeCycleSettings.getNumberWorkerThreads() } ]]
+					</td>
+				</tr>
+
+				<tr
+					title="If false, operators must manually restart httpd when new services are added or ports change">
+					<td>Auto httpd restart on cluster reload</td>
+					<td>[[ ${ lifeCycleSettings.isAutoRestartHttpdOnClusterReload() } ]]</td>
+				</tr>
+
+
+				<tr>
+					<td>CSAP Events</td>
+					<td><div>Event Url: [[ ${ lifeCycleSettings.getEventUrl() } ]] </div>
+						<div>Enabled: [[ ${ lifeCycleSettings.isEventPublishEnabled() } ]]</div>
+						<div>Event User: [[ ${ lifeCycleSettings.getEventDataUser() } ]] </div>
+						<div>Event Count Url:  [[ ${ lifeCycleSettings.getEventUiCountUrl() } ]]</div>
+					</td>
+				</tr>
+
+				<tr>
+					<td>Event UIs</td>
+					<td>
+						<div>[[ ${ lifeCycleSettings.getHistoryUiUrl() } ]],</div>
+						<div>[[ ${ lifeCycleSettings.getEventMetricsUrl() } ]],</div>
+						<div>[[ ${ lifeCycleSettings.getAnalyticsUiUrl() } ]]</div>
+
+					</td>
+				</tr>
+
+
+				<tr>
+					<td>Metrics upload url</td>
+					<td>
+						<div>[[ ${ lifeCycleSettings.getMetricsUrl() } ]],</div>
+						<div>Enabled: [[ ${ lifeCycleSettings.isCsapMetricsUploadEnabled() } ]],</div>
+					</td>
+				</tr>
+				<tr>
+					<td>Metrics</td>
+					<td>
+						<div th:each="metricEntry : ${lifeCycleSettings.getMetricToSecondsMap()}">
+							[[ ${ metricEntry } ]]
+						</div>
+						<div>
+							[[ ${lifeCycleSettings.getUploadIntervalsInHoursJson() }  ]]
+						</div>
+
+					</td>
+				</tr>
+
+				<tr>
+					<td>Monitors</td>
+					<td th:utext="${lifeCycleSettings.getMonitors()}"> </td>
+				</tr>
+				<tr>
+					<td>RealTimeMeters</td>
+					<td><pre>[[ ${lifeCycleSettings.getRealTimeMetersForView() }  ]]</pre></td>
+				</tr>
+
+				<tr>
+					<td>Process Audit:</td>
+					<td>
+
+						<div>Interval:  [[ ${ lifeCycleSettings.getPsDumpInterval() } ]],</div>
+						<div>Max in Interval: [[ ${ lifeCycleSettings.getPsDumpCount() } ]],</div>
+						<div>Low memory limit: [[ ${ lifeCycleSettings.getPsDumpLowMemoryInMb() } ]],</div>
+					</td>
+				</tr>
+				<tr>
+					<td>All Data:</td>
+					<td th:utext="${lifeCycleSettings.toString()}"></td>
+				</tr>
+			</table>
+
+		</section>
+
+		<% } %> 
+	</body>
+</html>

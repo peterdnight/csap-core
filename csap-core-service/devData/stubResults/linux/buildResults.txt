@@ -1,0 +1,387 @@
+
+ *** Executing on: csap-dev01 at:15:20:13,   September 8  2017 
+
+
+
+ ***  on git repository: /home/ssadmin/staging/build/CsAgent_8011
+ Optional: use service clean to delete build location to force a new clone on new branch to be created.
+Merge of revisions dbfa04bc89a3198a58298e0651e8584c14c6a542, dbfa04bc89a3198a58298e0651e8584c14c6a542 with base dbfa04bc89a3198a58298e0651e8584c14c6a542 using strategy recursive resulted in: Already-up-to-date. 
+
+ Updated files:
+
+ ================= git sync complete =============
+
+
+
+ ============= Deployment on host csap-dev01  =====================
+
+
+Executing OS command on host csap-dev01:/home/ssadmin/staging/bin/rebuildAndDeploySvc.sh_P_
+
+
+0  :  ====================================================================
+1  :  Deploy invoked on csap-dev01
+2  :  ====================================================================
+3  :  
+4  :  
+5  :   =========
+6  :   == /tmp/rebuildFile1504902015 invoked on csap-dev01, user: ssadmin, toolsServer: csaptools  at 09/08/2017 15:20:15 
+7  :   =========
+8  :  
+9  :  
+10  :   =========
+11  :   == Environment variables set by CSAP . For shell scripts: use "$variable",  for java: System.getenv().get("variable") 
+12  :   =========
+13  :         csapName: CsAgent                 csapHttpPort: 8011                     csapJmxPort: 8016                 
+14  :       csapServer: SpringBoot                csapTomcat:                      csapHttpPerHost:                      
+15  :      csapPackage: CSAP Engineering            csapLife: dev                        csapLbUrl: http://csap-secure.yourcompany.com 
+16  :      csapVersion: 5.1.7.1-SNAPSHOT     csapServiceLife: dev                                 :                      
+17  :    csapProcessId: CsAgent_8011                csapPids: 13825                     csapParams: -DcsapJava8 -Dspring.profiles.active=CSAP_LIFE,agent,limits -Dsun.rmi.transport.tcp.responseTimeout=3000 -XX:MaxMetaspaceSize=96M -Xms256M -Xmx256M 
+18  :   csapWorkingDir: /home/ssadmin/processing/CsAgent_8011      csapLogDir: /home/ssadmin/processing/CsAgent_8011/logs                :                      
+19  :  customAttributes: []                               set: only for this service                :                      
+20  :          csapAjp: MASKED                      Refer to: https://github.com/csap-platform/csap-core/wiki/CSAP+Loadbalancing                :                      
+21  :        csapPeers: csap-dev02              csapdb-dev01: csap-dev04             csaprtp-dev01:                      
+22  :  Csap Encryption:                       CSAP_ALGORITHM: PBEWITHMD5ANDTRIPLEDES         CSAP_ID: Encryption token masked 
+23  :   redisSentinels:                                     :                                     :                      
+24  :    notifications: -                      csapAddresses: someDeveloper@yourcompany.com     csapFrequency:                      
+25  :   csapMaxBacklog:                                     :                                     :                      
+26  :          STAGING: /home/ssadmin/staging      PROCESSING: /home/ssadmin/processing      CLUSTERDEF:                      
+27  :  == Special hook to switch CsAgent to SpringBoot
+28  :  
+29  :  
+30  :   =========
+31  :   == JAVA version: /opt/java/jdk1.8.0_141 
+32  :   =========
+33  :  
+34  :  
+35  :  ====================================================================
+36  :  Starting maven build using /home/ssadmin/staging/conf/propertyOverride/settings.xml
+37  :  location: /home/ssadmin/staging/build/CsAgent_8011/
+38  :  command: mvn -B -Dmaven.test.skip=true clean package deploy
+39  :  ====================================================================
+40  :  
+41  :  
+42  :  ==
+43  :  == Stripping off maven deploy param if it is specified, maven deploy will run separately after consoleCommands.deploy
+44  :  == This enables Wrappers to customize upload artifacts if necessary
+45  :  ==
+46  :  Java HotSpot(TM) 64-Bit Server VM warning: ignoring option PermSize=128m; support was removed in 8.0
+47  :  Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=256m; support was removed in 8.0
+48  :  [INFO] Scanning for projects...
+49  :  [INFO]                                                                         
+50  :  [INFO] ------------------------------------------------------------------------
+51  :  [INFO] Building agent 5.1.7.1-SNAPSHOT
+52  :  [INFO] ------------------------------------------------------------------------
+53  :  [INFO] 
+54  :  [INFO] --- maven-clean-plugin:2.6.1:clean (default-clean) @ agent ---
+55  :  [INFO] Deleting /home/ssadmin/staging/build/CsAgent_8011/target
+56  :  [INFO] 
+57  :  [INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ agent ---
+58  :  [INFO] Using 'UTF-8' encoding to copy filtered resources.
+59  :  [INFO] Copying 3 resources
+60  :  [INFO] Copying 287 resources
+61  :  [INFO] 
+62  :  [INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ agent ---
+63  :  [INFO] Changes detected - recompiling the module!
+64  :  [INFO] Compiling 79 source files to /home/ssadmin/staging/build/CsAgent_8011/target/classes
+65  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/stats/ServiceCollector.java:[54,31] com.sun.jmx.remote.util.EnvHelp is internal proprietary API and may be removed in a future release
+66  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/stats/ServiceCollector.java:[54,31] com.sun.jmx.remote.util.EnvHelp is internal proprietary API and may be removed in a future release
+67  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/stats/ServiceCollector.java:[54,31] com.sun.jmx.remote.util.EnvHelp is internal proprietary API and may be removed in a future release
+68  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/stats/ServiceCollector.java:[1542,58] com.sun.jmx.remote.util.EnvHelp is internal proprietary API and may be removed in a future release
+69  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/model/DefinitionParser.java: /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/model/DefinitionParser.java uses or overrides a deprecated API.
+70  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/model/DefinitionParser.java: Recompile with -Xlint:deprecation for details.
+71  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/model/Application.java: Some input files use unchecked or unsafe operations.
+72  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/model/Application.java: Recompile with -Xlint:unchecked for details.
+73  :  [INFO] 
+74  :  [INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ agent ---
+75  :  [INFO] Not copying test resources
+76  :  [INFO] 
+77  :  [INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ agent ---
+78  :  [INFO] Not compiling test sources
+79  :  [INFO] 
+80  :  [INFO] --- maven-surefire-plugin:2.18.1:test (default-test) @ agent ---
+81  :  [INFO] Tests are skipped.
+82  :  [INFO] 
+83  :  [INFO] --- maven-jar-plugin:2.6:jar (default-jar) @ agent ---
+84  :  [INFO] Building jar: /home/ssadmin/staging/build/CsAgent_8011/target/agent-5.1.7.1-SNAPSHOT.jar
+85  :  [INFO] 
+86  :  [INFO] --- spring-boot-maven-plugin:1.5.6.RELEASE:repackage (default) @ agent ---
+87  :  [INFO] 
+88  :  [INFO] >>> maven-source-plugin:2.4:jar (default) > generate-sources @ agent >>>
+89  :  [INFO] 
+90  :  [INFO] <<< maven-source-plugin:2.4:jar (default) < generate-sources @ agent <<<
+91  :  [INFO] 
+92  :  [INFO] --- maven-source-plugin:2.4:jar (default) @ agent ---
+93  :  [INFO] Building jar: /home/ssadmin/staging/build/CsAgent_8011/target/srcZip/agent-5.1.7.1-SNAPSHOT-sources.jar
+94  :  [INFO] ------------------------------------------------------------------------
+95  :  [INFO] BUILD SUCCESS
+96  :  [INFO] ------------------------------------------------------------------------
+97  :  [INFO] Total time: 8.705 s
+98  :  [INFO] Finished at: 2017-09-08T15:20:25-05:00
+99  :  [INFO] Final Memory: 55M/464M
+100  :  [INFO] ------------------------------------------------------------------------
+101  :  
+102  :  
+103  :  ============== Spring Boot Fri Sep 8 15:20:26 CDT 2017 ================
+104  :  = deploy:
+105  :  =
+106  :  
+107  :  ===== csap post deploy executing mvn deploy skiptests
+108  :  
+109  :  Java HotSpot(TM) 64-Bit Server VM warning: ignoring option PermSize=128m; support was removed in 8.0
+110  :  Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=256m; support was removed in 8.0
+111  :  [INFO] Scanning for projects...
+112  :  [INFO]                                                                         
+113  :  [INFO] ------------------------------------------------------------------------
+114  :  [INFO] Building agent 5.1.7.1-SNAPSHOT
+115  :  [INFO] ------------------------------------------------------------------------
+116  :  [INFO] 
+117  :  [INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ agent ---
+118  :  [INFO] Using 'UTF-8' encoding to copy filtered resources.
+119  :  [INFO] Copying 3 resources
+120  :  [INFO] Copying 287 resources
+121  :  [INFO] 
+122  :  [INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ agent ---
+123  :  [INFO] Changes detected - recompiling the module!
+124  :  [INFO] Compiling 79 source files to /home/ssadmin/staging/build/CsAgent_8011/target/classes
+125  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/stats/ServiceCollector.java:[54,31] com.sun.jmx.remote.util.EnvHelp is internal proprietary API and may be removed in a future release
+126  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/stats/ServiceCollector.java:[54,31] com.sun.jmx.remote.util.EnvHelp is internal proprietary API and may be removed in a future release
+127  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/stats/ServiceCollector.java:[54,31] com.sun.jmx.remote.util.EnvHelp is internal proprietary API and may be removed in a future release
+128  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/stats/ServiceCollector.java:[1542,58] com.sun.jmx.remote.util.EnvHelp is internal proprietary API and may be removed in a future release
+129  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/model/DefinitionParser.java: /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/model/DefinitionParser.java uses or overrides a deprecated API.
+130  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/model/DefinitionParser.java: Recompile with -Xlint:deprecation for details.
+131  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/model/Application.java: Some input files use unchecked or unsafe operations.
+132  :  [WARNING] /home/ssadmin/staging/build/CsAgent_8011/src/main/java/org/csap/agent/model/Application.java: Recompile with -Xlint:unchecked for details.
+133  :  [INFO] 
+134  :  [INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ agent ---
+135  :  [INFO] Not copying test resources
+136  :  [INFO] 
+137  :  [INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ agent ---
+138  :  [INFO] Not compiling test sources
+139  :  [INFO] 
+140  :  [INFO] --- maven-surefire-plugin:2.18.1:test (default-test) @ agent ---
+141  :  [INFO] Tests are skipped.
+142  :  [INFO] 
+143  :  [INFO] --- maven-jar-plugin:2.6:jar (default-jar) @ agent ---
+144  :  [INFO] Building jar: /home/ssadmin/staging/build/CsAgent_8011/target/agent-5.1.7.1-SNAPSHOT.jar
+145  :  [INFO] 
+146  :  [INFO] --- spring-boot-maven-plugin:1.5.6.RELEASE:repackage (default) @ agent ---
+147  :  [INFO] 
+148  :  [INFO] >>> maven-source-plugin:2.4:jar (default) > generate-sources @ agent >>>
+149  :  [INFO] 
+150  :  [INFO] <<< maven-source-plugin:2.4:jar (default) < generate-sources @ agent <<<
+151  :  [INFO] 
+152  :  [INFO] --- maven-source-plugin:2.4:jar (default) @ agent ---
+153  :  [INFO] 
+154  :  [INFO] --- maven-install-plugin:2.5.2:install (default-install) @ agent ---
+155  :  [INFO] Installing /home/ssadmin/staging/build/CsAgent_8011/target/agent-5.1.7.1-SNAPSHOT.jar to /home/ssadmin/staging/mavenRepo/org/csap/agent/5.1.7.1-SNAPSHOT/agent-5.1.7.1-SNAPSHOT.jar
+156  :  [INFO] Installing /home/ssadmin/staging/build/CsAgent_8011/pom.xml to /home/ssadmin/staging/mavenRepo/org/csap/agent/5.1.7.1-SNAPSHOT/agent-5.1.7.1-SNAPSHOT.pom
+157  :  [INFO] Installing /home/ssadmin/staging/build/CsAgent_8011/target/srcZip/agent-5.1.7.1-SNAPSHOT-sources.jar to /home/ssadmin/staging/mavenRepo/org/csap/agent/5.1.7.1-SNAPSHOT/agent-5.1.7.1-SNAPSHOT-sources.jar
+158  :  [INFO] 
+159  :  [INFO] --- maven-deploy-plugin:2.8.2:deploy (default-deploy) @ agent ---
+160  :  [INFO] Downloading: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/5.1.7.1-SNAPSHOT/maven-metadata.xml
+161  :  [INFO] Downloaded: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/5.1.7.1-SNAPSHOT/maven-metadata.xml (964 B at 5.3 KB/sec)
+162  :  [INFO] Uploading: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/5.1.7.1-SNAPSHOT/agent-5.1.7.1-20170908.202036-5.jar
+163  :  [INFO] Uploaded: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/5.1.7.1-SNAPSHOT/agent-5.1.7.1-20170908.202036-5.jar (66069 KB at 9382.1 KB/sec)
+164  :  [INFO] Uploading: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/5.1.7.1-SNAPSHOT/agent-5.1.7.1-20170908.202036-5.pom
+165  :  [INFO] Uploaded: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/5.1.7.1-SNAPSHOT/agent-5.1.7.1-20170908.202036-5.pom (4 KB at 27.4 KB/sec)
+166  :  [INFO] Downloading: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/maven-metadata.xml
+167  :  [INFO] Downloaded: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/maven-metadata.xml (4 KB at 52.1 KB/sec)
+168  :  [INFO] Uploading: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/5.1.7.1-SNAPSHOT/maven-metadata.xml
+169  :  [INFO] Uploaded: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/5.1.7.1-SNAPSHOT/maven-metadata.xml (985 B at 9.4 KB/sec)
+170  :  [INFO] Uploading: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/maven-metadata.xml
+171  :  [INFO] Uploaded: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/maven-metadata.xml (4 KB at 31.8 KB/sec)
+172  :  [INFO] Uploading: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/5.1.7.1-SNAPSHOT/agent-5.1.7.1-20170908.202036-5-sources.jar
+173  :  [INFO] Uploaded: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/5.1.7.1-SNAPSHOT/agent-5.1.7.1-20170908.202036-5-sources.jar (3030 KB at 6837.6 KB/sec)
+174  :  [INFO] Uploading: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/5.1.7.1-SNAPSHOT/maven-metadata.xml
+175  :  [INFO] Uploaded: http://engci-maven.yourcompany.com/artifactory/cstg-smartservices-snapshots/org/csap/agent/5.1.7.1-SNAPSHOT/maven-metadata.xml (985 B at 10.2 KB/sec)
+176  :  [INFO] ------------------------------------------------------------------------
+177  :  [INFO] BUILD SUCCESS
+178  :  [INFO] ------------------------------------------------------------------------
+179  :  [INFO] Total time: 16.941 s
+180  :  [INFO] Finished at: 2017-09-08T15:20:44-05:00
+181  :  [INFO] Final Memory: 59M/456M
+182  :  [INFO] ------------------------------------------------------------------------
+183  :  
+184  :  
+185  :  ============== Spring Boot Fri Sep 8 15:20:44 CDT 2017 ================
+186  :  = Extracting platform Scripts from /home/ssadmin/staging/warDist/CsAgent.jar into /home/ssadmin/staging/bin
+187  :  =
+188  :  == Deleteing files in /home/ssadmin/staging/bin
+189  :  
+190  :  
+191  :  ============== Spring Boot Fri Sep 8 15:20:44 CDT 2017 ================
+192  :  = Extracting BOOT-INF/classes/shellScripts to /home/ssadmin/staging/bin
+193  :  =
+194  :  Archive:  /home/ssadmin/staging/warDist/CsAgent.jar
+195  :    inflating: /home/ssadmin/staging/bin/unzipAsRoot.sh  
+196  :    inflating: /home/ssadmin/staging/bin/checkLimits.sh  
+197  :    inflating: /home/ssadmin/staging/bin/rootMigrate.sh  
+198  :    inflating: /home/ssadmin/staging/bin/httpIndex.html  
+199  :    inflating: /home/ssadmin/staging/bin/purgeDeployCache.sh  
+200  :    inflating: /home/ssadmin/staging/bin/restartAdmin.sh  
+201  :    inflating: /home/ssadmin/staging/bin/checkForWrapperExtract.sh  
+202  :    inflating: /home/ssadmin/staging/bin/jobRunner.sh  
+203  :    inflating: /home/ssadmin/staging/bin/stopInstance.sh  
+204  :    inflating: /home/ssadmin/staging/bin/_sampleShellApi.sh  
+205  :    inflating: /home/ssadmin/staging/bin/csapOverRide.properties  
+206  :    inflating: /home/ssadmin/staging/bin/resetJmxAuth.sh  
+207  :    inflating: /home/ssadmin/staging/bin/startAll.sh  
+208  :    inflating: /home/ssadmin/staging/bin/rootRenice.sh  
+209  :    inflating: /home/ssadmin/staging/bin/showInstance.sh  
+210  :    inflating: /home/ssadmin/staging/bin/dirVars.sh  
+211  :    inflating: /home/ssadmin/staging/bin/sslTemp_keystore  
+212  :    inflating: /home/ssadmin/staging/bin/killInstance.sh  
+213  :    inflating: /home/ssadmin/staging/bin/log4j.properties  
+214  :    inflating: /home/ssadmin/staging/bin/killStaging.sh  
+215  :    inflating: /home/ssadmin/staging/bin/threadDump.sh  
+216  :    inflating: /home/ssadmin/staging/bin/rebuildAndDeploySvc.sh  
+217  :    inflating: /home/ssadmin/staging/bin/bashSecurityPatch.sh  
+218  :    inflating: /home/ssadmin/staging/bin/kills.sh  
+219  :    inflating: /home/ssadmin/staging/bin/servicePidStat.sh  
+220  :    inflating: /home/ssadmin/staging/bin/startInstance.sh  
+221  :    inflating: /home/ssadmin/staging/bin/_newAgent.txt  
+222  :    inflating: /home/ssadmin/staging/bin/serviceSocketStat.sh  
+223  :    inflating: /home/ssadmin/staging/bin/httpdTemplate.conf  
+224  :    inflating: /home/ssadmin/staging/bin/admin.bashrc  
+225  :    inflating: /home/ssadmin/staging/bin/mkcsap.sh  
+226  :    inflating: /home/ssadmin/staging/bin/stopAll.sh  
+227  :    inflating: /home/ssadmin/staging/bin/mavenVerify.sh  
+228  :    inflating: /home/ssadmin/staging/bin/scriptRunAsRoot.sh  
+229  :    inflating: /home/ssadmin/staging/bin/findFiles.sh  
+230  :    inflating: /home/ssadmin/staging/bin/editAsRoot.sh  
+231  :    inflating: /home/ssadmin/staging/bin/SpringBootWrapper.sh  
+232  :    inflating: /home/ssadmin/staging/bin/collectHostSocketsThreadsFiles.sh  
+233  :    inflating: /home/ssadmin/staging/bin/csap.sh  
+234  :  
+235  :  
+236  :  ============== Spring Boot Fri Sep 8 15:20:44 CDT 2017 ================
+237  :  = Extracting BOOT-INF/classes/shellScripts/defaultConf to /home/ssadmin/staging/bin/temp
+238  :  =
+239  :  Archive:  /home/ssadmin/staging/warDist/CsAgent.jar
+240  :     creating: /home/ssadmin/staging/bin/temp/BOOT-INF/classes/shellScripts/defaultConf/
+241  :     creating: /home/ssadmin/staging/bin/temp/BOOT-INF/classes/shellScripts/defaultConf/propertyOverride/
+242  :     creating: /home/ssadmin/staging/bin/temp/BOOT-INF/classes/shellScripts/defaultConf/propertyOverride/CsAgent/
+243  :     creating: /home/ssadmin/staging/bin/temp/BOOT-INF/classes/shellScripts/defaultConf/propertyOverride/CsAgent/resources/
+244  :     creating: /home/ssadmin/staging/bin/temp/BOOT-INF/classes/shellScripts/defaultConf/propertyOverride/CsAgent/resources/dev/
+245  :    inflating: /home/ssadmin/staging/bin/temp/BOOT-INF/classes/shellScripts/defaultConf/Application.json  
+246  :    inflating: /home/ssadmin/staging/bin/temp/BOOT-INF/classes/shellScripts/defaultConf/propertyOverride/CsAgent/resources/dev/commonPropsOver.txt  
+247  :    inflating: /home/ssadmin/staging/bin/temp/BOOT-INF/classes/shellScripts/defaultConf/propertyOverride/CsAgent/resources/dev/application.yml  
+248  :    inflating: /home/ssadmin/staging/bin/temp/BOOT-INF/classes/shellScripts/defaultConf/propertyOverride/CsAgent/resources/dev/csapSecurity.properties  
+249  :    inflating: /home/ssadmin/staging/bin/temp/BOOT-INF/classes/shellScripts/defaultConf/propertyOverride/settings.xml  
+250  :  
+251  :  
+252  :  ====================================================================
+253  :  Finished Build, target/CsAgent.jar is now in /home/ssadmin/staging/warDist
+254  :  ====================================================================
+255  :  
+256  :  
+257  :  == BUILD__SUCCESS
+
+Executing distribution using : 3 threads.
+
+
+Sending to host: csap-dev02 file: /home/ssadmin/staging/temp/CsAgent.jar.tgz using connection: transient
+Sending to host: csap-dev04 file: /home/ssadmin/staging/temp/CsAgent.jar.tgz using connection: transient
+Sending to host: csapdb-dev01 file: /home/ssadmin/staging/temp/CsAgent.jar.tgz using connection: transient
+
+Completed job 1 of 6: , summary of response: {
+  "host" : "csap-dev04",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: CsAgent.jar.tgz Size: 59009757\nExecuting OS command
+
+ *** Waiting for response from: [csap-dev02:CsAgent.jar, csapdb-dev01:CsAgent.jar, csap-dev02:CsAgent.jar.txt, csap-dev04:CsAgent.jar.txt, csapdb-dev01:CsAgent.jar.txt]
+Sending to host: csap-dev02 file: /home/ssadmin/staging/temp/CsAgent.jar.txt.tgz using connection: transient
+
+Completed job 2 of 6: , summary of response: {
+  "host" : "csap-dev02",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: CsAgent.jar.txt.tgz Size: 273\nExecuting OS command 
+
+ *** Waiting for response from: [csap-dev02:CsAgent.jar, csapdb-dev01:CsAgent.jar, csap-dev04:CsAgent.jar.txt, csapdb-dev01:CsAgent.jar.txt]
+Sending to host: csap-dev04 file: /home/ssadmin/staging/temp/CsAgent.jar.txt.tgz using connection: transient
+
+Completed job 3 of 6: , summary of response: {
+  "host" : "csap-dev04",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: CsAgent.jar.txt.tgz Size: 273\nExecuting OS command 
+
+ *** Waiting for response from: [csap-dev02:CsAgent.jar, csapdb-dev01:CsAgent.jar, csapdb-dev01:CsAgent.jar.txt]
+Sending to host: csapdb-dev01 file: /home/ssadmin/staging/temp/CsAgent.jar.txt.tgz using connection: transient
+
+Completed job 4 of 6: , summary of response: {
+  "host" : "csapdb-dev01",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: CsAgent.jar.tgz Size: 59009757\nExecuting OS comma
+
+ *** Waiting for response from: [csap-dev02:CsAgent.jar, csapdb-dev01:CsAgent.jar.txt]
+
+Completed job 5 of 6: , summary of response: {
+  "host" : "csapdb-dev01",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: CsAgent.jar.txt.tgz Size: 273\nExecuting OS comman
+
+ *** Waiting for response from: [csap-dev02:CsAgent.jar]
+
+Completed job 6 of 6: , summary of response: {
+  "host" : "csap-dev02",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: CsAgent.jar.tgz Size: 59009757\nExecuting OS command
+
+ *** Waiting for response from: []
+
+{
+  "host" : "csap-dev04",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: CsAgent.jar.tgz Size: 59009757\nExecuting OS command on host csap-dev04:/home/ssadmin/staging/bin/unzipAsRoot.sh_P_\n\n==\n== decompressing /home/ssadmin/staging/temp/CsAgentTransfer/CsAgent.jar.tgz to /home/ssadmin/staging/warDist/\n== chowning to ssadmin\nCsAgent.jar\nSetting permissings to 755 on /home/ssadmin/staging/warDist/\n== Removing transferred file /home/ssadmin/staging/temp/CsAgentTransfer/CsAgent.jar.tgz\n" ]
+}
+
+{
+  "host" : "csap-dev02",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: CsAgent.jar.txt.tgz Size: 273\nExecuting OS command on host csap-dev02:/home/ssadmin/staging/bin/unzipAsRoot.sh_P_\n\n==\n== decompressing /home/ssadmin/staging/temp/CsAgentTransfer/CsAgent.jar.txt.tgz to /home/ssadmin/staging/warDist/\n== chowning to ssadmin\nCsAgent.jar.txt\nSetting permissings to 755 on /home/ssadmin/staging/warDist/\n== Removing transferred file /home/ssadmin/staging/temp/CsAgentTransfer/CsAgent.jar.txt.tgz\n" ]
+}
+
+{
+  "host" : "csap-dev04",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: CsAgent.jar.txt.tgz Size: 273\nExecuting OS command on host csap-dev04:/home/ssadmin/staging/bin/unzipAsRoot.sh_P_\n\n==\n== decompressing /home/ssadmin/staging/temp/CsAgentTransfer/CsAgent.jar.txt.tgz to /home/ssadmin/staging/warDist/\n== chowning to ssadmin\nCsAgent.jar.txt\nSetting permissings to 755 on /home/ssadmin/staging/warDist/\n== Removing transferred file /home/ssadmin/staging/temp/CsAgentTransfer/CsAgent.jar.txt.tgz\n" ]
+}
+
+{
+  "host" : "csapdb-dev01",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: CsAgent.jar.tgz Size: 59009757\nExecuting OS command on host csapdb-dev01:/home/ssadmin/staging/bin/unzipAsRoot.sh_P_\n\n==\n== decompressing /home/ssadmin/staging/temp/CsAgentTransfer/CsAgent.jar.tgz to /home/ssadmin/staging/warDist/\n== chowning to ssadmin\nCsAgent.jar\nSetting permissings to 755 on /home/ssadmin/staging/warDist/\n== Removing transferred file /home/ssadmin/staging/temp/CsAgentTransfer/CsAgent.jar.tgz\n" ]
+}
+
+{
+  "host" : "csapdb-dev01",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: CsAgent.jar.txt.tgz Size: 273\nExecuting OS command on host csapdb-dev01:/home/ssadmin/staging/bin/unzipAsRoot.sh_P_\n\n==\n== decompressing /home/ssadmin/staging/temp/CsAgentTransfer/CsAgent.jar.txt.tgz to /home/ssadmin/staging/warDist/\n== chowning to ssadmin\nCsAgent.jar.txt\nSetting permissings to 755 on /home/ssadmin/staging/warDist/\n== Removing transferred file /home/ssadmin/staging/temp/CsAgentTransfer/CsAgent.jar.txt.tgz\n" ]
+}
+
+{
+  "host" : "csap-dev02",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: CsAgent.jar.tgz Size: 59009757\nExecuting OS command on host csap-dev02:/home/ssadmin/staging/bin/unzipAsRoot.sh_P_\n\n==\n== decompressing /home/ssadmin/staging/temp/CsAgentTransfer/CsAgent.jar.tgz to /home/ssadmin/staging/warDist/\n== chowning to ssadmin\nCsAgent.jar\nSetting permissings to 755 on /home/ssadmin/staging/warDist/\n== Removing transferred file /home/ssadmin/staging/temp/CsAgentTransfer/CsAgent.jar.tgz\n" ]
+}
+
+Executing distribution using : 3 threads.
+
+
+Sending to host: csap-dev02 file: /home/ssadmin/staging/temp/bin.tgz using connection: pooled
+Sending to host: csap-dev04 file: /home/ssadmin/staging/temp/bin.tgz using connection: pooled
+Sending to host: csapdb-dev01 file: /home/ssadmin/staging/temp/bin.tgz using connection: pooled
+
+Completed job 1 of 3: , summary of response: {
+  "host" : "csap-dev04",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: bin.tgz Size: 52065\nExecuting OS command on host cs
+
+ *** Waiting for response from: [csap-dev02:bin, csapdb-dev01:bin]
+
+Completed job 2 of 3: , summary of response: {
+  "host" : "csapdb-dev01",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: bin.tgz Size: 52065\nExecuting OS command on host 
+
+ *** Waiting for response from: [csap-dev02:bin]
+
+Completed job 3 of 3: , summary of response: {
+  "host" : "csap-dev02",
+  "coreResults" : [ "\n==  Host:173.36.61.50 uploaded file: bin.tgz Size: 52065\nExecuting OS command on host cs
+
+ *** Waiting for response from: []
+
+ ===== STAGING/bin updated: [csap-dev02, csap-dev04, csapdb-dev01] =====
+__COMPLETED__
+
+
+ *** 15:20:53,   September 8  2017 
+

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+
+		<title th:replace="/os/dashboard-head :: pageContent"></title>
+
+	</head>
+
+	<body th:inline="text">
+
+
+		<header
+			style="margin-bottom: 5px;">
+
+			<div style="font-size: 0.7em; display:inline-block; float: right;">
+
+				<a class="simple" href="https://github.com/csap-platform/csap-core/wiki#updateRefHost+Dashboard" title="Click to view Reference Help"
+				   style="margin-right: 3em" target="opGuide">
+					Learn More<img title="Read about domain model" class="but" src="../images/16x16/help.png"/>
+				</a>
+			</div>
+
+			Host Dashboard: [[ ${ host } ]] 
+
+
+		</header>
+
+
+		<div id="tabs" style="margin-top: 1em; display: none">
+
+			<ul>
+				<li data-tab="explorerTab"><a id="" href="#explorerTab" title="Docker">[[ ${ host } ]] Explorer<img class="but" src="../images/16x16/logs.png"/></a></li>
+				<li data-tab="vmTab" ><a id="" href="#vmTab" title="VM Summary">Host Graphs<img class="but" src="../images/16x16/sysMon.png"/></a></li>
+				<li data-tab="serviceTab"><a id="" href="#serviceTab" title="Service Resources Summary">Service Graphs<img class="but" src="../images/16x16/sysMon.png"/></a></li>
+				<li data-tab="processTab"><a id="" href="#processTab" title="Process list">OS Processes<img class="but" src="../images/16x16/os.png"/></a></li>
+				<li data-tab="memoryTab"><a id="" href="#memoryTab" title="">Memory<img class="but" src="../images/16x16/os.png"/></a></li>
+				<li data-tab="fileTab"><a id="" href="#fileTab" title="" >File Systems<img class="but" src="../images/dbSmall.png"/></a></li>
+			</ul>
+
+			<div id="explorerTab" style="display: block">
+
+				<div class="quote">
+					Related:
+					<a id="hostInfo" class="simple" href="#hostInfo" title="Show uname, version, etc">OS Summary</a>
+					<a title="journalctl output with parameter support" target="_blank" class="simple" 
+					   th:href="@{ journal(numberOfLines='100',reverse='false',json='false' ) }">Host Journal</a>
+					<a title="systemctl status output" target="_blank" class="simple" 
+					   th:href="@{ systemctl(noArgs='true' ) }">Systemctl Status</a>
+					<a th:href="${lifeCycleSettings.getHistoryHostUrl()} " class="simple" target="_blank" 
+					   title="View all events on Host">OS Command History</a>
+					<a target="_blank" class="simple" href="checkLimits" title="Linux kernel settings">Kernel Settings</a> 
+
+					<label  id="cpuTimestamp"></label>
+					<label  id="treeLastValue"></label>
+				</div>
+
+				<div id="dockerTree">
+
+				</div>
+			</div>
+			<div id="vmTab" style="display: block">
+
+				<div class="quote">Related:
+
+					<a target="_blank" class="simple" href="getVmStats" title="Last collection open file count, socket count, etc.">OS Resource</a> 
+					<a target="_blank" class="simple" href="getCpuInfo" title="Provided by /proc/cpuinfo">Cpu Info</a> 
+
+					<a href="command?command=script&template=vmPerf&" class="simple" target="_blank" 
+					   title="A simple bash shell script will record time taken to loop specified iterations">CPU Test</a>
+					<a href="command?command=script&template=diskPerf&" class="simple" target="_blank" 
+					   title="A simple bash shell script will record time taken to loop specified iterations">Disk Test</a>
+
+
+
+				</div>
+
+
+				<div id="vmGraphs"></div>
+
+			</div>
+
+			<div id="serviceTab" style="display: block">
+				<div class="quote">Related:
+
+					<a target="jmxGraphs" class="simple jmxButton" th:href="@{/os/java(hosts=${host}) }" 
+					   title="Java JMX data is available for services using Java" >Java Performance Graphs</a>
+					<a th:href="@{/csap/health?pattern=service.jobs&}" class="simple" target="_blank" 
+					   title="View agent times taken to complete">Service Jobs</a>
+					<a th:href="@{/csap/health?pattern=OsCommand&}" class="simple" target="_blank" 
+					   title="View agent times taken to complete">Os Command Times</a>
+					<a th:href="@{/csap/health?pattern=fail&}" class="simple" target="_blank" 
+					   title="View agent failures (collections, commands, etc)">Agent Failures</a>
+				</div>
+
+				<div id="serviceGraphs" ></div>
+			</div>
+
+			<div id="fileTab">
+
+				<div class="quote">Related:
+
+					<a target="_blank" class="simple" href="command?command=script&template=iostat"
+					   title="Show VM wide disk statistics">iostat</a> 
+
+					<a target="_blank" class="simple" href="command?command=script&template=processDetails"
+					   title="Show disk statistics per process">pidstat</a> 
+
+					<a target="_blank" class="simple" href="command?command=script&template=df"
+					   title="show inodes, file counts, etc">Extended Disk Information</a> 
+					<label >File Systems out gathered by: df -Ph (Auto-Refreshed 60s)</label>
+				</div>
+
+
+				<div id="dfTableDiv">
+					<table class="bordered fixed" >
+						<thead>
+							<tr>
+								<th>Mount Point (Browse)</th>
+								<th class="sorter-false"></th>
+								<th>% Used (Test)</th>
+								<th>Used/Available</th>
+								<th>Device</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Loading</td>
+								<td>Loading</td>
+								<td>Loading</td>
+								<td>Loading</td>
+								<td>Loading</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+
+			<!-- 
+				- memory listings
+			-->
+
+
+			<div id="memoryTab">
+
+				<div class="quote">Related:
+
+
+					<a target="meminfo" class="simple" href="getMemInfo">View /proc/meminfo</a>
+
+					<a target="_blank" class="simple" href="command?command=script&template=vmstat" 
+					   title="view linux VM metrics">vmstat</a> 
+
+					<a target="_blank" class="simple" href="command?command=script&template=clearBuffers"
+					   title="Some OS commands can fill memory buffers; they can be cleared.">Clear Buffers</a> 
+
+
+					<label >
+						<span id="memReloadTime"></span>
+						(Auto-Refreshed 20s), source: <a target="meminfo" class="simple" href="getMemFree">free -m</a>
+					</label>
+
+				</div>
+
+
+				<!--  Autorefreshed by javascript-->
+				<div id="memTableDiv">
+					<table class="bordered fixed" style="width: 800px;">
+						<thead>
+
+							<tr>
+								<th>Type</th>
+								<th>% Used</th>
+								<th>Used / Total Mb</th>
+								<th>shared/buffer+cache Mb</th>
+							</tr>
+						</thead>
+
+						<tbody>
+						</tbody>
+
+
+					</table>
+				</div>
+
+				<div class="quote" style="margin-top:3em">
+						Swap Space: swapon -s (Auto-Refreshed 20s)
+				</div>
+
+
+				<!--  Autorefreshed by javascript-->
+				<div id="swapTableDiv">
+					<table class="bordered fixed"  style="width: 800px;">
+						<thead>
+
+							<tr>
+								<th>Mount Point</th>
+								<th>Type</th>
+								<th>% Used</th>
+								<th>Used/Available</th>
+								<th>Priority</th>
+							</tr>
+						</thead>
+
+
+						<tbody>
+						</tbody>
+
+					</table>
+				</div>
+				<br/>
+				<div class="news" style="">
+					Notes:<br/> Linux aggressively caches/buffers io (and will
+					release if needed).
+				</div>
+			</div>
+
+
+			<!-- 
+				- process listings
+			-->
+			<div th:replace="/os/dashboard-process-tab :: pageContent"></div>
+
+		</div>
+
+
+
+		<!-- templates used for graphs integration -->
+		<div th:replace="/graphs/template :: pageContent"></div>
+
+		<div th:replace="/os/dashboard-templates :: pageContent"></div>
+
+	</body>
+
+</html>

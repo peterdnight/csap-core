@@ -1,0 +1,362 @@
+{
+	"bootVolumes": [
+		{
+			"hostPath": "/home/ssadmin/processing/BootInDocker_8361",
+			"containerMount": "/_working",
+			"readOnly": true,
+			"sharedUser": true
+		}
+	],
+	"bootEntry1": [
+		"java",
+		"$parameters",
+		"-DcsapJmxPort=$jmxPort",
+		"org.springframework.boot.loader.JarLauncher",
+		"--spring.profiles.active=$life",
+		"--server.port=$port"
+	],
+	"javaJmx": [
+		"-Djava.rmi.server.hostname=_HOST_NAME_",
+		"-Dcom.sun.management.jmxremote.port=_JMX_PORT_",
+		"-Dcom.sun.management.jmxremote.rmi.port=_JMX_PORT_",
+		"-Dcom.sun.management.jmxremote.local.only=false",
+		"-Dcom.sun.management.jmxremote.authenticate=false",
+		"-Dcom.sun.management.jmxremote.ssl=false"
+	],
+	"csapBase": {
+		"image": "$dockerRepository/csap-base:latest",
+		"entryPoint": [
+			"/bin/sh",
+			"-c",
+			"echo use csap service log viewer, running as `id`; java -version ;java $parameters -DcsapDockerJava org.springframework.boot.loader.JarLauncher --spring.profiles.active=$life --server.context-path=/$context --server.port=$port >> logs/consoleLogs.txt 2>&1"
+		],
+		"command": [],
+		"workingDirectory": "/_working",
+		"runUser": "$csapUser",
+		"networkMode": "",
+		"containerName": "$instance",
+		"environmentVariables": [
+			"CLASSPATH=/_working/jarExtract",
+			"testVar=testValue"
+		],
+		"volumes": [
+			{
+				"hostPath": "$workingFolder",
+				"containerMount": "/_working",
+				"readOnly": false,
+				"sharedUser": true
+			}
+		],
+		"portMappings": [
+			{
+				"PrivatePort": "$port",
+				"PublicPort": "$port"
+			},
+			{
+				"PrivatePort": "$ajpPort",
+				"PublicPort": "$ajpPort"
+			}
+		],
+		"limits": {
+			"cpuCoresMax": 3
+		}
+	},
+	"csapBaseWithHostJava": {
+		"image": "$dockerRepository/csap-base:latest",
+		"entryPoint": [
+			"/bin/sh",
+			"-c",
+			"echo use csap service log viewer, running as `id`; java -version ;java $parameters  -DcsapDockerJava org.springframework.boot.loader.JarLauncher --spring.profiles.active=$life --server.context-path=/$context --server.port=$port >> logs/consoleLogs.txt 2>&1"
+		],
+		"command": [],
+		"workingDirectory": "/_working",
+		"networkMode": "",
+		"containerName": "$instance",
+		"runUser": "$csapUser",
+		"environmentVariables": [
+			"CLASSPATH=/_working/jarExtract",
+			"JAVA_HOME=/java/$jvm",
+			"PATH=/java/$jvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+		],
+		"volumes": [
+			{
+				"hostPath": "/opt/java",
+				"containerMount": "/java",
+				"readOnly": true,
+				"sharedUser": true
+			},
+			{
+				"hostPath": "$workingFolder",
+				"containerMount": "/_working",
+				"readOnly": false,
+				"sharedUser": true
+			}
+		],
+		"portMappings": [
+			{
+				"PrivatePort": "$port",
+				"PublicPort": "$port"
+			},
+			{
+				"PrivatePort": "$ajpPort",
+				"PublicPort": "$ajpPort"
+			}
+		],
+		"limits": {
+			"cpuCoresMax": 3
+		}
+	},
+	"csapHostedOracle": {
+		"image": "$dockerRepository/csap-base:latest",
+		"entryPoint": [
+			"/bin/sh",
+			"-c",
+			"echo use csap service log viewer, running as `id`; java -version ;java $parameters  -DcsapDockerJava org.springframework.boot.loader.JarLauncher --spring.profiles.active=$life --server.context-path=/$context --server.port=$port >> logs/consoleLogs.txt 2>&1"
+		],
+		"command": [],
+		"workingDirectory": "/_working",
+		"networkMode": "host",
+		"containerName": "$instance",
+		"runUser": "$csapUser",
+		"environmentVariables": [
+			"ORACLE_HOME=/oracle/base/product/11.2.0.4/db_1",
+			"CLASSPATH=/oracle/base/product/11.2.0.4/db_1/jdbc/lib/ojdbc6_g.jar:/_working/jarExtract",
+			"LD_LIBRARY_PATH=/oracle/base/product/11.2.0.4/db_1/lib",
+			"JAVA_HOME=/java/$jvm",
+			"PATH=/java/$jvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+		],
+		"volumes": [
+			{
+				"hostPath": "/home/oracle",
+				"containerMount": "/oracle",
+				"readOnly": true,
+				"sharedUser": true
+			},
+			{
+				"hostPath": "/opt/java",
+				"containerMount": "/java",
+				"readOnly": true,
+				"sharedUser": true
+			},
+			{
+				"hostPath": "$workingFolder",
+				"containerMount": "/_working",
+				"readOnly": false,
+				"sharedUser": true
+			}
+		],
+		"portMappings": [
+			{
+				"PrivatePort": "$port",
+				"PublicPort": "$port"
+			},
+			{
+				"PrivatePort": "$ajpPort",
+				"PublicPort": "$ajpPort"
+			}
+		],
+		"limits": {
+			"cpuCoresMax": 3
+		}
+	},
+	"csapOracleDriver": {
+		"image": "$dockerRepository/csap-oracle:latest",
+		"entryPoint": [
+			"/bin/sh",
+			"-c",
+			"echo use csap service log viewer, running as `id`; java -version ;java $parameters  -DcsapDockerJava org.springframework.boot.loader.JarLauncher --spring.profiles.active=$life --server.context-path=/$context --server.port=$port >> logs/consoleLogs.txt 2>&1"
+		],
+		"command": [],
+		"workingDirectory": "/_working",
+		"runUser": "$csapUser",
+		"containerName": "$instance",
+		"environmentVariables": [
+			"CLASSPATH=/oracle/instantclient_12_1/ojdbc7.jar:/_working/jarExtract",
+			"testVar=testValue"
+		],
+		"volumes": [
+			{
+				"hostPath": "$workingFolder",
+				"containerMount": "/_working",
+				"readOnly": false,
+				"sharedUser": true
+			}
+		],
+		"portMappings": [
+			{
+				"PrivatePort": "$port",
+				"PublicPort": "$port"
+			},
+			{
+				"PrivatePort": "$ajpPort",
+				"PublicPort": "$ajpPort"
+			}
+		],
+		"limits": {
+			"cpuCoresMax": 3
+		}
+	},
+	"csapTomcat": {
+		"image": "$dockerRepository/csap-tomcat:latest",
+		"entryPoint": [
+			"/bin/sh",
+			"-c",
+			"echo use csap service log viewer, running as `id`; java -version ; catalina.sh run  >> logs/catalina.out 2>&1"
+		],
+		"command": [],
+		"workingDirectory": "/_working",
+		"runUser": "$csapUser",
+		"containerName": "$instance",
+		"environmentVariables": [
+			"CATALINA_BASE=/_working",
+			"JAVA_OPTS=$parameters -DcsapDockerJava"
+		],
+		"volumes": [
+			{
+				"hostPath": "$workingFolder",
+				"containerMount": "/_working",
+				"readOnly": false,
+				"sharedUser": true
+			}
+		],
+		"portMappings": [
+			{
+				"PrivatePort": "$port",
+				"PublicPort": "$port"
+			},
+			{
+				"PrivatePort": "$ajpPort",
+				"PublicPort": "$ajpPort"
+			}
+		],
+		"limits": {
+			"cpuCoresMax": 3
+		}
+	},
+	"csapTomcatOracle": {
+		"image": "$dockerRepository/csap-tomcat-oracle:latest",
+		"entryPoint": [
+			"/bin/sh",
+			"-c",
+			"echo use csap service log viewer, running as `id`; java -version ; catalina.sh run  >> logs/catalina.out 2>&1"
+		],
+		"command": [],
+		"runUser": "$csapUser",
+		"workingDirectory": "/_working",
+		"containerName": "$instance",
+		"environmentVariables": [
+			"CATALINA_BASE=/_working",
+			"JAVA_OPTS=$parameters -DcsapDockerJava"
+		],
+		"volumes": [
+			{
+				"hostPath": "$workingFolder",
+				"containerMount": "/_working",
+				"readOnly": false,
+				"sharedUser": true
+			}
+		],
+		"portMappings": [
+			{
+				"PrivatePort": "$port",
+				"PublicPort": "$port"
+			},
+			{
+				"PrivatePort": "$ajpPort",
+				"PublicPort": "$ajpPort"
+			}
+		],
+		"limits": {
+			"cpuCoresMax": 3
+		}
+	},
+	"csspLegacy": {
+		"image": "$dockerRepository/cssp-legacy:latest",
+		"entryPoint": [
+			"/bin/sh",
+			"-c",
+			"echo use csap service log viewer, running as `id`; java -version ;/csspRun.sh  >> logs/catalina.out 2>&1"
+		],
+		"command": [],
+		"workingDirectory": "/_working",
+		"runUser": "$csapUser",
+		"networkMode": "host",
+		"containerName": "$instance",
+		"environmentVariables": [
+			"CATALINA_BASE=/_working",
+			"csapServer=updatedByAgent",
+			"JAVA7=false",
+			"JAVA_OPTS=$parameters -DcsapDockerJava"
+		],
+		"volumes": [
+			{
+				"hostPath": "$workingFolder",
+				"containerMount": "/_working",
+				"readOnly": false,
+				"sharedUser": true
+			},
+			{
+				"hostPath": "$staging",
+				"containerMount": "/staging",
+				"readOnly": true,
+				"sharedUser": true
+			}
+		],
+		"portMappings": [
+			{
+				"PrivatePort": "$port",
+				"PublicPort": "$port"
+			},
+			{
+				"PrivatePort": "$ajpPort",
+				"PublicPort": "$ajpPort"
+			}
+		],
+		"limits": {
+			"cpuCoresMax": 3
+		}
+	},
+
+	"csapTestApp": {
+		"image": "$dockerRepository/csap-test-app:latest",
+		"entryPoint": [
+			"java",
+			"-Xms256M",
+			"-Xmx256M",
+			"-DcsapDockerJava",
+			"-Dspring.profiles.active=embedded",
+			"-Dserver.port=$port",
+			"-jar",
+			"/csapTest.jar"
+		],
+		"command": [],
+		"runUser": "$csapUser",
+		"containerName": "$instance",
+		"workingDirectory": "",
+		"networkMode": "",
+		"versionCommand": "echo 1.3.0",
+		"environmentVariables": [],
+		"volumes": [
+			{
+				"hostPath": "$staging",
+				"containerMount": "/staging",
+				"readOnly": true,
+				"sharedUser": true
+			}
+		],
+		"portMappings": [
+			{
+				"PrivatePort": "$port",
+				"PublicPort": "$port"
+			}
+		],
+		"limits": {
+			"cpuCoresMax": 3,
+			"logs": {
+				"type": "json-file",
+				"max-size": "10m",
+				"max-file": "2"
+			}
+		}
+	}
+}

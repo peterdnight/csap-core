@@ -1,0 +1,172 @@
+# why yaml http://jessenoller.com/blog/2009/04/13/yaml-aint-markup-language-completely-different
+
+status: warn
+
+monitorInterval: 10
+
+appenders:
+  
+  console:
+    name: consoleAppender
+    target: SYSTEM_OUT
+    PatternLayout:
+      Pattern: "%d ==== %F ==== thread: %t ==== %-8p>%n%C.%M() => %x (line: %L)%n\t%m%n%n"
+        
+  RollingFile: 
+    name: errorsAppender
+    fileName: logs/warnings.log
+    filePattern: "logs/warning-%i.log.gz"
+    append: true
+    DefaultRolloverStrategy:
+      max: 3
+    policies:
+      SizeBasedTriggeringPolicy:
+        size: "5 MB"
+    PatternLayout:
+      Pattern: "%d ==== %F ==== thread: %t ==== %-8p>%n%C.%M() => %x (line: %L)%n\t%m%n%n"
+        
+        
+#        Pattern: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+
+loggers:
+      
+  root: { level: info , AppenderRef: [ ref: consoleAppender ] }
+
+# note: for tomcat logs you need to set both org.apache.catalina to debug and logging.properties to fin
+  logger:
+    - name: org.apache.catalina
+      level: INFO
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+      
+    - name: org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+      
+    - name: org.csap
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+      
+    # also requires $PROCESSING/<serviceName_port>.debug
+    - name: org.csap.serviceDebug
+      level: info
+      additivity: false
+        
+    - name: org.csap.agent.model.Application
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+      
+    - name: org.csap.agent.services.ServiceManager
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+        
+    - name: org.csap.agent.services.OsManager
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+      
+    - name: org.csap.agent.input.http.ui.rest.DefinitionRequests
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+      
+    - name: org.csap.agent.stats.ServiceCollector
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+      
+    - name: org.csap.agent.input.http.ui.rest.HostRequests
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+      
+    - name: org.csap.security
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+      
+    - name: org.sample
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+      
+    - name: com.github.dockerjava
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+        
+    - name: org.springframework
+      level: warn
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+      
+    - name: org.springframework.security
+      level: warn
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+        
+    - name: org.hibernate.validator.internal.util.Version
+      level: warn
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+        
+    - name: org.springframework.boot.autoconfigure.security
+      level: warn
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+        
+    - name: test
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+        
+
+      
+   

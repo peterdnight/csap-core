@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+
+	<head>
+
+		<title th:inline="text"> [[ ${ pageName } ]]</title>
+
+		<script th:replace="~{ csap/fragments/libsAndStyles :: pageContent }"></script>
+		
+		<script>
+		$( document ).ready( function () {
+				
+				function windowResize() {
+					
+					var displayHeight = Math.round( $( window ).outerHeight( true ) - $( "header" ).outerHeight( true )- $( ".resourceConfig" ).outerHeight( true )) ;
+					console.log("displayHeight", displayHeight);
+		
+					$( "#commandOutput" ).css( "height", displayHeight - 40 );
+					$( "#commandOutput" ).css( "width", $( window ).width() - 40 );
+		
+		
+				}
+				
+				CsapCommon.configureCsapAlertify();
+
+				$( window ).resize( function () {
+					windowResize();
+				} );
+				windowResize();
+				
+				$( '#wrapButton' ).change(
+						function () {
+							if ( $( "#wrapButton" ).prop( 'checked' ) ) {
+								$( "#commandOutput" ).css( 'white-space', 'normal' );
+							} else {
+								$( "#commandOutput" ).css( 'white-space', 'pre' );
+							}
+						} );
+		}) ;
+		
+		</script>
+
+		<style>
+			.resourceConfig {
+				font-size: 0.7em;
+				font-weight: bold;
+				padding: 0;
+				padding-top: 3px;
+				margin-left: 1em;
+				display: block;
+				width: 100%;
+				margin: 0em;
+			}
+			
+			.resourceConfig input {
+				margin-left: 10px;
+				margin-right: 2px;
+				display: inline;
+				vertical-align: middle;
+			}
+			
+			#commandOutput {
+				min-height: 300px;
+				overflow-y: auto;
+				overflow-x: auto;
+				border: 1px solid black;
+				display: inline-block;
+				min-width: 95%;
+				background-color: white;
+				font-size: 0.8em;
+				line-height: 1.2em;
+				margin-left: 10px;
+				padding: 10px;
+				font-family: Lucida Console;
+				font-size: 9pt;
+				word-break: break-all;
+				white-space: pre;
+			}
+			
+			.service {
+				margin-top: 10px;
+				display: block;
+				color: red;
+			}
+
+		</style>
+	</head>
+
+	<body th:inline="text">
+		
+		<header th:replace="csap/fragments/page :: header"></header>
+		
+		<div class="resourceConfig">
+			<label class="radio" for="wrapButton"
+						   title="Lines exceeding browser width will be wrapped. Uncheck for a horizontal scroll.">
+						<input
+							id="wrapButton" class="custom" type="checkbox"/>
+						Wrap lines
+			</label>
+		</div>
+		
+		<div id="commandOutput" th:utext="${commandOutput}">
+		
+		</div>
+
+	</body>
+
+</html>

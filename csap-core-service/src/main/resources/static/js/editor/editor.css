@@ -1,0 +1,533 @@
+
+div.blueSection {
+	background-color: #D7EFF7;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+div.greySection {
+	background-color: #DAE1E3;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+
+div.redSection {
+	background-color: #F2DADA;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+
+
+div.greenSection {
+	background-color: #E6F2DA;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+div.redSection div.heading, div.greySection div.heading, div.blueSection div.heading, div.greenSection div.heading {
+	margin-top: 0;
+}
+
+#ciDiv {
+	display: none;
+}
+
+#ciDiv label {
+	font-weight: bold;
+}
+
+#mainDisplayNav {
+	margin: 3px;
+}
+
+#tabs {
+	display: none;
+	font-size: 10pt;
+}
+
+#jsonFileBrowser .treeServiceButton, #jsonFileBrowser .treeSettingsButton, #jsonFileBrowser .treeClusterButton {
+	padding: 0;
+	border:0 ;
+	vertical-align: middle;
+	width: 12px;
+	height: 12px;
+  	background-image: url('../../images/maxWindow.gif');
+  	background-size: 12px 12px;
+	border-radius: 0;
+}
+
+
+
+#jsonFileBrowser ul.fancytree-container {
+	height: 50em;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+.fancytree-title label {
+	min-width: 10em;
+	display: inline-block ;
+	padding-right: 1em;
+}
+
+.fancytree-title input {
+	top: 2px;
+	width: 40em;
+}
+
+span.fancytree-node.fancytree-folder > span.fancytree-icon, span.fancytree-node.fancytree-folder:hover > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/format-indent-more.png');
+}
+
+/*
+span.fancytree-node.fancytree-folder.fancytree-expanded > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/16x16/logs.png');
+}
+*/
+
+#jsonFileBrowser span.fancytree-node.default > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/16x16/packages.png');
+}
+
+#jsonFileBrowser span.fancytree-node.ft_db > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/dbSmall.png');
+}
+
+#jsonFileBrowser span.fancytree-node.ft_jms > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/16x16/mail-send-receive.png');
+}
+
+#jsonFileBrowser span.fancytree-node.ft_script > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/16x16/files.png');
+}
+
+#jsonFileBrowser span.fancytree-node.ft_java > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/javaSmall.png');
+}
+
+#jsonFileBrowser span.fancytree-node.ft_SpringBoot > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/bootSmall.png');
+}
+
+#jsonFileBrowser span.fancytree-node.ft_tomcatEol > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/tomcatEol.png');
+  background-size: 16px;
+}
+#jsonFileBrowser span.fancytree-node.ft_tomcatLatest > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/tomcatLarge.png');
+  background-size: 16px;
+}
+
+#jsonFileBrowser span.fancytree-node.ft_os > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/16x16/os.png');
+}
+#jsonFileBrowser span.fancytree-node.ft_wrapper > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/16x16/run2.png');
+}
+
+#jsonFileBrowser span.fancytree-node.ft_settings > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/16x16/preferences-system.png');
+}
+
+#jsonFileBrowser span.fancytree-node.ft_performance > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/16x16/x-office-spreadsheet.png');
+}
+
+#jsonFileBrowser span.fancytree-node.ft_monitor > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/16x16/note.png');
+}
+
+#jsonFileBrowser span.fancytree-node.ft_jsonedit > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/emblem-symbolic-link.png');
+}
+
+.treeText {
+	spellcheck: false;
+	background-color: #EDF3F5;;
+}
+#jsonFileBrowser textarea {
+	white-space: pre;
+}
+
+
+.folderDesc {
+	display: inline-block;
+	border: 1px solid black;
+	color: black;
+	margin: 0em;
+	padding-top: 1px;
+	padding-bottom: 3px;
+	padding-right: 1em;
+	padding-left: 1em;
+	margin-left: 1em;
+	border-radius: 2px;
+	background-color: #E6E6E6;
+}
+#header .serviceNavigate {
+    margin-top: 0;
+	font-size: 9pt;
+	font-weight: normal;
+    line-height: 16px;
+	margin-right: 10px;
+	float: right;
+}
+
+.serviceNavigate img {
+	width: 12px;
+}
+
+#settingsEditor img.moveRow, #serviceEditor img.moveRow {
+	left: 5px;
+	cursor: move;
+}
+img.newRow {
+	right: 5px;
+	top: 0;
+	width: 14px;
+}
+img.deleteRow {
+	right: 5px;
+	bottom: 0;
+	width: 14px;
+}
+
+#textEditWarning {
+	display: inline;
+	position: absolute;
+	right: 3em;
+	top: -5px;
+	padding-left: 3em;
+	white-space: normal;
+}
+
+#hostCatalog {
+	display: inline;
+	margin-left: 3em;
+}
+
+#reconfigureHosts {
+	margin-left: 2em;
+	margin-right: 2em;
+}
+
+#reconfigureHosts img, #hostCatalog img {
+	height: 14px
+}
+
+#editOps a {
+	display: inline;
+	margin-left: 2em;
+}
+
+div.heading .ui-selectmenu-button {
+	vertical-align: middle;
+	margin-right: 3em;
+}
+
+
+div.alertify div.info {
+	font-size: 10pt;
+}
+
+.alertify.ajs-frameless .ajs-body .ajs-content {
+	top: 5px;
+}
+
+.alertify.ajs-frameless .ajs-header {
+	display: none;
+}
+
+
+.alertify.ajs-closable .ajs-commands button.ajs-close {
+	background-image: url('../../images/16x16/close.jpg');
+	height: 1.8em;
+	width: 37px;
+	background-position: 2px 3px ;
+}
+
+.alertify.ajs-closable .ajs-commands button.ajs-close:hover{
+	background-color: black;
+}
+
+#opsNewName {
+	width: 10em;
+	margin-left: 4em;
+	margin-right: 0;
+	display: none;
+}
+div.opsRadio {
+	display: inline;
+	margin-left: 2em;
+}
+input.opsRadio {
+	margin: 0;
+	margin-left: 1em;
+}
+
+#serviceEditor a.simple , #dialogResult a.simple   {
+	display: inline;
+}
+
+#dialogResult {
+	display: none;
+}
+
+#validateOnly {
+	margin-right: 4em;
+	float: right;
+	vertical-align: middle;
+}
+#validateOnlyCheckbox {
+	vertical-align: middle;
+	margin-left: 0;
+}
+#dialogOpsContainer button, button.dialog {
+	margin-left: 0.5em;
+	min-width: 6em;
+	font-size: 9pt;
+	padding: 0;
+	line-height: 1.1em;
+	height: auto;
+}
+
+#dialogOpsContainer {
+	display: block;
+	margin-bottom: 5px;
+	margin-left: 0px;
+	margin-right: 5px;
+	font-weight: bold;
+}
+#dialogServiceSelect-button {
+	vertical-align: middle;
+}
+
+
+#showPackageDialog {
+	margin: 0;
+	font-size: 10pt;
+	line-height: 1.2em;
+	position: relative;
+	top: -2px;
+}
+
+span.highlight {
+	background-color: yellow;
+	font-style: italic;
+}
+#packageDialogWrapper {
+	display: none;
+}
+
+#packageDialogContents ul {
+	margin: 1em;
+	list-style-type:disc ;
+}
+
+#packageDialogWrapper button.pushButton {
+	min-width: 20em;
+	min-height: 2.5em;
+	margin: 2em;
+}
+
+#releaseTab table td:first-child {
+	min-width: 300px;
+}
+
+#releaseFilter, #batchAttributeSelect {
+	position: absolute;
+	top: 5px;
+	left: 120px;
+	padding: 0;
+	padding-left: 5px;
+}
+#batchAttributeSelect { 
+	left: 480px;
+}
+
+.releaseInput, .releaseDiv {
+	width: 600px;
+	margin-left: 8px;
+}
+.releaseDiv {
+	font-size: 10pt;
+	border: 1px solid grey;
+	padding: 3px;
+	color: grey ;
+	background-color: #e0e0e0 ;
+}
+
+.releaseDiv span {
+	display: inline-block;
+	min-width: 5em;
+}
+
+.loadingLargePanel {
+	position: absolute ;
+	left: 2em;
+	z-index: 99;
+}
+
+.ui-selectmenu-menu {
+	z-index: 99999;
+}
+
+#popup_message .ui-widget, #jvmSelect-menu .ui-menu-item{
+	font-size: 12pt;
+}
+
+#popup_message .ui-selectmenu-button {
+	vertical-align: middle;
+}
+
+
+.infoWarn {
+	margin:0; 
+	width: 35em; 
+	font-size: 0.8em; 
+	background-color: #f5bfbf;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: 5px 5px 2px #888;
+    color: black;
+    padding: 0.5em 0.5em 0.5em 2em;
+    position: relative;
+    text-align: left;
+
+}
+
+#cleanFsButton {
+	margin-left: 6em;
+	font-size: 0.8em;	
+}
+
+#cleanFsButton img {
+	height: 12px;	
+}
+
+.butImage {
+	margin-right: 2px;
+	vertical-align: top;
+}
+
+
+#header>a {
+	margin-top: 2px;
+}
+
+#header img {
+	margin-right: 2px;
+	vertical-align: middle;
+}
+
+#header .ui-widget {
+	font-size: 0.7em;
+}
+
+
+span.error {
+	font-weight: bold;
+	color: red;
+	font-style: italic;
+}
+
+.ui-tabs-panel {
+	font-size: 1.0em;
+}
+
+input {
+	margin-right: 1em;
+}
+
+
+#help-button, #devOps-button, #tools-button  {
+	width: 6em;
+	float: right;
+	font-size: 0.7em;
+	padding: 0;
+	margin-right: 0.5em;
+}
+
+
+.hostMenu {
+	width: 40px;
+}
+
+.hostMenu img {
+	position: relative;
+	top: -1px;
+	width: 14px;
+}
+
+.releaseVersion {
+	display: inline-block;
+	float: right;
+	font-size: 0.8em;
+	font-style: italic;
+}
+
+.current {
+	font-weight: bold;
+	color: red;
+	display: inline-block;
+	margin-left: 0.5em;
+	margin-right: 1em;
+}
+
+.regionButton {
+	position: absolute;
+	left: 40em;
+	top: 3.5em;
+}
+
+.pushButton {
+	min-width: 8em;
+	font-weight: bold;
+	font-size: 1em;
+}
+
+ol.error {
+	list-style-type: decimal;
+}
+
+li.error {
+	font-size: 0.9em;
+}
+
+.warnIcon {
+	background-image: url('../../images/16x16/warning.png');
+	background-repeat: no-repeat;
+}
+
+.errorIcon {
+	background-image: url('../../images/16x16/process-stop.png');
+	background-repeat: no-repeat;
+}
+
+#json {
+	width: 800px;
+	height: 2000px;
+	font-size: 10pt;
+	font-family: monospace;
+	line-height: 15px !important;
+	-moz-tab-size: 4;
+	tab-size: 4 ;
+}
+
+#resultPre .note {
+	white-space: pre-wrap;
+}

@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>Sub page with templates</title>
+</head>
+
+<body>
+
+	<div th:fragment="pageContent" th:remove="tag">
+
+
+		<div id="templatePrompt" style="display: none">
+			<div class="infoBlock">Click on any line to load the template</div>
+			<table id="templateTable" class="simple fixed">
+				<thead>
+
+					<tr>
+						<th>Linux Command</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+
+				<tbody id="tableBody">
+
+				</tbody>
+
+			</table>
+		</div>
+
+
+		<table id="projectScriptTemplates" style="display: none">
+			<tbody>
+
+				<tr class="fileRow" th:each="script : ${ projectScripts }"
+					th:attr="data-template=${script}">
+					<td>[[ ${ script } ]]</td>
+					<td>Custom Project Scripts</td>
+				</tr>
+
+			</tbody>
+		</table>
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="uptimeTemplate"
+			data-name="uptime and df" data-desc="Summary of host availability">
+cd _file_
+
+printIt "Uptime for host: $HOSTNAME"
+uptime
+
+exit
+
+systemctl status
+
+
+# printIt "File System"
+# df -h
+		</textarea>
+
+		<textarea th:inline="none" class="osTemplate" id="csapProcessTemplate"
+			data-name="ps grep csapProcessId " data-desc="Compare processes with csapProcessId versus java">
+cd _file_
+
+printIt "DcsapProcessId matches: " `ps -ef | grep DcsapProcessId | wc -l`
+
+printIt "java matches: " `ps -ef | grep java| wc -l`
+
+printIt "Uncomment the last line to see the deltas"
+#ps -ef | grep java | grep -v DcsapProcessId  | grep -v activemq
+		</textarea>
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="buildZipTemplate"
+			data-name="zip Selected Files" data-desc="Build a zip of selected files">
+cd _file_
+
+# cd /home/ssadmin/processing, cobertura.ser
+
+zipName="$HOSTNAME"_demo.zip
+
+printIt "Creating: $zipName"
+
+\rm -rf $zipName
+find * -name "consoleLogs.txt" -print | zip $zipName -@
+			
+		</textarea>
+		
+
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="showJarsTemplate"
+			data-name="Show Jars" data-desc="Find and count jars">
+cd _file_
+
+count=`find * -name "*.jar" -exec basename {} \;|  sort | uniq | wc -l`
+
+printIt "Unique jar files: $count, Listing: "
+
+find * -name "*.jar" -exec basename {} \;|  sort | uniq 
+
+		</textarea>
+
+		<textarea th:inline="none" class="osTemplate" id="passTemplate"
+			data-name="Password Reset" data-desc="Modify Management passwords">
+
+user="ssadmin";
+newPassword="changeme" ;
+
+
+if [ "$USER" != "root" ] ; then
+	printIt "Script must be run as root, switch user."
+	exit ;
+fi ;
+
+printIt "Changing password for user: $user"
+
+echo -e "$newPassword\n$newPassword" | passwd $user
+
+			</textarea>
+
+		<textarea th:inline="none" class="osTemplate" id="processMatchTemplate"
+			data-name="Process Matching"
+			data-desc="View running processes to determine best process match">
+
+
+printIt "command used by csap to map service names to pids for deploy commands and resource consumption"
+
+ps -e --no-heading --sort -rss -o pcpu,rss,vsz,nlwp,ruser,pid,nice,args | sed 's/  */ /g'
+#ps -e --no-heading --sort -rss -o pcpu,rss,vsz,thcount,ruser,pid,nice,args | sed 's/  */ /g'
+
+			</textarea>
+
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="processDetailsTemplate" 
+			data-name="pidstat" data-desc="Show Process IO">
+
+# Modify CSAP timeouts if you change
+
+sampleSeconds="4";
+
+sampleIterations="6"
+
+parentPid="_pid_" ;
+serviceName='_serviceName_' ;
+
+# uncomment to run on multiple hosts
+# optionalPid=`ps -eo pid,args | grep $serviceName | grep -v -e grep | awk '{print $1}' | paste -d, -s -`
+
+optionalPid="-p $parentPid" ; if [[ "$optionalPid" == *pid*  ]] ; then optionalPid="-l" ; fi;
+
+
+
+
+
+printIt "Pidstat for host: $HOSTNAME optionalPid: $optionalPid  sampleSeconds: $sampleSeconds  sampleIterations: $sampleIterations" 
+
+# -p for pid
+# u = cpu , d=IO , r=memory , t = thread, w = task switching
+
+pidstat $optionalPid  -hud $sampleSeconds $sampleIterations
+
+			</textarea>
+
+		<textarea th:inline="none" class="osTemplate" id="processMemoryTemplate"
+			data-name="Memory Analysis"
+			data-desc="Java jmap and Linux pmap for process">
+
+targetPid="_pid_"
+serviceName='_serviceName_' ;
+
+# uncomment to run on multiple hosts
+# targetPid=`ps -eo pid,args | grep $serviceName | grep -v -e grep | awk '{print $1}' | paste -d, -s -`
+
+
+
+printIt "Java jmap for $targetPid" 
+$JAVA8_HOME/bin/jmap $targetPid
+
+printIt "Linux pmap can be run by removing the following line"
+exit;
+
+
+# ref. http://linoxide.com/linux-command/linux-memory-analysis-with-free-and-pmap-command/
+
+printIt "Linux pmap for $targetPid. Change -d to -x to view rss" 
+pmap -x $targetPid
+
+			</textarea>
+
+		<textarea th:inline="none" class="osTemplate" id="processThreadsTemplate"
+			data-name="Thread Analysis"
+			data-desc="Java jstack and Linux pmap for process">
+
+targetPid="_pid_"
+serviceName='_serviceName_' ;
+
+# uncomment to run on multiple hosts
+# targetPid=`ps -eo pid,args | grep $serviceName | grep -v -e grep | awk '{print $1}' | paste -d, -s -`
+
+
+
+# ref. 
+
+
+printIt "Linux pstree" 
+pstree -h $targetPid | col -bx
+
+printIt "Java jstack" 
+$JAVA8_HOME/bin/jstack -l $targetPid
+
+printIt "OS provides significant details as well"
+exit
+
+# ps -Lf -p $targetPid
+# ps -mo THREAD -p $targetPid
+
+
+			</textarea>
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="vmPerfTemplate"
+			data-name="OS Cpu Test" data-desc="Simple test to validate compute">
+
+scriptDir=`dirname $0`
+
+printIt $0 : numIterations
+echo ==  Expected throughput can vary, but typically 1000000 will take about 10 seconds. 
+echo ==  If results are greater then 12 seconds, validate VM compute limits.
+echo == `date`
+
+alias time="/usr/bin/time --format=\"\nReal: %e \t User: %U \t System: %S \t Pcpu: %P\n\""
+
+x=1000000
+if [ $# == 1 ]   ; then
+	x="$1"
+fi;
+
+
+#echo "$2" $(date)
+#x=1000000 , approximately 10 seconds
+time while [ $x -gt 0 ]; do x=$(( x-1 ));done
+
+# approximately 6 seconds
+# time $(i=0; while (( i < 1000000 )); do (( i ++ )); done)  
+#echo "$2" $(date)	
+			</textarea>
+
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="diskPerfTemplate" 
+			data-name="OS Disk Test"
+			data-desc="Simple test to validate disk throughput">
+
+fileSystemToTest="_file_"
+sizeOfTestFileInGigs="1"
+
+
+printIt Testing "$fileSystemToTest" by creating and deleting $sizeOfTestFileInGigs Gb file
+
+cd "$fileSystemToTest"
+
+testFileSize=$((1048576*($sizeOfTestFileInGigs)))
+currAvail=`df -Pk . | tail -1 | awk '{print $4}'`
+
+echo == Deleting testFile if it is present already in case of an earlier abort
+rm -rf testFile
+
+if [[ $testFileSize -gt  $currAvail ]] ; then
+
+	printIt Insufficient space available for test, must be numGb+1 available
+	echo == currAvail: $currAvail
+	echo == testFileSize: $testFileSize
+	exit
+fi;
+
+echo 
+time dd if=/dev/zero of=testFile bs=1024 count=$testFileSize; 
+
+
+printIt syncing io; 
+ls -l testFile ; echo; echo
+sync
+printIt removing testFile; 
+rm -rf testFile
+
+echo == Run completed: `date` ; 
+
+			</textarea>
+
+
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="manTemplate" data-name="man"
+			data-desc="Linux Documentation">
+# pipe into col strips out special characters
+# line below is for ps, but use any linux command
+
+man ps | col -bx
+
+			</textarea>
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="iostatTemplate" data-name="iostat"
+			data-desc="Report Disk IO">
+
+# Modify CSAP timeouts if you change
+sampleIntervalSeconds=4
+numberOfSamples=6
+deviceFilter="-d"  # all devices
+
+#deviceFilter="-d dm-2" # usually app mounts
+# ls -l /dev/mapper* will show volume groups to dm mapping. ssadmin is usually dm-2
+
+iostat -m $deviceFilter  $sampleIntervalSeconds $numberOfSamples
+
+
+			</textarea>
+
+		<textarea th:inline="none" class="osTemplate" id="vmstatTemplate" data-name="vmstat"
+			data-desc="Report virtual memory statistics">
+# Modify CSAP timeouts if you change
+
+sampleIntervalSeconds=3
+numberOfSamples=6
+
+vmstat -n $sampleIntervalSeconds $numberOfSamples
+
+			</textarea>
+
+		<textarea  class="osTemplate" id="connectTemplate"
+			data-name="Connection Test: nc"
+			data-desc="Verifies network connectivity to resource such as LDAP, maven, etc">
+
+
+numRuns=1;
+
+checkInstalled timeout ;
+checkInstalled nc ;
+
+function testConnection() {
+	host="$1.yourcompany.com" ;
+	port="$2" ;
+	words=`timeout 2 nc -w 1 $host $port 2>&1 | wc -w`
+
+	result="Pass" ;
+	#echo "'"$words"'"
+	if [ $words -gt 0 ] ; then
+		result="Fail" ;
+	fi ;
+	printIt "$host $port $result"
+}
+
+for (( run=1; run < (numRuns+1) ; run++ ))
+do
+	printIt run $run of $numRuns
+	testConnection csaptools 80
+	testConnection csaptools 81
+	#testConnection engci-maven 80
+	#testConnection dsx 389
+	#testConnection tns-prod 5000
+	#testConnection smart-prd 80
+	#testConnection smart-dev 81
+done
+exit
+
+# note -z option of nc is not support in rh 7.2 yet.
+
+numRuns=1;
+
+printIt number of iterations to test: $numRuns
+
+for (( run=0; run < numRuns ; run++ ))
+do  
+	printIt "==== Run " $run of $numRuns
+	nc -w 2 -z $toolsServer 80
+	nc -w 2 -z [[ ${lifeCycleSettings.getLbServer()} ]] 80
+done
+
+
+			</textarea>
+
+
+		<textarea th:inline="none" class="osTemplate" id="connectCountTemplate"
+			data-name="Connection Test: wget"
+			data-desc="Verifies network connectivity using wget">
+
+checkInstalled wget ;
+
+# webserver: http://$toolsServer/about.html, admin: http://$toolsServer/admin/api/model/host/lifecycle
+# github: https://github.com/csap-platform/csap-core
+
+testUrl="http://$toolsServer/admin/api/model/host/lifecycle" ; 
+numRuns=10;
+success=0 ;
+showOutput="y" ;
+intervalSeconds=0 ; # 0.5,1, ...
+
+# wget option for getting out shown: -q0-
+
+
+for (( run=0; run < numRuns ; run++ )) ; do  
+
+	# test both status and content - rare conditions cause either to fail
+	#resultsText=`wget -nv --spider $testUrl 2>&1`
+	startTime=`date +%s%N`
+	output=$(wget -qO- $testUrl 2>&1)
+	resultsCode=$?  ; # bash exit code returned from wget, 0 indicates success
+	
+	#echo $results
+	
+	#if [[ "$results" == *200* ]] ; then success=$((success+1)) ; fi
+	if [[ "$resultsCode" == 0  && output != "" ]] ; then success=$((success+1)) ; fi
+	
+	if [ $showOutput != "n" ] ; then 
+
+		numMillis=$((($(date +%s%N) - $startTime)/1000000))
+		
+		echo -e "------ \n Run $run \t\t Return Code: $resultsCode \t time: $numMillis ms, $testUrl"
+		echo -e " HTTP status:\t $resultsText" ; 
+		echo -e " HTTP Body  : \t $output \n" ; 
+		
+	fi
+	
+	sleep $intervalSeconds ;
+	
+done
+
+errors="" ;
+if [ $success != $numRuns ] ; then errors="Warning errors found " ; fi;
+
+printIt "==== Results "$errors $success of $numRuns passed
+
+# ssl certificate validation
+# curl -vvI https://github.com/csap-platform/csap-core
+
+# uncomment to get http content
+# curl http://$toolsServer/admin/api/CapabilityHealth
+# curl -v [[ ${lifeCycleSettings.getLbUrl()} ]]
+	#nslookup $toolsServer
+	# results=`nc -w 2 -z $toolsServer 80`
+			</textarea>
+
+
+		<textarea th:inline="none" class="osTemplate" id="timeZoneTemplate"
+			data-name="/etc/sysconfig/clock"
+			data-desc="View timezone, optionally updated">
+
+
+# Notes:
+# 1. Set the timeZone as needed
+
+curZone=`cat /etc/sysconfig/clock`
+tzLink=`readlink /etc/localtime`
+printIt == date is `date` ,  zone is $curZone, /etc/localtime is $tzLink
+
+
+#
+# comment this out to update
+#
+exit ;
+
+# update to desired zone
+vmZone="America/Chicago"
+
+echo ZONE="$vmZone" > /etc/sysconfig/clock
+\rm -rf /etc/localtime
+ln -s /usr/share/zoneinfo/$vmZone /etc/localtime
+
+			</textarea>
+
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="tailTemplate"
+			data-name="tail and grep" data-desc="File changes with filter">
+
+# Notes:
+# 1. Set the filter as needed
+# 2. Tail/Grep commands can put significant load on VM, use CSAP vm monitor to observe impact
+# 3. stdbuf is used to prevent grep from buffering output. ref. http://www.pixelbeat.org/programming/stdio_buffering/
+
+outputFilter='someString' ;
+
+printIt  tailing file for $outputFilter, ignoring case 
+
+tail -f  _file_ | stdbuf -o0 grep -i $outputFilter
+			</textarea>
+
+
+
+
+
+
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="pkillTemplate" data-name="pkill"
+			data-desc="Terminate a process using a filter">
+
+# Notes:
+# 1. Set the filter as needed
+
+outputFilter="someString" ;
+
+printIt searching process listing for $outputFilter,  the following pids will be killed `pgrep -f $outputFilter`
+echo == the following processes will match
+ps -ef | grep  $outputFilter
+
+# uncomment this to kill the processes
+exit
+
+pkill -9 -f $outputFilter
+
+			</textarea>
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="grepTemplate" data-name="grep"
+			data-desc="Filter file with lines before and after">
+
+# Notes:
+# 1. Set the filter as needed
+# 2. Tail/Grep commands can put significant load on VM, use CSAP vm monitor to observe impact
+
+filter="ReplaceThisWithYourString" ;
+location="_file_"
+maxMatches=10
+linesBefore=2
+linesAfter=0
+
+printIt searching file for $filter, ignoring case , maxMatches: $maxMatches
+
+grep -A $linesAfter -B $linesBefore -m $maxMatches -i "$filter" $location
+
+# 
+# zgrep -A $linesAfter -B $linesBefore -m $maxMatches -i "$filter" $location
+			</textarea>
+
+
+		<textarea th:inline="none" class="osTemplate" id="duTemplate" data-name="du"
+			data-desc="Show folder space consumption">
+
+# Notes:
+# 1. Set directory as needed
+
+cd _file_ 
+
+printIt disk usage:
+du -hs * | sort -rh
+
+# old redhat 5 du -BM | sort -nr
+
+			</textarea>
+
+		<textarea th:inline="none" class="osTemplate" id="dfTemplate" data-name="df"
+			data-desc="Show disk statistics by volume">
+
+# Notes:
+# 1. Set directory as needed
+
+cd _file_ 
+
+
+printIt disk usage:
+df -h --print-type
+
+printIt inode usage:
+df -i .
+
+maxTimeToAvoidOsPainSeconds=300
+
+printIt file count with max timeout: $maxTimeToAvoidOsPainSeconds
+timeout $maxTimeToAvoidOsPainSeconds find . -type f | wc -l
+
+printIt "Raw Disk via fdisk: run as root"
+fdisk -l
+
+
+# note that this can cause a lot of system cpu and memory to be used. Run it on an idle vm and use csap os dashboard
+printIt file counts by folder sorted with max timeout seconds: $maxTimeToAvoidOsPainSeconds
+#timeout $maxTimeToAvoidOsPainSeconds find . -xdev -printf '%h\n' | sort | uniq -c | sort -k 1 -n
+
+			</textarea>
+
+
+		<textarea th:inline="none" class="osTemplate" id="lsofTemplate"
+				  data-name="lsof grep filter"
+			data-desc="Host Threads,Sockets and Failes">
+
+# Notes:
+# 1. You may need to extend time for command to complete if VM is very busy
+
+openFiles=`cat /proc/sys/fs/file-nr | awk '{print $1}'`
+totalThreads=`ps -e --no-heading --sort -pcpu -o pcpu,rss,nlwp,ruser,pid  | awk '{ SUM += $3} END { print SUM }'`
+csapThreads=`ps -u$USER --no-heading --sort -pcpu -o pcpu,rss,nlwp,ruser,pid  | awk '{ SUM += $3} END { print SUM }'`
+
+printIt "openFiles: $openFiles totalThreads: $totalThreads csapThreads $csapThreads "
+
+
+networkConns=`ss | grep -iv wait | wc -l`	
+networkWait=`ss | grep -i wait | wc -l`	
+
+
+printIt networkConns: $networkConns networkWait: $networkWait
+
+# totalFileDescriptors=`/usr/sbin/lsof  | wc -l`
+csapFileDescriptors=`/usr/sbin/lsof -u $USER  | wc -l`
+
+totalFileDescriptors=0;
+
+for userid in $(cat /etc/passwd | sed 's/:.*$//g'); do 
+   echo -n $userid  ' '; lsof -u $userid  2>/dev/null | wc -l  
+   currentUserCount=`lsof -u $userid  2>/dev/null | wc -l`
+   totalFileDescriptors=$((totalFileDescriptors+ currentUserCount))
+done
+
+printIt "totalFileDescriptors: $totalFileDescriptors csapFileDescriptors: $csapFileDescriptors"	
+
+exit
+
+
+
+printIt global totals
+openFiles=`cat /proc/sys/fs/file-nr | awk '{print $1}'`
+totalFileDescriptors=`/usr/sbin/lsof  | wc -l`
+csapFileDescriptors=`/usr/sbin/lsof | grep $USER  | wc -l`
+printIt openFiles in /proc/sys/fs/file-nr: $openFiles vm: $totalFileDescriptors $USER lsof: $csapFileDescriptors
+
+
+
+# update this with your process identifier from ps output 
+processFilter="someFilter"
+
+printIt Matching processes
+ps -ef | grep $processFilter  | grep -v -e grep
+
+parentPid=`ps -ef | grep $processFilter   | grep -v -e grep -e $0 | awk '{ print $2 }'`
+
+for pid in $parentPid; do
+	printIt looking for open files for pid $pid
+
+	printIt Number of open files: `/usr/sbin/lsof -p $pid | wc -l`
+	printIt Number of procfd files: `ls -l /proc/$pid/fd | wc -l`
+
+	printIt == open files:
+	#/usr/sbin/lsof -p $pid 
+	ls -l  /proc/$pid/fd
+done ;
+			</textarea>
+
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="lsofPidTemplate" 
+				  data-name="lsof using pid"
+			data-desc="Show open file descriptors using process id (pid)">
+
+# Notes:
+# 1. lsof will include shared libs, and possibly and count both file handle and memory handle
+# 2. /proc/sys/fs is probably most useful when troubleshooting as it contains handles specific to process
+
+printIt global totals
+openFiles=`cat /proc/sys/fs/file-nr | awk '{print $1}'`
+totalFileDescriptors=`/usr/sbin/lsof  | wc -l`
+csapFileDescriptors=`/usr/sbin/lsof | grep $USER  | wc -l`
+printIt openFiles in /proc/sys/fs/file-nr: $openFiles , $USER lsof: $csapFileDescriptors, vm: $totalFileDescriptors 
+
+# update this with your pid 
+parentPid="_pid_"
+# set separator for comma
+IFS=","
+for pid in $parentPid; do
+	printIt Filtering open files for pid $pid
+
+	printIt  procfd files: `ls /proc/$pid/fd | wc -l`, Number of lsof files: `/usr/sbin/lsof -p $pid | wc -l`
+
+	printIt procfd files:
+	ls -l  /proc/$pid/fd
+
+
+	printIt uncomment to view lsof files :
+	#/usr/sbin/lsof -p $pid 
+done ;
+
+			</textarea>
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="clearBuffersTemplate"
+			data-name="/proc/sys/vm/drop_caches"
+			data-desc="Clear memory buffers: Some linux admin commands will fill memory buffers. Use this to empty afterwards">
+
+# Notes:
+# 1. You will need to run as root
+
+printIt Before:
+free && sync && echo 3 > /proc/sys/vm/drop_caches
+
+printIt After:
+free
+
+			</textarea>
+
+
+			
+
+		<textarea th:inline="none" class="osTemplate" id="socketWaitTemplate" 
+				  data-name="ss grep wait"
+			data-desc="Show network connections in a CLOSE_WAIT state">
+
+# Notes:
+# 1. You may need to extend time for command to complete if VM is very busy
+
+networkConns=`ss | grep -iv wait | wc -l`	
+networkWait=`ss | grep -i wait | wc -l`	
+
+
+printIt Number of active sockets: $networkConns , Wait state: $networkWait
+
+printIt Socket stat
+ss -rp
+
+			</textarea>
+
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="socketQueryTemplate" 
+				  data-name="ss grep filter"
+			data-desc="Show network connections using a process params filter">
+
+# Notes:
+# 1. You may need to extend time for command to complete if VM is very busy
+
+processFilter="someFilter"
+
+printIt Matching processes
+ps -ef | grep $processFilter | grep -v -e grep
+
+parentPid=`ps -ef | grep $processFilter   | grep -v -e grep -e $0 | awk '{ print $2 }'`
+
+for pid in $parentPid; do
+printIt looking for ports for pid $pid
+
+# ss -r will resolve ip addresses
+ss -p | grep -w $pid
+done ;
+			</textarea>
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="dockerContainerTemplate" 
+				  data-name="docker container commands"
+			data-desc="Docker command templates">
+# Notes:
+# 1. Extend time for command to complete if Host is busy or a long running command
+# 2. Select additional hosts as needed
+
+
+containerName='_serviceName_' ;
+
+
+checkInstalled docker
+checkInstalled wget
+
+
+printIt "Running containers"
+docker ps
+
+
+printIt "Files in container:"
+filesInContainer=`docker exec $containerName ls -l`
+echo "$filesInContainer"
+
+exit ;
+
+printIt "Cleaning up unused containers, all volumes not used by a container, all dangling images"
+docker system prune --force
+
+printIt "Container limits"
+docker exec $containerName ulimit -a
+
+printIt "Container details"
+docker inspect $containerName
+
+printIt stopping docker container  $containerName
+docker stop $containerName
+
+
+printIt stopping docker container  $containerName
+docker start $containerName
+
+
+printIt Deleting container
+docker rm -f $containerName
+
+# 
+printIt "starting  nginx docker with containerName webServer99 on port 80 as a daemon"
+docker run -d -p 80:80 --name webServer99 nginx
+
+
+printIt stopping all containers
+docker stop $(docker ps -a -q) ;
+
+printIt removing all containers
+docker rm $(docker ps -a -q) ;
+
+
+sleep 1;
+
+testUrl="http://localhost" ;
+output=$(wget -qO- $testUrl 2>&1)
+
+printIt "Hitting $testUrl using wget, stripping off html tags"
+echo $output | sed -e 's/<[^>]*>//g'
+
+
+
+
+			</textarea>
+
+		<textarea th:inline="none" class="osTemplate" id="dockerImageTemplate" 
+				  data-name="docker image commands"
+			data-desc="Docker image  templates">
+
+# Notes:
+# 1. Extend time for command to complete if Host is busy or a long running command
+# 2. Select additional hosts as needed
+
+
+imageName='_serviceName_' ;
+
+
+checkInstalled docker
+checkInstalled wget
+
+
+
+printIt "Images on Host"
+docker images
+
+printIt "Image details"
+docker inspect $imageName
+
+exit ;
+
+printIt "Cleaning up unused containers, all volumes not used by a container, all dangling images"
+docker system prune --force 
+
+##
+##  image commands
+##
+printIt pulling latest image
+docker pull $imageName
+docker rmi --force $imageName
+
+
+docker pull docker.io/hello-world:latest
+docker pull docker.io/library/nginx:latest
+docker pull containers.yourcompany.com/someDeveloper/csap-simple:latest 
+
+printIt Deleting nginx image
+docker rmi -f docker.io/library/nginx
+
+printIt removing all images 
+docker rmi --force $(docker images -a -q) ;
+
+prinIt removing all dangling volumes
+docker volume rm $(docker volume ls -f dangling=true -q)
+
+##
+##  Creating new container 
+##
+newContainerName="csapTestContainer"
+workingDir=$PROCESSING/$newContainerName
+\rm -rf $workingDir ; mkdir -p $workingDir; touch $workingDir/dummy.txt
+
+printIt "created $workingDir for use as a volume"
+
+printIt "removing $newContainerName"
+docker stop $newContainerName
+docker rm $newContainerName
+
+printIt "creating container named $newContainerName. Port 7080 is public - routed to 8080. Filemounts using read only"
+docker run -d -p 7080:8080 \
+--cpu-period=50000 --cpu-quota=25000 \
+-v $JAVA_HOME:/java:ro -v $workingDir:/$newContainerName:z \
+--name $newContainerName $imageName \
+
+printIt "Files in container:"
+filesInContainer=`docker exec $newContainerName ls -l /java /$newContainerName`
+echo "$filesInContainer"
+
+NOW=$(date +"%h-%d-%I-%M-%S")
+printIt touching a ro filesystem
+docker exec $newContainerName touch  /java/test.$NOW
+
+printIt touching a rw filesystem
+docker exec $newContainerName touch  /$newContainerName/test.$NOW
+
+##
+## echo 1000 > /sys/fs/cgroup/cpu/system.slice/docker-069ef55e22e9d6716946077430ee7e7e4e2c61c4e3fb747df541834f8aa70319.scope/cpu.cfs_quota_us
+##
+
+##
+## Using CSAP stress image and docker cgroups throttle options https://www.kernel.org/doc/Documentation/scheduler/sched-bwc.txt
+
+# use cpu quota to limit to 2x cores. periods are 400ms = 400000
+#  docker run --detach  --cpu-period=400000 --cpu-quota=800000 --rm stress --cpu 8
+
+# run on cores 0, 1 and 2
+# docker run --detach  --cpuset-cpus "0-2"  stress --cpu 8
+
+			</textarea>
+
+		<textarea th:inline="none" class="osTemplate" id="socketPidTemplate" 
+				  data-name="ss grep pid"
+			data-desc="Show network connections using a process id filter">
+# update this with your pid 
+parentPid="_pid_" ;
+serviceName='_serviceName_' ;
+
+# uncomment to run on multiple hosts
+# parentPid=`ps -eo pid,args | grep $serviceName | grep -v -e grep | awk '{print $1}' | paste -d, -s -`
+
+pidSearch=${parentPid//,/|}
+printIt  "Looking for open sockets for process ids: $parentPid. Optionally run as root if needed"
+
+printIt Number of open Sockets: `ss -pr | grep -E  "$pidSearch" | wc -l`
+
+printIt Socket Listing
+ss -pr | grep -E  "$pidSearch"
+
+
+printIt Docker container Sockets
+nsenter -t "$parentPid" -n ss -p
+
+exit
+
+#
+#  show open sockets over time
+#
+
+numRuns=10;
+sleepDelay=0.5
+for (( run=1; run < (numRuns+1) ; run++ ))
+do
+	sleep $sleepDelay
+	printIt "run $run of $numRuns, open Sockets:" `ss -pr | grep -E  "$pidSearch" | wc -l`
+done
+
+exit
+
+
+
+# networkConns=`ss | grep -iv wait | wc -l`	
+# networkWait=`ss | grep -i wait | wc -l`	
+# echo Number of active sockets: $networkConns , Wait state: $networkWait
+
+
+exit
+
+# iterate over pids if needed
+
+# set separator for comma
+IFS=","
+for pid in $parentPid; do
+	printIt  Number sockets for pid $pid : `ss -pr | grep -w $pid | wc -l`
+
+	printIt List
+	# use -r to resolve ip addresses
+	ss -pr | grep -w $pid
+done ;
+			</textarea>
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="findTemplate" 
+				  data-name="find old files"
+			data-desc="Show and remove old files">
+
+# Notes:
+# 1. You may need to extend time for command to complete if VM is very busy
+# 2. stdbuf is used to prevent grep from buffering output. ref. http://www.pixelbeat.org/programming/stdio_buffering/
+# 3. find -mmin +5 will find files older then 5 minutes
+# 4. find -mtime +5 will find files older then 5 days
+
+
+# update this to select directory 
+folderToBeSearched="_file_" ;
+numDays="+2" ;
+dirDepth="1" ;
+
+if [ ! -d "$folderToBeSearched" ]; then
+	printIt "Folder does not exist: $folderToBeSearched";
+	exit
+fi
+
+cd $folderToBeSearched 
+
+printIt "looking for files "
+
+numMatches=`find . -maxdepth $dirDepth -mtime $numDays -type f | wc -l`
+
+
+printIt "Found $numMatches files older then $numDays days inside $folderToBeSearched . Uncomment the next line to perform"
+
+#uncomment to remove
+#find . -maxdepth $dirDepth -mtime $numDays -type f  | xargs \rm -vrf 
+
+# to review
+#find . -maxdepth $dirDepth -mtime $numDays -type f  | xargs ls -l
+
+# find * -mtime +5 -exec rm {} \;
+# find . -mtime +30 | xargs rm 
+# find . -maxdepth 1 -mtime $numDays | xargs ls -l
+
+			</textarea>
+
+
+
+		<textarea th:inline="none" class="osTemplate" id="swapTemplate" data-name="mkswap"
+			data-desc="Create Swap ">
+
+# Notes:
+# https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/5/html/Deployment_Guide/s2-swap-creating-file.html
+
+printIt creating swap - run as root
+swapDestination="/data/swapfile"
+
+swapoff $swapDestination ; \rm -rf $swapDestination
+swapInGb=1
+swapSize=$((swapInGb*1024*1024))
+dd if=/dev/zero of=$swapDestination bs=1024 count=$swapSize
+chmod 0600 $swapDestination
+mkswap $swapDestination
+swapon $swapDestination
+				
+
+
+			</textarea>
+
+
+		<textarea th:inline="none" class="osTemplate" id="sarTemplate" data-name="sar"
+			data-desc="Linux stats ">
+
+# Notes:
+# http://www.thegeekstuff.com/2011/03/sar-examples/
+
+printIt memory
+sar -r 1 3
+
+
+printIt swap
+sar -S 1 3
+
+
+printIt runq and load
+sar -q 1 3
+
+
+
+printIt sar options
+sar -h
+
+
+			</textarea>
+
+		<textarea th:inline="none" class="osTemplate" id="cleanupTemplate"
+			data-name="Clean processing"
+			data-desc="Remove old logs, text files, and runtimes ">
+
+cd $PROCESSING ;
+
+\rm -rf tomcat*Linux*;
+\rm -rf cssp* ;
+\rm -rf *.log *.txt
+\rm -rf $STAGING/platform
+
+			</textarea>
+
+		<textarea th:inline="none" class="osTemplate" id="csapOsPackageTemplate"
+			data-name="yum recommended packages"
+			data-desc="Recommended packages for all CSAP hosts">
+
+
+printIt run as root and extend timeout to 5 minutes then remove the exit
+exit
+
+printIt "zlib-devel is used used by csap web package for mod_inflate" 
+yum -y install zlib-devel
+
+printIt current glibc
+yum -y update glibc
+
+yum -y  install nc dos2unix  gcc  gcc-c++  yum_utils  sysstat openssl
+
+
+
+			</textarea>
+		
+		<textarea th:inline="none" class="osTemplate" id="glibCPatchTemplate"
+			data-name="Patch - GlibC" data-desc="glibc Query and Update example">
+
+			
+function glibcPatch() {
+	printIt current glibc
+	rpm -qa | grep glibc
+	printIt run as root and extend timeout to 5 minutes then remove the exit
+	exit
+
+	printIt updating
+	yum -y update glibc
+
+
+	printIt new glibc
+	rpm -qa | grep glibc
+}
+
+function rh5() {
+	printIt rh5 patch
+	glibcPatch
+}
+
+function rh6() {
+	printIt rh6 patch
+	glibcPatch
+
+}
+
+function rh7() {
+	printIt rh7 patch
+	glibcPatch
+
+}
+
+function runBasedOnOs() {
+	versionDescription=`cat /etc/redhat-release` ;
+
+	if [[ $versionDescription == *"release 5"* ]] ; then
+		rh5
+
+	elif [[ $versionDescription == *"release 6"* ]] ; then
+		rh6
+
+	elif [[ $versionDescription == *"release 7"* ]] ; then
+		rh7
+	fi
+}
+
+runBasedOnOs ;
+
+
+
+			</textarea>
+
+
+		<textarea th:inline="none" class="osTemplate" id="yumTemplate" data-name="yum and rpm"
+			data-desc="Linux Host management Samples">
+
+# Notes: These are sample commands
+# https://github.com/csap-platform/csap-core/wiki#updateRefCS-AP+Vm+Notes
+
+echo;echo; echo ============== which package installed
+rpm -qf `which traceroute`
+
+exit
+
+# examples are below
+
+
+
+printIt completing any existing work
+yum-complete-transaction
+
+echo;echo; echo ============== install package without prompts using default repo
+yum -y install  traceroute
+
+yum -y install dos2unix*
+
+##
+## Sample with rh5 and rh6
+## 
+
+
+echo;echo; echo ============== Sample os specific install used for bash ssl patch
+numMatches=`grep  "6." /etc/redhat-release | wc -l`
+
+if [ $numMatches == 0 ] ; then 
+echo patching rh5	
+cd /var/tmp
+
+
+else	
+
+echo updating  redhat 6
+
+fi
+
+
+
+rpm -qa | grep bash
+# Note this may take 90 seconds to run, extend the timeout on console
+echo == Current glibc version is `rpm -q bash`
+
+echo == remove this line to proceed with install ; exit
+
+
+
+
+echo == Post install
+rpm -q bash
+
+
+			</textarea>
+
+
+
+	</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<title th:replace="/deployment/admin-head :: pageContent"></title>
+	</head>
+
+	<body th:inline="text" style="min-width: 70em">
+
+		<header>
+			<a class="simple" title="Return to application landing page"
+			   style="font-size: 10pt;  margin-left: 1em; position: absolute; left: 10px; top: 1em"
+			   th:href="@{services(releasePackage=${param.releasePackage[0]})}">
+				<img class="but" th:src="@{/images/16x16/goWiki.png}">Application Portal
+			</a>
+			Service Portal: <div class="noteHighlight">[[  ${ serviceInstance.getServiceName() }   ]]</div> 
+
+			<button id="motdButton" class="ui button "
+					data-qtipRight="Host Notes: Click to update as needed">
+				<span id="motd"></span>
+			</button>
+		</header>
+
+		
+		<div style="display: none" id="resultsLoading" class="loadingPanel">Deployment in Progress</div>
+			
+		<div style="display: none">
+
+			<div id="resultsSection" >
+				<pre id="resultPre">[[ ${result} ]]</pre>
+			</div>
+			
+		</div>
+		
+		
+		<div id="mainDisplayArea">
+
+
+			<div th:replace="/deployment/admin-deploy :: pageContent"></div>
+
+
+			<div th:replace="/deployment/admin-performance :: pageContent"></div>
+
+
+		</div>
+
+	</body>
+
+</html>

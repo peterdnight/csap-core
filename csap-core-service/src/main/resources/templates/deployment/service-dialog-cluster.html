@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<head>
+
+		<title th:inline="text">Cluster Browser</title>
+
+		<script th:replace="~{ csap/fragments/libsAndStyles :: pageContent }"></script>
+
+
+		<style>
+			article.host {
+				width: auto;
+				font-size: 0.8em;
+				display: inline-block;
+				vertical-align: top;
+				padding: 0.25em;
+				margin: 0.5em;
+				padding-left: 1em;
+				padding-right: 1em;
+			}
+
+			img.but {
+				padding: 2px;
+			}
+
+			.col1, .col2 {
+				font-weight: bold;
+				font-size: 0.9em;
+			}
+		</style>
+	</head>
+
+	<body th:inline="text">
+
+		<header th:replace="csap/fragments/page :: header"></header>
+		<div id="alertifyContents">
+			<table id="clusterTable" class="bordered fixed">
+				<thead>
+
+					<tr>
+						<th class="col1">Cluster Name</th>
+						<th class="col2">Hosts</th>
+					</tr>
+				</thead>
+
+				<tbody id="clusterTableBody"
+					   th:each="cluster : ${ releasePackage.getLifeCycleToGroupMap().get( lifecycle ) }"
+					   th:if="${ releasePackage.getGroupToVersionMap() != null and releasePackage.getGroupToVersionMap().get( lifecycle + cluster ) != null}">
+
+					<tr class="templateRow" data-template="ls"
+						th:each="version : ${ releasePackage.getGroupToVersionMap().get( lifecycle + cluster ) }">
+
+						<td class="col1">[[ ${cluster } ]]-[[ ${ version } ]]</td>
+						<td class="col2">
+
+
+							<article class="host"
+									 th:each="host : ${ releasePackage.getLcGroupVerToHostMap().get( lifecycle + cluster + version) }"
+									 th:if="${ host != null }" th:with="double=__">
+
+								<div class="hostLabel">[[ ${ host } ]]</div>
+								<a target="_blank" class="promptButton launchBrowse"
+								   th:href="${ csapApp.getAgentUrl( host , '/file/FileManager?fromFolder=' + double +'staging__/conf')}"
+								   title="Browse Files">
+									<img class="but"  src="images/16x16/logs.png">
+								</a>
+
+								<a target="_blank" class="promptButton"
+								   th:href="${ csapApp.getAgentUrl( host , '/os/command?command=script&host=' + host +'&fromFolder=.') }"
+								   title="Run shell commands">
+									<img class="but" src="images/16x16/shell.png">
+								</a>
+
+								<a target="_blank" class="promptButton"
+								   th:href="${ csapApp.getAgentUrl( host , '/os/HostDashboard') }"
+								   title="Host Dashboard: Shows load graphs, etc. ">
+									<img class="but"  src="images/16x16/sysMon.png">
+								</a>
+
+							</article>
+
+						</td>
+					</tr>
+
+				</tbody>
+			</table>
+		</div>
+
+
+		<footer th:replace="csap/fragments/page :: footer"></footer>
+	</body>
+
+</html>

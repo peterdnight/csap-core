@@ -1,0 +1,1 @@
+Run model tests when validating changes to definition

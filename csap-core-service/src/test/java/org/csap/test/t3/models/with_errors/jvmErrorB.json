@@ -1,0 +1,163 @@
+{
+
+		
+	"packageDefinition" : {
+		"name" : "Supporting Sample B" ,
+		"architect" : "someUser@yourCompany.com",
+		"emailNotifications" : "support@notConfigured.com"
+	}, 
+		
+	"clusterDefinitions": {
+		"dev": {
+			"middlewareB": {
+				"jvmPorts": {
+					"Factory2Sample": [
+						"804x"
+					]
+				},
+				"osProcessesList": [
+					"oracle"
+				],
+				"multiVm": {
+					"1": {
+						"hosts": [
+							"sampleHostB-dev01"
+						]
+					}
+				}
+			}, 
+
+			"middlewareB2": {
+				"jvmPorts": {
+					"SampleJvmInB2": [
+						"804x"
+					]
+				},
+				"osProcessesList": [
+					"oracle"
+				],
+				"singleVmPartition": {
+					"1": {
+						"hosts": [
+							"sampleHostB2-dev02"
+						]
+					}
+				}
+			}
+		}
+	},
+	"jvms": {
+
+		"SampleJvmInB2" : {
+			"description" : "CsAgent provides core service management capabilities, along with runtimes",
+			"docUrl" : "https://github.com/csap-platform/csap-core/wiki#/CSAP+-+CsAgent",
+			"java" : "-Xms256M -Xmx256M -XX:MaxPermSize=128m",
+			"server" : "cssp-2.x",
+			"source" : {
+				"scm" : "svn",
+				"path" : "http://yourSvnOrGit/yourPathToSource",
+				"branch" : "HEAD"
+			},
+
+			"osProcessPriority": "-10",
+			
+			"maven" : {
+				"dependency" : "org.csap:csap-core-service:6.0.0:jar"
+			},
+
+			"version" : { 
+				"1" : { "dev" : {}, "stage" : {}, "lt" : {}, "prod" : {} },
+				"2" : { "dev" : {}, "stage" : {}, "lt" : {}, "prod" : {} }
+			}
+		},
+
+
+		"Factory2Sample": {
+			"description": "Provides cssp-2.x reference implementation for engineering, along with core platform regression tests.",
+			"docUrl": "https://github.com/csap-platform/csap-core/wiki#/Code+Samples",
+			"java": "-XX:-UseSplitVerifier -Xms128M -Xmx128M -XX:MaxPermSize=128m",
+			"server": "cssp-2.x",
+			"autoStart": "55",
+			"source": {
+				"scm": "svn",
+				"path": "http://yourSvnOrGit/yourPathToSource/CsspFactorySample",
+				"branch": "HEAD"
+			},
+			"maven": {
+				"dependency": "com.your.group:Cssp2FactorySample:2.0.21:war"
+			},
+			"customMetrics": {
+				"TotalVmCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"attribute": "SystemCpuLoad"
+				},
+				"ProcessCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"attribute": "ProcessCpuLoad"
+				},
+				"SpringJmsListeners": {
+					"mbean": "org.csap.:application=csap,name=SpringBeans",
+					"attribute": "JmsActive"
+				},
+				"SpringJmsOnMessage": {
+					"simonCounter": "zmetrics.Demo_JmsListener.onMessage()"
+				},
+				"SpringDbcpActive": {
+					"mbean": "org.csap.:application=csap,name=SpringBeans",
+					"attribute": "DbActive"
+				},
+				"SpringDbcpIdle": {
+					"mbean": "org.csap.:application=csap,name=SpringBeans",
+					"attribute": "DbIdle"
+				},
+				"DBAddItem": {
+					"simonCounter": "zmetrics.Demo_DataAccessObject.addSchedule()"
+				},
+				"DBShowItem": {
+					"simonCounter": "zmetrics.Demo_DataAccessObject.showScheduleItemsJpql()"
+				}
+			},
+			"version": {
+				"1": {
+					"dev": {},
+					"stage": {},
+					"lt": {},
+					"prod": {}
+				},
+				"2": {}
+			},
+			"servletThreadCount": "48",
+			"servletAccept": "0",
+			"servletMaxConnections": "47",
+			"servletTimeoutMs": "5000",
+			"metaData": "-nio"
+		}
+	},
+
+	"osProcesses": {
+
+
+		"oracle": {
+			"description": "Oracle provides a data persistence services.",
+			"docUrl": "http://www.oracle.com/",
+			"deployTimeoutMinutes": "60",
+			"port": "1521",
+			"jmxPort": "-1",
+			"scmVersion": "11.2",
+			"server": "os",
+			"logDirectory": "/home/oracle/base/diag/rdbms/ss$hsuffix/SS$hsuffix/trace",
+			"propDirectory": "/home/oracle",
+			"logRegEx": ".*\\.log",
+			"url": "http://www.oracle.com/",
+			"user": "oracle",
+			"version": 
+			{
+				"1": 
+				{
+					
+				}
+			},
+			"disk": "oracleLV"
+		}
+	}
+}

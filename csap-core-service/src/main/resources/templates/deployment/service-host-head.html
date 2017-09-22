@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<head th:fragment="pageContent" th:remove="tag" >
+<script th:replace="/deployment/service-head"></script>
+
+
+<script>
+
+// Switch to host viewing
+var inHostMode=true;
+</script>
+
+<style>
+
+/*  host columns have different values, differernt layouts*/
+th.summaryColumn1, td.summaryColumn1 {
+	width: 10em; text-align: left;
+}
+th.summaryColumn2, td.summaryColumn2 {
+	width: 6em; text-align: left;
+}
+th.summaryColumn3, td.summaryColumn3 {
+	width: 6em; text-align: left;
+}
+th.summaryColumn4, td.summaryColumn4 {
+	width: 6em; text-align: left;
+}
+
+
+th.instanceService, td.instanceService {
+	width: 16em; text-align: left; padding: 0;
+	line-height: 15px;
+}
+th.instanceColumn3, td.instanceColumn3 {
+	width: 3em; text-align: center;
+}
+th.instanceColumn4, td.instanceColumn4 {
+	width: 4em; text-align: left;
+}
+th.instanceVersion, td.instanceVersion {
+	width: 10em; text-align: left;
+}
+th.mavenId, td.mavenId {
+	width: 8em; text-align: left;
+	display: none;
+}
+th.instanceDisk, td.instanceDisk {
+	width: 3em; text-align: left;
+}
+
+
+.instanceCheck {
+	margin: 0;
+	margin-right: 0.2em;
+	position: relative;
+	left: -10px;
+}
+
+
+</style>
+
+</head>

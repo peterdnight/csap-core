@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>TODO supply a title</title>
+	</head>
+	<body th:fragment="pageContent" th:remove="tag" >
+
+
+
+		<div id="sync" class="commandSection">
+			<section>
+				<div class="title">Sync to other hosts</div>
+
+
+				<form id="syncScriptForm" action="syncFiles" method="post">
+					[[ ${ host } ]]
+					folder:
+					<input name="location" th:value="${ defaultLocation}" style="width: 60em;" />
+					<br/>Sync to:
+					<input name="extractDir" th:value="${ T(org.csap.agent.CSAP).SAME_LOCATION}" style="width: 60em" />
+
+					<br/>Chown User: 
+					<select id="syncUserid" name="chownUserid" >
+						<option th:each="optionUser : ${osUsers}" 
+								th:selected="${ optionUser == csapUser }"
+								th:value="${ optionUser }"
+								th:text="${ optionUser }">will be replaced</option>
+
+					</select> 
+
+
+					<span id="hostButtonTarget"></span>
+					<label>
+					Delete Existing:
+					<input type="checkbox" name="deleteExisting" style="" 
+						   title="If destination exists, it will be renamed to .old. By default - content is merged with exisiting files overwritten"
+						   />
+					</label>
+					Time Out:
+					<input type="number" name="timeoutSeconds" style="width: 4em" value="30"
+						   title="Commands will be aborted if not completed in specified interval"
+						   />
+					seconds <br/>
+					<br/>
+					<a id="syncSubmitButton" class="formButton" href="#">
+						sync from
+						[[ ${ host }  ]]</a>
+				</form>
+
+				<div class="note" style="">
+					Notes:<br/> 1. Regardless of destination set above - files are ALWAYS forced to same location
+				</div>
+			</section>
+		</div>
+
+
+
+
+	</body>
+</html>

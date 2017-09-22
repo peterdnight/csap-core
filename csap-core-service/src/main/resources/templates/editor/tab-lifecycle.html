@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<head>
+
+		<title th:inline="text">Life Editor</title>
+
+		<script th:replace="~{ csap/fragments/libsAndStyles :: pageContent }"></script>
+
+
+
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/editor/dialog-cluster.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+		<link th:href="@{ ${csapApp.versionedUrl('/js/editor/editor-dialog-service.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+		<link th:href="@{ ${csapApp.versionedUrl('/js/editor/dialog-settings.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+		
+		<link th:href="@{ ${csapApp.versionedUrl('/js/editor/life-edit.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+		<link th:href="@{ ${csapApp.versionedUrl('/js/editor/editor.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+
+
+
+
+		<link th:href="@{/js/csapLibs/qtip/jquery.qtip.min.css}" rel="stylesheet"
+			  type="text/css" media="screen" />
+		<script th:src="@{/js/csapLibs/qtip/jquery.qtip.min.js}"></script>
+
+		<script th:src="@{/js/csapLibs/lineNums/jquery-linedtextarea.js}"></script>
+		<link th:href="@{/js/csapLibs/lineNums/jquery-linedtextarea.css}" rel="stylesheet"
+			  type="text/css" media="screen" />
+
+
+
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+
+			var addHostUrl = [[ ${ csapApp.getRootModel().getInfraAddHost()  }]];
+			var rootPackageName = [[ ${ rootPackageName } ]];
+			var baseUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).BASE_URL}}]];
+			
+			var lifeEditUrl = [[ @{ ${ T(org.csap.agent.CsapCoreService).EDIT_URL + '/lifecycle'} } ]]
+			var lifeUpdateUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).DEFINITION_URL}}]] + '/lifecycle';
+			
+			var serviceEditUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).EDIT_URL}}]] + '/serviceDialog';
+			var serviceDefUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).DEFINITION_URL}}]] + '/service';
+			var settingsEditUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).EDIT_URL}}]] + '/settingsDialog';
+			var settingsDefUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).DEFINITION_URL}}]] + '/settings';
+			var clusterEditUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).EDIT_URL}}]] + '/clusterDialog';
+			var clusterDefUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).DEFINITION_URL}}]] + '/cluster';
+			var serviceName = "pendingSelection";
+			var hostName = "*";
+			// initialize is done in service-test
+			/*]]>*/
+		</script>
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/commonJQ.js')} }"></script>
+
+		
+		<script  th:attr="data-main=@{ ${csapApp.requiresUrl('/js/editor/modules/life-test.js')}   }" 
+			th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script>
+		
+
+	</head>
+
+	<body th:inline="text">
+
+
+		<header th:replace="csap/fragments/page :: header"></header>
+
+
+		<span style="margin-right: 1em;">Package Editor:</span> <select
+			class="releasePackage"
+			style="width: 14em">
+			<option
+				th:each="name : ${packageNames}"
+				th:selected="${name == selectedRelease }"
+				th:value="${name}"
+				th:text="${name}">package names updated here</option>
+		</select>
+
+		<div id='lifeEditorWrapper' class='lifeContents'>
+			<!--
+			<div class="info">
+				Note: After making changes, use the JSON Text tab to confirm and commit changes. 
+				
+				<span style="background-color: yellow">
+					Changes made on other tabs will be lost unless they are committed prior to using Lifecycle editor
+				</span> 
+			</div> -->
+
+			<label>Application Environment:
+				<select
+					id="lifeEdit"
+					class="lifeSelection"
+					style="width: 14em">
+					<option
+						th:each="lifeName : ${ packageLifes }"
+						th:selected="${lifeName == lifeToEdit }"
+						th:value="${lifeName}"
+						th:text="${lifeName}">Will be updated with dev/stage/lt/...</option>
+				</select>
+				<a
+					th:if="${ ( infraRole != null) }" 
+					title="Add a new application Life cycle" href="#"  class="simple addNewLifeButton">
+								<img th:src="@{/images/16x16/newFolder.png}"></a>
+				<a 
+					th:if="${ ( infraRole != null) }" 
+					title="Remove Life cycle" href="#"  class="simple removeLifeButton">
+								<img th:src="@{/images/16x16/deleteFolder.png}"></a>
+			</label> 
+
+			<label>
+				<button id="editSettingsButton" class="pushButton" 
+						title="Click to modify service configuraion" >
+					<img  class="but" th:src="@{/images/format-indent-more.png}" >Edit Settings
+				</button>
+			</label>
+			<label>
+				Filter:  
+					<input id="clusterFilter" style="display: inline-block; margin-right: 0" 
+							title="Filter by lifecycle, servicename, version, etc. Hit enter key to apply filter" value=""/>
+			</label>
+					
+
+			<table id="editLifeTable" class="simple">
+
+
+				<thead>
+
+					<tr>
+						<th style="">Cluster
+							<a 
+								th:if="${ ( infraRole != null) }" 
+								title="Create a new cluster" href="#"  class="simple addNewClusterButton">
+								<img th:src="@{/images/16x16/newFolder.png}">Add</a></th>
+						
+						<th style="">Hosts: Click name to launch Host Dashboard</th>
+						
+						<th>Services: Click name to edit
+						
+							<a 
+								th:if="${ ( infraRole != null) }" 
+								href="#"  class="simple addServiceClusterButton">
+								<img th:src="@{/images/16x16/newFolder.png}">
+								Add Service
+							</a>
+						</th>
+					</tr>
+				</thead>
+
+
+				<tr 
+					th:if="${ clusterNames.size() == 0 }" >
+					<td colspan="3">No clusters found.</td>
+
+				</tr>
+
+				<tbody >
+
+				<tr 
+					th:if="${ unusedServices != null && unusedServices.size() != 0 }" >
+					<td>UnAssigned </td>
+					<td>Selected Lifecycle</td>
+					
+						<td>
+							
+							
+							<div class="clusterItems">
+								<div class="clusterHostName"
+									 th:each="clusterServiceName : ${ unusedServices  }">
+									<a class="simple editServiceButton" th:title="${clusterServiceName}"
+									   th:href="${'#' + jvm }">[[ ${ clusterServiceName } ]]</a>
+								</div>
+								
+							</div>
+							
+						</td>
+
+				</tr>
+					<tr 
+						th:each="cluster : ${ clusterNames  }"
+						th:class="${ clusterDisplayMap.get(cluster) }" 
+						th:title="${ clusterNotesMap.get(cluster) }" >
+						<td> 
+
+							<a class="simple editClusterButton" 
+							   th:href="${'#' + jvm }"><img  class="but" th:src="@{/images/format-indent-more.png}" >
+									[[ ${ cluster } ]] 
+							</a>
+							<br/>
+							<div class="heading"> [[ ${clusterDescriptionMap.get(cluster) } ]]</div>
+
+						</td>
+						 
+						<td>
+							<div class="clusterItems">
+								<div class="clusterHostName"
+									 th:each="clusterHostName : ${ hostsMap.get(cluster)  }">
+									<a class="simple" target="_blank" th:title="${clusterHostName}"
+										th:href="${ csapApp.getAgentUrl( clusterHostName , '/os/HostDashboard') }"
+									   >[[ ${ clusterHostName } ]]</a>
+								</div>
+							</div>
+
+						</td>
+						
+						<td>
+							
+							
+							<div class="clusterItems">
+								<div class="clusterHostName"
+									 th:each="clusterServiceName : ${ servicesMap.get(cluster)  }">
+									<a class="simple editServiceButton" th:title="${clusterServiceName}"
+									   th:href="${'#' + jvm }">[[ ${ clusterServiceName } ]]</a>
+								</div>
+							</div>
+							
+							
+
+							
+						</td>
+					</tr>
+				</tbody>
+
+
+			</table>
+
+		</div>
+
+
+
+
+
+		<footer th:replace="csap/fragments/page :: footer"></footer>
+	</body>
+
+</html>

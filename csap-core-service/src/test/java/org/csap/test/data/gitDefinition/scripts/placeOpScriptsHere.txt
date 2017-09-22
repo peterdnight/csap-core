@@ -1,0 +1,4 @@
+Use of adhoc commands via ssh is discouraged due to risk and lack of audit trails.
+
+=> Teams are encouraged to placed frequently execute commands in this project.
+==> Any file ending with .sh will be added to template list

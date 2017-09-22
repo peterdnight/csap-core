@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<title>test</title>
+	</head>
+
+	<body th:fragment="pageContent" th:remove="tag">
+
+		<script th:inline="javascript">
+			var trendingConfig = [[ ${ lifeCycleSettings.trendingConfig } ]];
+		</script>
+
+		<div id="loadingMessage" class="loadingLargePanel" >Loading Application Portal</div>
+		
+		<div id="currentErrors" style="display:none">
+			<div class="alertifyWarnings">
+				<ol class="decimal">
+				</ol>
+			</div>
+		</div>
+
+
+		<div id="news" style="display: none">
+
+			<div id="messageText" class="">
+
+				<div class="newsBlock">			
+					<div class="head" style="font-size: 1.5em; margin-bottom: 0.5em;">
+						24 Hours:
+						<a class="simple" target="_blank" style="display: inline; margin-left: 0.5em; " title="View project events" 
+						   href="#allActivity" id="activityCount">Loading..</a>
+
+
+						<a class="simple" target="_blank" style="display: inline; margin-left: 3em; font-size: 0.7em" title="View your activity in all CSAP projects" 
+						   href="#myActivity" id="myActivity">
+							Activity: [[${userid}]] <img style="vertical-align: middle; margin-left: 3px;width: 12px" src="images/16x16/system-users.png"></a>
+
+						<a id="analyticsUrl" target="_blank" class="simple perfWinButton hbutton" style="margin-right: 1em; font-size: 1em"
+						   title="View project analytics and performance data, including load levels, user activty, and more..." 
+						   href="#analytics" >Review Performance<img style="vertical-align: middle; margin-left: 3px" src="images/16x16/x-office-spreadsheet.png"></a>
+
+						<span th:if="${lifeCycleSettings.monitoringUrl} != none" > 
+							<a id="monitoringUrl" target="_blank" class="simple perfWinButton hbutton" style="margin-right: 2em"
+							   title="View historical availablility" 
+							   th:href="${ lifeCycleSettings.monitoringUrl }" >Uptime<img style="vertical-align: middle; margin-left: 3px;width: 12px" src="images/16x16/x-office-spreadsheet.png"></a>
+						</span>
+					</div>
+
+
+					<div id="needsDomainWarning" class="infoWarn" style="margin: 2em;"
+						 th:if="${ domainUrl } != null">
+						<label>Browser Url is missing full domain need for single sign on.</label>
+						<br/>
+						<a id="switchUrl" class="simple" style="display: inline; margin-left: 4em; margin-right: 4em" th:href="${ domainUrl }">
+							Use full domain: [[ ${ domainUrl } ]]</a>
+					</div>
+
+					<div id="warning" class="warning">
+						<span style="padding: 0; margin: 0; font-weight: bold;">count</span>
+						<a id="showAlerts" class="simple" style="display: inline; margin-left: 4em; margin-right: 4em" href="#">
+							View Alerts</a>
+					</div>
+
+					<div style="margin-left: 3em; margin-top: 0;">
+						<table id="scoreTable" class="bordered fixed">
+							<thead>
+
+								<tr>
+									<th colspan="3" ><a class="simple" href="https://github.com/csap-platform/csap-core/wiki#updateRefScoreCard" target="_blank">Project Technology Score Card</a></th>
+								</tr>
+							</thead>
+
+							<tbody id="tableBody">
+
+								<tr>
+									<td >
+										Platform Services: <br/>
+										Application Services:<br/>
+										Monitor Alerts:
+									</td>
+									<td id="scoreList" >
+										... <br/>
+										...<br/>
+										...
+									</td>
+									<td style="vertical-align: middle">
+										<a id="totalScore"  class="simple" href="https://github.com/csap-platform/csap-core/wiki#updateRefScoreCard" target="_blank" 
+										   style="font-size: 3em; line-height: 1em"></a>
+									</td>
+								</tr>
+
+
+							</tbody>
+
+						</table>
+
+
+						<a  class="simple" target="_blank" title="Update the news for lifecycle" 
+							style="position: absolute; left: 0.5em;" 
+							th:href="@{/edit/application(path='clusterDefinitions.' + ${lifecycle} + '.settings.newsItems')}" >
+							<img src="images/16x16/preferences-system.png"/>
+						</a>
+						<ol id="newsList" style="padding-bottom: 1em;">
+						</ol>
+					</div>
+				</div>	
+
+
+				<div  class="newsBlock">
+					<div class="head" title="Collected within last 30 seconds, click a meter to open real time dashboard showing last collected from each host">Real Time Performance:</div>
+					<div id="analyticsMeters"></div>
+
+				</div>
+
+				<div id="newsTrends">
+					<div id="trendPanel" class="newsBlock">
+						<div class="head">Trending:
+							<select id="trendingDays" title="Select Number of days">
+								<option value="7">1 Week</option>
+								<option value="16" selected="selected">2 Weeks</option>
+								<option value="21">3 Weeks</option>
+								<option value="28">4 Weeks</option>
+								<option value="56">8 Weeks</option>
+								<option value="112">16 Weeks</option>
+								<option value="182">6 months</option>
+								<option value="365">1 year</option>
+								<option value="720">2 years</option>
+							</select>
+							<a id="minMaxTrendsButton" href="#minMaxTrending">
+								<img th:src="@{/images/maxWindow.gif}" id="toggleResultsImage">
+							</a>
+						</div>
+
+						<div id="trendContainer" style="clear:both">
+						</div>
+						<div style="clear:both"></div>
+					</div> 
+				</div>
+
+
+				<div style="clear:both"></div>
+
+			</div>
+
+			<br/>
+
+		</div>
+
+	</body>
+</html>

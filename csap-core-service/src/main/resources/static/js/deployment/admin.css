@@ -1,0 +1,902 @@
+#resultsLoading {
+	font-size: 20pt;
+	vertical-align: middle;
+	background-size: 18px;
+	position: absolute ;
+	z-index: 9999;
+	top: 200px;
+	left: 300px;
+	background-color: #DEF2D8 ;
+}
+
+
+
+#dockerContainerNotice {
+	background-color: yellow;
+	display: inline-block;
+	padding: 3px;
+	margin-left: 3em;
+}
+#graphDiv {
+	display: none;
+	width: 580px;
+	position: fixed ;
+	top: 50px;
+	left: 10px;
+	height: 450px;
+	overflow: visible;
+	background-color: lightgray;
+	border: 1px solid #6ba8e5;
+	border-radius: 5px;
+}
+
+div.info {
+	font-weight: normal;
+}
+
+.versionTip {
+	width: 380px;
+	max-width: 380px;
+}
+
+.qtip-title {
+	font-weight: bold;
+	line-height: 1em;
+}
+
+
+.gpanel {
+	font-size: 9pt;
+}
+#panelControls {
+	display: block;
+	height: 1.5em ;
+	background: #1B48CF;
+	background-image:-webkit-linear-gradient(top, #4271FF, #1B48CF);
+	background-image:-moz-linear-gradient(top, #4271FF, #1B48CF);
+	background-image:-ms-linear-gradient(top, #4271FF, #1B48CF);
+	background-image:-o-linear-gradient(top, #4271FF, #1B48CF);
+	background-image:linear-gradient(to bottom, #4271FF, #1B48CF);
+}
+#panelControls a.simple {
+	float: right;
+}
+
+#panelInfo {
+	min-height: 1em;
+	margin: 4px;
+	font-weight: bold;
+}
+#panelInfo div {
+	background-color: yellow;
+}
+#panelControls img {
+	width: 16px;
+	margin: 2px;
+	margin-left: 5px;
+}
+
+#hostDisplay {
+	display: none;
+}
+#graphDiv .loadingLargePanel {
+	left: 0;
+}
+#graphDiv .graphDisplay {
+	display: inline-block;
+	margin-top: 5px;
+}
+
+#graphDiv .graphDisplay .timeZone {
+	margin-left: 0em;
+	margin-right: 5px;
+}
+
+.plotMinMaxButton {
+	display: none;
+}
+#mainDisplayNav {
+
+}
+
+#opsTitle {
+	position: absolute;
+}
+
+#deployContainer {
+	margin-top: 1.4em;
+	width: 40em;
+	display: inline-block ;
+	position: relative;
+}
+
+button.ok {
+	background-color: #58cb73 !important;
+	color: #fff;
+	-webkit-border-radius: 14;
+	-moz-border-radius: 14;
+	border-radius: 14px;
+	-webkit-box-shadow: 0px 1px 0px #666666;
+	-moz-box-shadow: 0px 1px 0px #666666;
+	box-shadow: 0px 1px 0px #666666;
+	font-family: Arial;
+	color: #ffffff;
+	font-size: 17px;
+	padding-right: 5px;
+	padding-left: 5px;
+	text-decoration: none;
+}
+button.ok:hover {
+	background: #3cb0fd;
+	background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+	background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+	background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+	background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+	background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+	text-decoration: none;
+}
+#eolWarningButton span {
+	padding-left: 1em;
+}
+#eolWarningButton span.attention {
+	display: inline-block;
+	font-style: normal;
+	color: black;
+}
+#eolWarningButton {
+	display: none;
+	position: absolute;
+	right: 1em;
+	top: -0.8em;
+}
+
+
+#performanceContainer {
+	margin-top: 1.4em;
+	display: inline-block ;
+	vertical-align: top;
+	position: relative ;
+	max-width: 34em;
+}
+
+#serviceCpu span {
+	padding-left: 0;
+}
+
+#operations {
+	margin-top: 0;
+}
+
+#analyticsButtons a.pushButton {
+	min-width: 12em;
+	font-size: 9pt;
+}
+
+#meters .reportNotes {
+	font-size: 0.8em;
+	display: inline-block;
+	float: right;
+	padding-top: 1em;
+}
+#meters .jqplot-xaxis-tick {
+	top: -10px;
+}
+
+#meters .reportRate {
+	position: absolute ;
+	top: 10px;
+}
+
+
+#meters label:hover {
+	cursor: pointer ;
+}
+
+div.infoNews {
+	position: absolute;
+	top: -1.5em;
+	right: 1em;
+	font-size: 10pt;
+}
+
+
+
+#osLearnMore {
+	font-size: 1.2em;
+    margin: 3em;   
+	padding: 1em;
+	font-weight: normal;
+}
+
+
+.osToolTipLimit, .jmxToolTipLimit {
+	font-size: 0.7em;
+	font-style: italic;
+	display: inline-block;
+	padding-left: 1em;
+}
+
+.tipType {
+	color: red;
+	display: inline-block;
+	min-width: 4.5em;
+}
+
+.osToolTipLimit {
+	min-width: 5em;
+}
+
+.ltoe {
+	display: none;
+	min-width: 1em;
+}
+
+.card  {
+	width: 10em;
+	height: 2em;
+	margin: 2 ;
+}
+.card  div {
+	padding: 1em;
+}
+#serviceCpu img {
+	position: relative;
+	vertical-align: middle;
+	top: -0.2em;
+	margin-left: 2em
+
+}
+
+div.tipValue {
+	display: inline-block;
+	border: 1px solid black;
+	margin: 0.15em;
+	padding: 0.15em;
+	border-radius: 5px;
+	background-color: #F0ECB2;
+	font-size: 1.1em;
+}
+
+div.trendOpen {
+	font-size: 9pt;
+	margin-top: 0.1em;
+	font-style: italic;
+}
+
+.osToolTipLimit div, .jmxToolTipLimit div {
+	font-size: 0.6em;
+	margin-top: 0.2em;
+	vertical-align: middle;
+}
+
+.jmxToolTipLimit div {
+	position: absolute;
+	left: 10px;
+}
+
+.jqplot-highlighter-tooltip, .jqplot-canvasOverlay-tooltip {
+    border: 1px solid black;
+	border-radius: 5px;
+    white-space: nowrap;
+    background: rgba(208,208,208,0.9);
+
+	font-size: 2em;
+	padding: 7px;
+	padding-bottom: 15px;
+	z-index: 9999;
+
+	min-width: 6em;
+}
+
+
+#subType {
+	vertical-align: middle; 
+	padding: 0; 
+	padding-left: 0
+}
+
+#serviceVersion {
+	background-color: lightgoldenrodyellow ;
+}
+
+
+.heading {
+	margin-top: 1em;
+}
+
+.heading span, .explain {
+	padding-left: 3em;
+	color: graytext;
+	font-style: italic ;
+}
+
+button#motdButton {
+
+	font-style:italic;
+	font-size: 0.6em;  
+	display: inline-block; 
+	float: right ;
+	padding: 5px;
+	margin-right: 2em;
+	text-transform: none;
+}
+
+.alertify.ajs-resizable:not(.ajs-maximized) .ajs-dialog {
+	min-width: 800px;
+}
+.alertify-notifier .ajs-message {
+	width: 800px;
+}
+label {
+	font-weight: bold;
+}
+
+.stopWarn {
+	color: red;
+}
+
+#toggleMeters {
+	padding-right: 1em;
+	float: right;
+	padding-left: 1em;
+	margin-top: 2px;
+}
+
+#toggleMeters img {
+	vertical-align: middle ;
+}
+
+
+#meters input {
+	margin-left: 0;
+}
+
+
+#meters .pushButton {
+	display: inline;
+	font-size: 0.9em;
+	padding: 0.2em;
+	margin-left: 3em;
+	margin-right: 3em;
+}
+
+#meters input {
+	vertical-align: middle;
+	margin-left: 2em;
+	margin-right: 0.5em;
+}
+
+.meterGraph {
+	display: inline-block;
+	border: 3px solid #f5f5f5;
+	border-radius: 5px;
+	margin-top: 10px;
+	font-weight: bold;
+}
+
+.meterGraph:hover {
+	border: 3px solid #6ba8e5;
+	background-color: #F7D0D5;
+	border-radius: 5px;
+}
+
+#osAnalytics {
+    font-size: 10pt;
+    position: absolute;
+    right: 3em;
+	top: -1.2em;
+}
+#osAnalytics img {
+	vertical-align: middle;
+}
+
+
+#refreshStats {
+    position: absolute;
+    left: 2em;
+	top: -1.2em;
+	min-width: 4em;
+	height: 16px;
+	line-height: 16px;
+	padding: 0;
+	margin: 0;
+}
+
+#refreshStats img {
+	height: 10px;
+	vertical-align: middle;
+	position: relative;
+	top: -2px;
+}
+
+
+
+#opsButtons .pushButton{
+    height: 2.5em;
+    width: 9em;
+	font-weight: bold
+}
+
+.jqplot-meterGauge-label {
+	font-size: 0.8em;
+}
+
+.checkLabel {
+	display: inline-block;
+	margin-left: 1em;
+	padding-top: 5px;
+	vertical-align: top;
+}
+
+.jqplot-title {
+	z-index: 1000
+}
+
+.serverIcon {
+	display: inline-block;
+	vertical-align: middle;
+	padding: 2px;
+}
+
+.serverIcon img {
+	padding: 2px;
+	width: 30px;
+}
+
+.serverIcon a {
+	padding: 0;
+	margin: 0;
+	min-width: 0;
+}
+
+#osChart {
+	display: inline-block;
+	vertical-align: top;
+    font-size: 1em;
+}
+
+
+#filterThreshold-button, #rateSelect-button, #numAppSamples-button {    
+    vertical-align: middle;
+	margin-right: 2em;
+	margin-left: 5px;
+	font-size: 8pt;
+}
+#rateSelect-button {    
+	margin-top: -2px;
+}
+
+
+#compareLabel {
+	margin-left: 0em;
+	margin-right: 0em;
+}
+
+
+
+.datepicker {
+	font-size: 8pt;
+	padding: 0;
+	padding-left: 2px;
+}
+
+.appMetricsLabel {
+	white-space: nowrap;
+	min-width: 8em;
+	padding: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+.appMetricsLabel input, .jmxClassifier input {
+	margin: 3px;
+}
+
+#appStats {
+	margin-top: 1em;
+}
+#appStats .appTitle {
+	font-size: 9pt; 
+	margin-left: 1em;
+	position: relative;
+}
+#appStats .appTitle input {
+	margin-right: 3px;
+}
+
+#appStats table.simple, #serviceStats table.simple  {
+	margin-top: 2px;
+	margin-bottom: 5px;
+}
+
+#serviceStats td.showGraphCell:hover, #appStats td.showGraphCell:hover {
+	cursor: pointer;
+	text-decoration: underline ;
+	background: rgb(144, 188, 234); 
+	background: rgba(144, 188, 234, 0.8);
+}
+
+#serviceStats a.simple:hover, #appStats a.simple:hover  {
+	cursor: pointer ;
+}
+
+table.simple span.resourceWarning {
+	background-color: yellow;
+}
+
+#serviceStats {
+	vertical-align: middle;
+	padding: 2px;
+	margin-top: 0px;
+}
+
+#serviceStats table.simple td, #serviceStats table.simple th,
+#appStats table.simple td, #appStats table.simple th {
+	text-align: right;
+	padding: 8px;
+	padding-right: 2em;
+	position: relative;
+}
+
+#serviceStats table.simple td:nth-child(1), #serviceStats table.simple th:nth-child(1),
+#appStats table.simple td:nth-child(1), #appStats table.simple th:nth-child(1) {
+	padding-right: 4px;
+}
+
+
+#serviceStats table.simple th , #appStats table.simple th {
+	padding-right: 8px;
+	padding-left: 3px;
+	min-width: 6em;
+}
+
+#appStats table.simple th, #serviceStats table.simple th {
+	text-align: center;
+	padding-bottom: 4px;
+	padding-top: 4px;
+}
+
+#serviceStats .limitsColumn, #appStats .limitsColumn {
+	display: none;
+}
+
+#serviceStats .units, #appStats .units {
+	position: absolute;
+	display: inline;
+	top: 8px;
+	padding-left: 3px;
+	font-weight: normal;
+
+}
+
+#serviceStats table.simple {
+	font-size: 10pt;
+}
+
+#serviceStats table.simple td:first-child, #appStats table.simple td:first-child {
+	text-align: left;
+}
+
+#serviceStats table.simple td:first-child .statusIcon, #appStats table.simple td:first-child .statusIcon {
+	position: relative;
+	left: -3px;
+}
+
+#appStats span.customRate  {
+	float: right;
+	font-size: 9pt;
+	font-style: italic;
+}
+
+
+.day1 , .day7  {
+	font-size: 8pt;
+	font-weight: normal;
+}
+#serviceStats >div {
+	display: inline-block ;
+	background-color: white;
+	min-width: 100px;
+	border: 1px solid #6ba8e5;
+	border-top: none;
+	border-radius: 5px;
+	margin: 0.5em;
+	position: relative ;
+}
+
+
+#infoLine {
+	width: 600px;
+	font-style:italic;
+	font-size: 0.7em; 
+	font-weight:normal;
+	margin:1em;
+	margin-top: 0em;
+}
+
+#analyticLinks {
+    position: absolute;
+    right: 2em;
+    top: 2px;
+}
+#analyticLinks a.simple {
+	margin-left: 1em;
+}
+
+#analyticLinks img {
+	vertical-align: middle;
+}
+
+#chartsRefresh label {
+	vertical-align: middle;
+	padding-top: 0;
+}
+
+#chartsRefresh input {
+	margin-left: 0px;
+	margin-right: 0.5em;
+	vertical-align: middle;
+}
+
+#compareStartInput {
+	width: 7em;
+	margin-top: 5px;
+}
+
+#startOptions label {
+	display: inline-block;
+    text-align: right;
+    width: 12em;
+}
+
+
+.promptButton img {
+	width: 12px
+}
+
+.optionLabel {
+	margin-left: 2em;
+	margin-right: 4em;
+}
+
+.optionLabel input {
+	margin-right: 0.25em ;
+    position: relative;
+    top: -2px;
+}
+
+#deployOptions input {
+	margin-left: 0.1em;
+}
+
+#sourceOptions label {
+	min-width: 15em;
+	display: inline-block;
+    margin-bottom: 0.5em;
+}
+
+.deployOptions {
+	border: 1px solid black;
+	margin: 0.5em;
+	margin-bottom: 1em;
+	padding: 0.5em;
+	padding-left: 2em ;
+	border-radius: 5px;
+	background-color: white;
+	clear: both;
+}
+
+#deployOptions, #startOptions, #killOptions, #launchOptions {
+	width: auto;
+	padding: 0;
+	display: none;
+}
+
+.serviceLabels input {
+	margin-right: 5px;
+}
+
+.serviceLabels {
+    display: block;
+    margin-bottom: 0.25em;
+}
+#startServerServices label {
+	text-align: left ;
+	display: block ;
+	width: auto;
+}
+
+.multipleServicesButton img {
+	position: relative;
+	top: -2px;
+}
+
+.servicesContainer {
+	display: none;
+	border: 1px solid black;
+	margin-top: 1em;
+    padding: 10px;
+	border-radius: 5px;
+}
+.servicesContainer .simple {
+	font-size: 0.8em;
+	position: relative;
+    top: -5px;
+}
+
+
+.serviceCheckboxes {
+	-webkit-column-count: 3; /* Chrome, Safari, Opera */
+	-moz-column-count: 3; /* Firefox */
+	column-count: 3;
+}
+
+.resourceGraphTitle .launches, .resourceConfig {
+	display: none;
+}
+
+#selectAllInstancesButton {
+	margin-left: 5em;
+	font-size: 0.8em
+}
+
+#instanceLabel {
+	vertical-align: bottom;
+	display:inline;
+}
+
+#instanceTable {
+	font-size: 0.8em;
+	width: 95%;
+}
+
+#instanceTable td, #instanceTable th {
+	text-align: center;
+	padding-left: 5px;
+	padding-right: 5px;
+	width: 4em;
+	word-break: break-all;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+
+#instanceTable td:nth-child(2) {
+	max-width: 8em;
+}
+
+#instanceTable td:nth-child(3) {
+	max-width: 6em;
+}
+
+#instanceTable td:nth-child(1) {
+	text-align: left;
+	min-width: 16em;
+	padding-left: 1em;
+
+	white-space: normal;
+}
+#instanceTable td:nth-child(1) span {
+	float: right;
+	font-size: 9pt;
+	font-style: italic;
+}
+
+.instanceCheck {
+	margin: 0;
+	margin-right: 0.2em;
+}
+
+.myAlerts {
+	text-align: justify;
+}
+
+input {
+	margin-right: 1em;
+	vertical-align: middle;
+}
+
+.deployMenus {
+	width: 10em;
+	float: none;
+	font-size: 0.7em;
+	padding: 0;
+	margin-right: 1em;
+}
+
+th {
+	text-align: left;
+}
+
+.progress {
+	width: 300px;
+	height: 1em;
+	border: 1px solid black;
+	padding: 0px;
+	border-radius: 7px;
+	margin: 1em;
+}
+
+.bar {
+	background-color: rgba(255, 0, 0, 0.45) ;
+	width: 0%;
+	height: 15px;
+	border-radius: 7px;
+}
+
+.percent {
+	position: relative;
+	display: inline-block;
+	padding: 0;
+	text-align: center;
+	width: 100%;
+	top: -2em;
+	font-weight: bold;
+	font-size: 0.6em;
+}
+
+form {
+	background-color: white;
+}
+
+.error {
+	color: #F50505;
+	font-weight: bold;
+}
+
+.warn {
+	color: #9E07F5;
+	font-weight: bold;
+}
+
+.info {
+	color: #081999;
+	font-weight: bold;
+}
+
+.debug {
+	color: #1D9908;
+	font-weight: bold;
+}
+
+.pushButton {
+	min-width: 6em;
+	height: 24px;
+	font-size: 1em;
+}
+
+.toolsButton {
+	font-size: 0.8em;
+	display: inline-block;
+	width: 10em;
+}
+
+.toolsButton img {
+	position: relative;
+	top: 0.3em;
+	padding-right: 0em;
+	margin-left: 1em;
+	margin-right: 3px;
+	height: 15px;
+}
+
+#startBlock input {
+	margin-left: 0;
+	vertical-align: middle;
+}
+
+#resultPre {
+	margin-top: 2em;
+	margin-bottom: 2em;
+	white-space: pre-wrap;
+}
+
+#resultPre .note {
+	white-space: pre-wrap;
+	background-color: white;
+}
+
+#resultPre .simple {
+	display: inline;
+	margin-left: 2em;
+	margin-right: 2em;
+}

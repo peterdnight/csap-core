@@ -1,0 +1,14 @@
+
+Used/1048576-blocks Mounted Capacity Filesystem
+4727M/10229M / 47% /dev/sda1
+0M/7919M /dev 0% devtmpfs
+0M/7942M /dev/shm 0% tmpfs
+815M/7942M /run 11% tmpfs
+0M/7942M /sys/fs/cgroup 0% tmpfs
+3507M/25067M /data 15% /dev/mapper/cstg_volume_group-extraLV
+7160M/25067M /home/ssadmin 31% /dev/mapper/cstg_volume_group-ssadminLV
+0M/1589M /run/user/0 0% tmpfs
+0M/1589M /run/user/1001 0% tmpfs
+168M/9948M /home/mquser 2% /dev/mapper/cstg_volume_group-activeMqLV 
+36717M/100661M /home/oracle 39% /dev/mapper/cstg_volume_group-oracleLV
+

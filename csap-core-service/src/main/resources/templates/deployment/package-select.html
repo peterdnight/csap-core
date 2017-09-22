@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<head>
+
+		<title th:inline="text">Package Select [[ ${ name } ]]</title>
+
+		<script th:replace="~{ csap/fragments/libsAndStyles :: pageContent }"></script>
+
+
+
+		<script th:src="@{/js/csapLibs/commonJQ.js}"></script>
+		<script th:src="@{/js/csapLibs/csapUtils/CsapUser.js}"></script>
+
+
+		<link th:href="@{/js/csapLibs/qtip/jquery.qtip.min.css}"
+			  rel="stylesheet" type="text/css" media="screen" />
+		<script th:src="@{/js/csapLibs/qtip/jquery.qtip.min.js}"></script>
+
+
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+
+
+			var lb = [[ ${ lifeCycleSettings.getLbUrl() } ]];
+			var newRegex = new RegExp("_newIcon_", "g");
+			var newIcon = '<img class="newsIcon" src="images/16x16/new.png">';
+			var noteRegex = new RegExp("_noteIcon_", "g");
+			var noteIcon = '<img class="newsIcon" src="images/16x16/note.png">';
+			$(document).ready(function() {
+
+			$('#activityCount').click(function() {
+			var urlAction = [[ ${ lifeCycleSettings.getHistoryUiUrl() } ]];
+			openWindowSafely(urlAction, "Activity");
+			return false;
+			});
+			$("#newsList li").each(function(index) {
+			var line = $(this).text().replace(newRegex, newIcon);
+			line = line.replace(noteRegex, noteIcon);
+			$(this).html(line);
+			});
+			});
+			/*]]>*/
+		</script>
+
+		<style>
+			table th {
+				text-align: left;
+			}
+
+			.clusterType {
+				font-size: 0.8em;
+				color: red;
+			}
+
+			.package, .package:hover {
+				font-size: 1.25em;
+				height: 2em;
+				padding-top: 0.5em;
+				width: 15em;
+				padding-left: 1em;
+				background-image: url('images/32x32/newFolder.png');
+				background-repeat: no-repeat;
+				background-position: 0.25em 0.25em;
+				line-height: 1.2em;
+			}
+
+			li.about {
+				margin-bottom: .5em;
+			}
+
+			.archName {
+				position: relative;
+				top: 2px;
+				line-height: 1.1em;
+			}
+		</style>
+
+	</head>
+
+
+
+	<body th:inline="text">
+
+		<header id="summary"
+				style="text-align: left; padding-left: 8em; margin-bottom: 0em; clear: both">
+			<div class="noteHighlight">[[ ${ name } ]]</div>
+			Release Package Selection
+
+		</header>
+
+
+		<div class="note"
+			 style="font-size: 0.7em; font-weight: normal; margin-top: 5px; background-color: white">
+			[[ ${ name } ]] contains multiple release packages that have
+			independent development, QA, and release time lines. Select the
+			package below to view operator console.</div>
+
+		<!-- 
+			- Summary
+		-->
+
+		<table class="bordered" style="font-size: 0.8em; margin-top: 1em">
+			<thead>
+
+				<tr>
+					<th>Release Packages</th>
+					<th>About</th>
+				</tr>
+			</thead>
+
+
+			<tr th:each="model : ${ csapApp.getPackageModels() }"
+				th:with="lcHostCount =  ${model.getLifeCycleToHostMap().get( lifecycle ).size()}">
+
+
+				<td th:if="${ lcHostCount } > 0"><a class="pushButton package"
+													th:href="@{ services(releasePackage=${ model.getReleasePackageName()}) }">
+
+						[[ ${ model.getReleasePackageName() } ]] </a></td>
+
+				<td th:if="${ lcHostCount } > 0"
+					style="padding-top: 1em; vertical-align: top; font-size: 0.8em">
+
+					<ol>
+						<li class="about">[[ ${ lifecycle } ]] Hosts: [[ ${
+							lcHostCount } ]] (All: [[ ${ model.getHostToAdminMap().size() } ]]
+							) , Services: [[ ${ model.getServiceToAllInstancesMap().size() }
+							]] , <a class="simple" target="_blank" style="display: inline"
+									th:href="@{/showSummary(releasePackage=${ model.getReleasePackageName()} )}">(details)</a>
+						</li>
+						<li class="about">Architect: <a
+								title="Click to view in directory" target="_blank"
+								style="display: inline" class="simple"
+								th:href="${'http://lookup.yourcompany.com/' + model.getArchitect() }">[[
+								${ model.getArchitect() } ]]</a></li>
+						<li class="about">[[ ${ model.getDescription() } ]]</li>
+					</ol>
+				</td>
+			</tr>
+
+
+		</table>
+
+		<div id="messageText" class="news"
+			 style="width: 90%; padding-bottom: 0; margin: 2em; width: 50em">
+			News for life cycle: [[ ${ lifecycle } ]]
+
+
+
+			<a class="simple hbutton" target="_blank"
+			   title="Click to post suggestions and questions to forum."
+			   href="https://github.com/csap-platform/csap-core/wiki">
+				<img src="images/16x16/help.png">
+			</a>
+
+			<a class="simple hbutton" target="_blank"
+			   title="Update the news for lifecycle" style="margin-right: 2em"
+			   th:href="@{editor(path=${'clusterDefinitions.' + lifecycle + '.settings.newsItems'})}">
+				<img src="images/16x16/preferences-system.png">
+			</a>
+
+
+			<div style="margin-top: 0.5em; margin-bottom: 0.5em">
+				Activity (24 hrs):
+				<a class="simple" target="_blank"
+				   style="display: inline; margin-left: 2em;"
+				   title="View project events" href="#" id="activityCount">View Lab
+					Activity</a>
+				<a class="simple" target="_blank"
+				   style="display: inline; margin-left: 2em;"
+				   title="View project analytics, including load levels, user activty"
+				   th:href="${ analyticsUrl }">Host Analytics</a>
+			</div>
+
+
+			<ol id="newsList">
+				<li
+					th:each="i :   ${#numbers.sequence( 0, lifeCycleSettings.getNewsJsonArray().size() -1)}">
+					[[ ${ lifeCycleSettings.getNewsJsonArray().get(i).asText() } ]]</li>
+
+			</ol>
+
+
+		</div>
+	</body>
+</html>

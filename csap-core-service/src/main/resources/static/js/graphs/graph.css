@@ -1,0 +1,541 @@
+
+/*
+.sliderContainer .ui-slider {
+	font-size: 1.4em;
+	vertical-align: middle;
+}
+
+.ui-selectmenu-button span.ui-selectmenu-text {
+	padding: 4px;
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.ui-selectmenu-menu {
+	font-size: 0.85em ;
+}
+
+*/
+
+.legendColorBox {
+	padding-left: 1em;
+	vertical-align: middle;
+}
+
+
+.graphDisplay {
+	display: inline;
+	margin-top: 5px;
+}
+
+.graphDisplay .timeZone {
+	margin-left: 2em;
+}
+
+.displayOptionsContainer {
+	float: right; 
+	margin-right: 1em; 
+	vertical-align: middle ;
+}
+.displayOptionsContainer  span {
+	vertical-align: middle ;
+	font-size: 0.85em ;
+
+}
+
+.displayOptionsContainer input {
+	margin-left: 0;
+}
+
+.tipInfo {
+	font-size: 0.8em;
+	font-style: italic;
+}
+
+#graphToolTip {
+	position: absolute;
+	z-index: 9999;
+	display: none;
+	border: 1px solid black;
+	border-radius: 3px;
+	white-space: nowrap;
+	background: rgba(208, 208, 208, 0.9);
+	font-size: 1.2em;
+	padding: 10px;
+}
+
+div.tipValue {
+	display: inline-block;
+	border: 1px solid black;
+	margin: 0.15em;
+	padding: 0.15em;
+	border-radius: 5px;
+	background-color: #F0ECB2;
+	font-size: 1.1em;
+}
+
+.playTimelineButton, .playTimelineBackButton {
+    line-height: 0.8em;
+    padding: 0;
+    width: 1.8em;
+}
+
+.playTimelineButton img{
+	padding: 0;
+}
+
+.playTimelineBackButton img{
+	padding: 0;
+	-moz-transform: scaleX(-1);
+	-o-transform: scaleX(-1);
+	-webkit-transform: scaleX(-1);
+	transform: scaleX(-1);
+	filter: FlipH;
+	-ms-filter: "FlipH";
+}
+
+.graphTitle {
+	font-weight: bold;
+	padding: 4px;
+	cursor: move ;
+	white-space: nowrap ;
+}
+
+.graphLegend {
+	font-size: 0.9em;
+	padding-top: 5px
+}
+.qtip {
+	max-width: 2000px;
+}
+.qtipExtract {
+	display: inline-block;
+	white-space: nowrap ;
+	width: auto;
+	overflow: hidden;
+}
+
+.qtipExtractContainer .qtip-content {
+    font-size: 1.0em;
+    line-height: 1em;
+	font-weight: bold ;
+}
+
+.qtipExtract >div {
+	display: inline-block;
+	margin-left: 1em;
+	margin-right: 2px;
+}
+
+.qtipExtract >div.qtipExtractText {
+
+	margin-left: 0em;
+	white-space: normal ;
+	word-break: break-all;
+	word-wrap: break-word;
+}
+
+/* 6 45 or 35 35*/
+.stackLabel {
+	color: black;
+	font-size: 10pt;
+	font-weight: bold;
+	margin-left: 1em;
+	position: relative;
+	top: -3px;
+	white-space: nowrap ;
+}
+.graphTitle {
+	border-radius: 4px;
+	padding-top: 5px;
+}
+
+.graphTitle label {
+	margin-bottom: 0;
+}
+
+.graphTitle .highlight {
+	color: red;
+}
+
+
+.graphTitle:hover {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f0f9ff+0,cbebff+47,a1dbff+100;Blue+3D+%2313 */
+	background: #f0f9ff; /* Old browsers */
+	background: -moz-linear-gradient(top,  #f0f9ff 0%, #cbebff 47%, #a1dbff 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f0f9ff), color-stop(47%,#cbebff), color-stop(100%,#a1dbff)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #f0f9ff 0%,#cbebff 47%,#a1dbff 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #f0f9ff 0%,#cbebff 47%,#a1dbff 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #f0f9ff 0%,#cbebff 47%,#a1dbff 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #f0f9ff 0%,#cbebff 47%,#a1dbff 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0f9ff', endColorstr='#a1dbff',GradientType=0 ); /* IE6-9 */
+
+}
+
+.graphTitle img {
+	margin-left: 2em;
+	vertical-align: middle;
+	width: 15px;
+}
+
+.graphInlineTitle {
+	display: none;
+	border: 1px solid #0C8EF7;
+	padding: 0;
+	margin-left: 1em;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	font-weight: bold;
+	border-radius: 10px;
+	color: red;
+}
+
+.graphNotes {
+	margin-left: 3em;
+	font-weight: normal;
+	font-style: italic;	
+	font-size: 0.8em
+}
+.plotMinMaxButton {
+    position: absolute;
+    right: 5px;
+    top: 0.2em;
+}
+.plotAboutButton {
+    position: absolute;
+    right: 25px;
+    top: 0.2em;
+}
+
+.plotContainer {
+	clear: both;
+}
+
+.plotContainer .news{
+	font-size: 2em;
+	cursor: wait ;
+
+}
+
+.statsContainer {
+	display: inline-block ;
+	border: 1px solid #6ba8e5;
+	border-radius: 5px;
+	padding: 4px;
+	margin: 5px;
+}
+.statsContainer >div {
+	padding: 3px;
+	padding-right: 20px;
+}
+.statsContainer >div:hover{
+	background-color: #ddd;
+}
+
+.statsContainer .red {
+	color: red;
+}
+
+.statsLabel, .statsType  {
+	font-weight: bold;
+	min-width: 200px;
+}
+
+.statsType  {
+	font-weight: bold;
+	margin-top: 8px;
+}
+.statsContainer div >span {
+	float: right;
+	font-weight: bold;
+	position: relative ;
+}
+
+.statsContainer span.statsUnits {
+	position: absolute;
+	padding-left: 3px;
+}
+
+/* display: inline-block ;*/
+.plotPanel {
+	float: left;
+	border: 1px solid #6ba8e5;
+	border-radius: 5px;
+	position: relative;
+	margin: 10px;
+	background-color: #EDF1F5;
+	padding: 0px;
+	padding-right: 0px;
+	vertical-align: top ;
+	overflow: hidden;
+}
+
+.hostPerf {
+	padding-top: 1em;
+	padding-left: 0px;
+	font-family: Arial;
+	clear: both;
+}
+.spacerForFloat {
+	clear: both;
+}
+
+input, select {
+	margin-right: 1em;
+}
+
+.graphPlot, .resource, .load {
+	display: inline-block;
+	padding: 0;
+	margin: 0px;
+	background-color: white;
+}
+
+.choices {
+	display: inline-block;
+	margin-right: 2em;
+}
+
+.hostName {
+	color: red;
+	padding-right: 2em;
+}
+
+.resourceGraphTitle {
+	padding: 0;
+	margin: 0;
+	padding-left: 20px;
+	padding-right: 20px;
+	font-weight: bold;
+	font-size: 0.9em;
+}
+
+.customSelection {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.sliderContainer {
+	font-size: 0.8em;
+}
+
+a.graphControls, a.graphControls:visited, a.graphControls:active {
+	color: blue;
+	font-weight: bold;
+	font-family: arial, helvetica, sans-serif;
+	text-decoration: none;
+	overflow: hidden;
+	padding: 0px;
+	padding-left: 1em;
+	margin: 0px;
+}
+
+a.graphControls:hover {
+	color: red;
+	font-weight: bold;
+	font-family: arial, helvetica, sans-serif;
+	text-decoration: underline;
+}
+
+.refresh {
+	padding: 0;
+	margin: 0;
+	padding-left: 20px;
+	font-weight: normal;
+}
+
+.graphOptions {
+	padding-top: 5px;
+	padding-right: 2em;
+	padding-left: 2em;
+	padding-bottom: 0;
+}
+
+
+.graphOptions button {
+	margin: 0em; 
+	margin-right: 2em;
+	padding:0; 
+	line-height: 1em;
+}
+
+a.showSettingsDialogButton, a.showSettingsDialogButton:hover {
+	display: inline;
+}
+a.showSettingsDialogButton img {
+	padding-right: 0;
+	vertical-align: middle ;
+}
+
+.graphOptions input, .graphOptions label, .graphOptions select {
+	margin: 0;
+	vertical-align: middle;
+}
+
+.graphOptions img {
+	height: 16px;
+	vertical-align: top;
+	margin-left: 1em;
+}
+
+img.graphHelp {
+	height: 18px;
+	vertical-align: middle ;
+}
+
+
+.graphOptions a {
+	line-height: 1em;
+	padding: 0;
+	margin: 0;
+}
+
+td.legendLabel {
+	word-break: normal;
+	word-wrap: break-word;
+	vertical-align: middle ;
+	font-weight: bold;
+	font-size: 8pt;
+}
+/*
+
+.legend {
+	font-size: 1.0em;
+}
+
+
+.legendLeft {
+	left: 40px;
+}
+
+
+
+*/
+.resourceConfigDialog {
+	font-size: 8pt;
+	padding-bottom: 2em;
+}
+
+.configLabels {
+	display: block;
+	margin-bottom: 0.25em;
+	margin-left: 10px;
+	word-break:break-all;
+}
+
+
+.configLabels span {
+	margin-left: 1em;
+	font-style: italic;
+}
+
+
+.resourceConfigDialog section {
+	border: 1px;
+	margin: 0;
+	margin-top: 1em;
+	margin-right: 1em;
+	padding: 0;
+	background-color: white;
+	border-radius: 0;
+	padding-bottom: 1em;
+}
+
+.resourceConfigDialog div.title {
+	top: 0;
+	font-style: normal;
+	margin: 10px;
+	float: none;
+}
+
+.resourceSlider {
+	width: 400px;
+	margin-right: 0.5em;
+	margin-left: 0em;
+	display: inline-block;
+	padding: 0;
+}
+
+input.custom {
+	margin-right: 0.25em;
+	margin-left: 0.5em;
+	vertical-align: middle;
+}
+
+input.customCheck {
+	margin-right: 0.25em;
+	margin-left: 0.5em;
+	vertical-align: middle;
+}
+
+#graphSettingsDialog label{
+	font-weight: bold;
+	margin-left: 1.5em;
+	vertical-align: middle;
+}
+
+#graphSettingsDialog label.radio {
+	font-weight: bold;
+	margin-left: 0em;
+	margin-right: 1em;
+}
+
+label.slider, .desc {
+	font-weight: bold;
+	font-size: 0.7em;
+	font-style: italic;
+	margin: 0;
+}
+
+input.sliderTimeCurrent, input.sliderTimeStart {
+	border: 0;
+	color: red;
+	font-style: italic;
+	width: 7em;
+	margin-right: 0em;
+	margin-left: 0em;
+	font-size: 1em;
+}
+
+.graphCheckboxes, .serviceCheckboxes {
+	-webkit-column-count: 4; /* Chrome, Safari, Opera */
+	-moz-column-count: 4; /* Firefox */
+	column-count: 4;
+}
+
+div.floatRight {
+	display: inline-block;
+	float: right;
+	font-size: 0.8em;
+}
+
+.bucketSize, .bucketSkip {
+	width: 3em;
+}
+
+.historicalOptions {
+	display: none;
+}
+
+.settingsText {
+	font-size: 0.7em;
+	padding: 0;
+}
+
+.graphTimeZone, .datepicker, .numDaysSelect, .zoomSelect {
+	padding: 0;
+	font-size: 0.9em;
+}
+
+#showResourceConfig {
+	padding: 0;
+}
+
+.datepicker, .zoomSelect, .useBuckets {
+	margin-left: 0;
+}
+
+.autoRefresh input {
+	display: inline;
+	vertical-align: middle;
+}

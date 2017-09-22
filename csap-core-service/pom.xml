@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>csap-core-service</artifactId>
+	<version>6.0.0.0-SNAPSHOT</version> <!-- 4.1.3.1-SNAPSHOT -->
+	<packaging>jar</packaging>
+
+	<name>csap-core-service</name>
+	<description>CSAP core service provides agent collection and management portals</description>
+
+	<parent>
+		<groupId>org.csap</groupId>
+		<artifactId>csap-starter-parent</artifactId>
+		<version>1.5.7.1</version>
+		<relativePath />
+		<!-- ../csap-starter/csap-starter-parent</relativePath> for use on desktop -->
+	</parent>
+
+	<properties>
+		<!-- Defaults from csap-starter to java 8 -->
+	</properties>
+
+	<dependencies>
+
+		<!-- Build your own, or use managed. Managed includes log4j2 with yaml, 
+			security integration with  ldap, etc. -->
+		<dependency>
+			<groupId>org.csap</groupId>
+			<artifactId>csap-starter</artifactId>
+
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.tmatesoft.svnkit</groupId>
+			<artifactId>svnkit</artifactId>
+			<version>1.8.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>4.2.0.201601211800-r</version>
+
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+
+		</dependency>
+
+
+		<!-- http://joel-costigliola.github.io/assertj/ -->
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- <dependency> <groupId>org.glassfish.jersey.core</groupId> <artifactId>jersey-client</artifactId> 
+			<dependency> <groupId>com.spotify</groupId> <artifactId>docker-client</artifactId> 
+			<version>8.3.1</version> </dependency> -->
+		<dependency>
+			<groupId>com.github.docker-java</groupId>
+			<artifactId>docker-java</artifactId>
+			<version>3.0.12</version>
+			<exclusions>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jcl-over-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpcore</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpclient</artifactId>
+				</exclusion>
+
+				<exclusion>
+					<groupId>io.netty</groupId>
+					<artifactId>netty-codec-http</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>io.netty</groupId>
+					<artifactId>netty-handler-proxy</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>io.netty</groupId>
+					<artifactId>
+						netty-transport-native-epoll
+					</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>io.netty</groupId>
+					<artifactId>netty-handler</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>io.netty</groupId>
+					<artifactId>
+						netty-transport-native-kqueue
+					</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+	</dependencies>
+
+
+	<url>https://github.com/csap-platform/csap-core</url>
+</project>

@@ -1,0 +1,74 @@
+
+
+Executing OS command on host csap-dev04:/home/ssadmin/staging/bin/scriptRunAsRoot.sh_P_
+
+====================================================================
+== Running /home/ssadmin/staging/scripts/someDeveloper_script.sh_1489519305730 as root
+dos2unix: converting file /home/ssadmin/staging/scripts/someDeveloper_script.sh_1489519305730 to Unix format ...
+total 380
+drwxr-xr-x. 15 ssadmin ssadmin  4096 Mar 14 10:52 .
+drwxr-xr-x. 14 ssadmin ssadmin  4096 Mar  6 12:16 ..
+lrwxrwxrwx. 1 ssadmin ssadmin   29 Mar 23 15:27 docker-storage-setup -> /usr/lib/docker-storage-setup
+lrwxrwxrwx. 1 ssadmin ssadmin   15 Mar 23 15:27 lib-docker -> /var/lib/docker
+lrwxrwxrwx. 1 ssadmin ssadmin   21 Mar 23 15:27 sysconfig-docker -> /etc/sysconfig/docker
+drwxr-xr-x.  8 ssadmin ssadmin  4096 Oct 13 15:07 appsTomcat
+drwxr-xr-x.  6 ssadmin ssadmin  4096 Mar 14 10:51 CsAgent_8011
+-rw-r--r--.  1 ssadmin ssadmin  2813 Mar 14 10:09 CsAgent_8011_kill.log
+-rw-r--r--.  1 ssadmin ssadmin  4836 Nov  8 13:06 CsAgent_8011_start.log
+-rw-r--r--.  1 ssadmin ssadmin     0 Nov  8 13:13 CsAgent_8011.stopped
+-rw-r--r--.  1 ssadmin ssadmin  3235 Mar 14 10:51 CsAgentKillNohup.txt
+-rw-r--r--.  1 ssadmin ssadmin  5850 Mar 14 10:51 CsAgentStartNohup.old.txt
+-rw-r--r--.  1 ssadmin ssadmin  8456 Mar 14 10:51 CsAgentStartNohup.txt
+drwxr-xr-x.  7 ssadmin ssadmin  4096 Dec  1 09:27 Cssp3OnTomcat_8251
+-rw-r--r--.  1 ssadmin ssadmin   124 Mar 14 10:52 Cssp3OnTomcat_8251_deploy.log
+-rw-r--r--.  1 ssadmin ssadmin  3814 Dec  1 09:27 Cssp3OnTomcat_8251_kill.log
+-rw-r--r--.  1 ssadmin ssadmin 11602 Dec  1 09:27 Cssp3OnTomcat_8251_start.log
+-rw-r--r--.  1 ssadmin ssadmin 11830 Mar 14 10:52 Cssp3OnTomcat_start.log
+drwxr-xr-x.  6 ssadmin ssadmin  4096 Mar 14 10:52 demoJava_8341
+-rw-r--r--.  1 ssadmin ssadmin   124 Mar 14 10:52 demoJava_8341_deploy.log
+-rw-r--r--.  1 ssadmin ssadmin  3268 Nov 28 12:07 demoJava_8341_kill.log
+-rw-r--r--.  1 ssadmin ssadmin  8254 Nov 28 13:03 demoJava_8341_start.log
+-rw-r--r--.  1 ssadmin ssadmin  9924 Mar 14 10:52 demoJava_start.log
+-rw-r--r--.  1 ssadmin ssadmin   124 Mar 14 10:52 InitComplete__deploy.log
+drwxr-xr-x.  5 ssadmin ssadmin  4096 Feb 22 13:44 jdk_0
+-rw-r--r--.  1 ssadmin ssadmin  5033 Oct 13 15:07 jdk_0_deploy.log
+-rw-r--r--.  1 ssadmin ssadmin  2444 Feb 22 13:43 jdk_0_kill.log
+-rw-r--r--.  1 ssadmin ssadmin  7276 Feb 22 13:44 jdk_0_start.log
+-rw-r--r--.  1 ssadmin ssadmin  6540 Oct 13 15:07 jdk_start.log
+drwxr-xr-x.  7 ssadmin ssadmin  4096 Oct 13 15:08 jenkins_8271
+-rw-r--r--.  1 ssadmin ssadmin  4511 Oct 13 15:08 jenkins_8271_deploy.log
+-rw-r--r--.  1 ssadmin ssadmin  3558 Nov 28 12:07 jenkins_8271_kill.log
+-rw-r--r--.  1 ssadmin ssadmin     0 Nov 28 12:07 jenkins_8271.stopped
+-rw-r--r--.  1 ssadmin ssadmin 11424 Nov 18 10:36 jenkins_start.log
+drwxr-xr-x.  4 ssadmin ssadmin  4096 Oct 13 15:09 jstatd_7995
+-rw-r--r--.  1 ssadmin ssadmin  4459 Oct 13 15:09 jstatd_7995_deploy.log
+-rw-r--r--.  1 ssadmin ssadmin  3078 Nov 28 12:07 jstatd_7995_kill.log
+-rw-r--r--.  1 ssadmin ssadmin     0 Nov 28 12:07 jstatd_7995.stopped
+-rw-r--r--.  1 ssadmin ssadmin  6747 Nov 18 10:36 jstatd_start.log
+drwxr-xr-x. 10 ssadmin ssadmin  4096 Dec 20 10:05 mongoArbiter_29017
+-rw-r--r--.  1 ssadmin ssadmin   124 Mar 14 10:52 mongoArbiter_29017_deploy.log
+-rw-r--r--.  1 ssadmin ssadmin  3466 Dec 20 10:04 mongoArbiter_29017_kill.log
+-rw-r--r--.  1 ssadmin ssadmin  8636 Dec 20 10:05 mongoArbiter_29017_start.log
+-rw-r--r--.  1 ssadmin ssadmin  7488 Mar 14 10:52 mongoArbiter_start.log
+drwxr-xr-x.  2 ssadmin ssadmin  4096 Mar 14 14:20 _pTemp
+drwxr-xr-x.  4 ssadmin ssadmin  4096 Oct 13 15:07 RedHatLinux_0
+-rw-r--r--.  1 ssadmin ssadmin  4472 Oct 13 15:07 RedHatLinux_0_deploy.log
+-rw-r--r--.  1 ssadmin ssadmin  2095 Nov 28 12:07 RedHatLinux_0_kill.log
+-rw-r--r--.  1 ssadmin ssadmin     0 Nov 28 12:07 RedHatLinux_0.stopped
+-rw-r--r--.  1 ssadmin ssadmin  7418 Oct 13 15:07 RedHatLinux_start.log
+drwxr-xr-x.  7 ssadmin ssadmin  4096 Mar 14 10:52 redis_6379
+-rw-r--r--.  1 ssadmin ssadmin   124 Mar 14 10:52 redis_6379_deploy.log
+-rw-r--r--.  1 ssadmin ssadmin  3558 Nov 28 13:04 redis_6379_kill.log
+-rw-r--r--.  1 ssadmin ssadmin  9614 Nov 28 13:04 redis_6379_start.log
+drwxr-xr-x.  6 ssadmin ssadmin  4096 Mar 14 10:52 RedisServices_8311
+-rw-r--r--.  1 ssadmin ssadmin   124 Mar 14 10:52 RedisServices_8311_deploy.log
+-rw-r--r--.  1 ssadmin ssadmin  2649 Nov 28 13:04 RedisServices_8311_kill.log
+-rw-r--r--.  1 ssadmin ssadmin  8546 Nov 28 13:04 RedisServices_8311_start.log
+-rw-r--r--.  1 ssadmin ssadmin 10209 Mar 14 10:52 RedisServices_start.log
+-rw-r--r--.  1 ssadmin ssadmin  9501 Mar 14 10:52 redis_start.log
+drwxr-xr-x.  5 ssadmin ssadmin  4096 Oct 13 15:07 tomcat_0
+-rw-r--r--.  1 ssadmin ssadmin  6578 Oct 13 15:07 tomcat_0_deploy.log
+-rw-r--r--.  1 ssadmin ssadmin  2130 Nov 28 12:07 tomcat_0_kill.log
+-rw-r--r--.  1 ssadmin ssadmin     0 Nov 28 12:07 tomcat_0.stopped
+-rw-r--r--.  1 ssadmin ssadmin 14778 Oct 13 15:07 tomcat_start.log
+-rw-r--r--.  1 ssadmin ssadmin    86 Nov 28 12:07 vmtoolsd_1212_kill.log

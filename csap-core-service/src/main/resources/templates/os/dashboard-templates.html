@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>explorer fragment</title>
+	</head>
+
+	<body th:fragment="pageContent" th:remove="tag" >
+
+		<div id="initialMessage" class="loadingLargePanel">
+			Waiting for host response. On busy hosts, this may take some time. For historical data - CSAP Analytics may be used.
+		</div>
+
+		<div id="jsTemplates" style="display:none">
+
+			<div id="filterControls">
+				<input id="fileFilter" placeholder="filter *.*" title="Filter files shown" />
+			</div>
+
+			<div id="dockerPortsTemplate">
+				<table class="simple">
+					<thead>
+						<tr>
+							<th>IP</th>
+							<th>Public</th>
+							<th>Private</th>
+							<th>Type</th>
+						</tr>
+					</thead>
+
+					<tbody></tbody>
+				</table>
+			</div>
+
+
+			<div id="resultsDialog">
+				
+				<button id="tailLogs" class="custom">Tail Logs</button>
+				
+				<div id="logControls" style="display: none">
+					<button id="clearLogs" class="custom">Clear</button>
+					<a class="simple" style="vertical-align: middle" target="_blank" href="#loading"><img th:src="@{ /images/16x16/logs.png }" />View All</a>
+					<span id="tailRefresh" style="float: right; font-style: italic"></span>
+				</div>
+				
+				
+				<div class="dockerResults">loading</div>
+			</div>
+
+
+			<div id="cpuQuotaDialog">
+
+				<div class="quote">
+					CPU quota can be used to ensure docker containers do not hog cpu. quota / period = max cores consumed
+				</div>
+
+				
+				<label>
+					Cpu Quota (ms):
+					<input id="promptCpuQuota" value="400" style="width: 3em"  /> <span class="quote"> How much CPU time can be consumed</span>
+				</label>
+				<br/>
+				<label>
+					Cpu Period (ms):
+					<input id="promptCpuPeriod" value="100" style="width: 3em" /><span class="quote">Sampling interval</span>
+				</label>
+				<br/>
+				<label>
+					Maximum Cores that will be used: <div id="promptCpuCoresUsed" class='note' style="font-size: 12pt; padding: 3px">4</div>
+				</label>
+				
+
+
+
+			</div>
+			
+			<div id="removeContainerDialog">
+
+				<div class="quote">
+					Remove the container. There is no undo - all data will be deleted
+				</div>
+
+				<label title="Force removal of container - even if it is still running">
+					<input id="containerRemoveForce" style="" type="checkbox" checked="checked"/>
+					Force
+				</label>
+				<label title="Remove volumes">
+					<input id="containerRemoveVolumes" style="" type="checkbox" checked="checked"/>
+					Remove Volumes
+				</label>
+
+
+			</div>
+			
+			<div id="stopContainerDialog">
+
+				<div class="quote">
+					Stop the container. 
+				</div>
+
+				<label title="container will be killed after time out">
+					Stop Time out (seconds):
+					<input id="containerStopSeconds" style="width: 1em; margin-left: 4px;margin-right: 3em;" value="3"/>
+				</label>
+				or 
+				<label title="Remove volumes">
+					<input id="containerKill" style="" type="checkbox" />
+					kill immediately
+				</label>
+
+
+			</div>
+			
+			<div id="pullImageDialog">
+
+				<div class="quote">
+					Include the repository and tag: eg. repo/image:tag . :latest will be used if no tag is specified
+				</div>
+
+				<label title="Unique name to manage container operations">
+					Image Name:
+					<input id="pullName" style="width: 30em"/>
+				</label>
+
+				<label>
+					<select>
+						<option value="none">Reference Images...</option>
+						<option>[[${ dockerRepository }]]/csap-base</option>
+						<option>[[${ dockerRepository }]]/csap-test-app</option>
+						<option>[[${ dockerRepository }]]/csap-oracle</option>
+						<option>[[${ dockerRepository }]]/csap-oracle-test</option>
+						<option>[[${ dockerRepository }]]/csap-tomcat</option>
+						<option>[[${ dockerRepository }]]/csap-tomcat-oracle</option>
+						<option>[[${ dockerRepository }]]/cssp-legacy</option>
+						<option>[[${ dockerRepository }]]/stress</option>
+						<option>docker.io/hello-world</option>
+						<option>docker.io/nginx</option>
+						<option>docker.io/httpd</option>
+					</select>
+				</label>
+
+			</div>
+
+
+
+
+
+			<div id="createContainerDialog">
+
+				<label title="Unique name to manage container operations">
+					<span>Container Name:</span>
+					<input id="createContainerName" style="width: 20em; margin-left: 0"/>
+					
+					<a class="simple" style="margin-left: 2em; display: inline" target="_blank" href="https://docs.docker.com/engine/reference/run">
+						<img  class="but" src="../images/16x16/help.png"/>Docker Syntax
+					</a>
+
+					<a class="simple" style="margin-left: 2em; display: inline" target="_blank" href="https://github.com/csap-platform/csap-core/wiki#updateRefCsap+Docker">
+						<img  class="but" src="../images/16x16/help.png"/>Csap Docker
+					</a>
+				</label>
+
+				
+				
+				<br/>
+				<label title="working directory when container is started">
+					<span>Working Directory</span>
+					<input id="createWorkingDirectory" style="width: 20em; margin-left: 0"/>
+				</label>
+				
+				
+				<label title="Check to start container after creating">
+					<input id="createStart" type="checkbox" checked="checked" 
+						   style="margin-left: 3em;margin-right: 0px; vertical-align: middle;" /> 
+					Start
+				</label>
+				
+				<label title="Policy: no,always,unless-stopped,on-failure:numberOfAttempts. eg. on-failure:3">
+					<span>Restart On Exit:</span>
+					<input id="restartPolicy" style="width: 8em; margin-left: 0" placeholder="no"/>
+				</label>
+				
+				<label title="Container user. Allowed: uid:gid, containerUser:containerGroup. Also:  $csapUser or $user will use host uid/gid for specified user">
+					<span style="width: auto">User:</span>
+					<input id="runUser" style="width: 8em; margin-left: 0" placeholder="containerUser:containerGroup"/>
+				</label>
+				
+				<br/>
+				
+				<label title="default command to run when container is started">
+					<span>Entry Point:</span>
+					<textarea id="createContainerEntry" class=""  spellcheck="false"></textarea>
+				</label>
+				
+				<label  title="default command to run when container is started">
+					<span>Command:</span>
+					<textarea id="createContainerCommand" class=""  spellcheck="false"></textarea>
+				</label>
+
+				<br/>
+				<div class="warning">error</div>
+
+				<div>
+					Environment Variables:  <button data-type="variable" title="add variable" class="custom"><img src="../images/plus.jpg"/></button>
+					<br/>
+					<textarea id="createContainerEnvVariables"  class="jsonCompile" spellcheck="false"></textarea>
+				</div>
+
+				<div>
+					Port Mappings:  <button data-type="port" title="add port" class="custom"><img src="../images/plus.jpg"/></button>
+					<label title="Docker Network Mode: default is bridge, host will use the parent OS" 
+						   style="float: right" >
+						<span style="display: inline">Network Mode:</span>
+						<input id="networkMode" style="font-size: 8pt; width: 4em; padding-bottom: 0;padding-bottom: 0;margin-left: 0" placeholder="bridge"/>
+					</label>
+					<br/>
+					<textarea id="createContainerPorts"  class="jsonCompile" spellcheck="false"></textarea>
+				</div>
+
+				<div>
+					Volumes: <button data-type="volume" title="add Volume" class="custom"><img src="../images/plus.jpg"/></button>
+					<br/>
+					<textarea id="createContainerVolumes"  class="jsonCompile" spellcheck="false"></textarea>
+				</div>
+
+				<div>
+					Container Constraints:  <button data-type="limit" title="reset default" class="custom"><img src="../images/emblem-symbolic-link.png"/></button>
+					<br/>
+					<textarea id="createContainerLimits"  class="jsonCompile" spellcheck="false"></textarea>
+				</div>
+
+			</div>
+
+			<div id="containerControls">
+				<button id="containerStart" title="Start Container" class="custom" data-command="start"> 
+					<img th:src="@{/images/16x16/start.jpg}" />
+				</button>
+
+				<button id="containerStop" title="Stop Container" class="custom" data-command="stop"> 
+					<img th:src="@{/images/16x16/process-stop.png}" />
+				</button>
+
+
+				<button id="containerFileBrowser" title="Browse/View/Edit files" class="custom" data-command="fileBrowser"> 
+					<img th:src="@{ /images/16x16/logs.png }" />
+				</button>
+
+				<button id="containerLogs" title="Show logs" class="custom" data-command="tail"> 
+					<img th:src="@{/images/format-justify-center.png}" />
+				</button>
+
+				<button id="containerBatch" title="Run shell commands" class="custom" data-command="batch"> 
+					<img th:src="@{ /images/16x16/shell.png }" />
+				</button>
+
+				<button id="containerRemove" title="Delete Container" class="custom" data-command="remove"> 
+					<img th:src="@{/images/user-trash.png}" />
+				</button>
+
+
+				<select >
+					<option>Operations...</option>
+					<option value="sockets">Network Connections</option>
+					<option value="processTree">Process Tree</option>
+					<option value="cpuQuota">Configure Cpu Quota</option>
+					<option value="batch">OS Shell...</option>
+					<option value="info">View Configuration</option>
+					<option value="start">Start Container</option>
+					<option value="stop">Stop Container</option>
+					<option value="tail">Tail Logs</option>
+					<option value="remove">Remove Container</option>
+				</select>
+			</div>
+
+			<div id="imageControls">
+
+				<button id="containerCreate" title="Create Container" class="custom"> 
+					<img th:src="@{/images/16x16/document-new.png}" />
+				</button>
+
+				<button id="imageBatch" title="Run shell commands" class="custom" data-command="batch"> 
+					<img th:src="@{ /images/16x16/shell.png }" />
+				</button>
+
+				<button id="imageRemove" title="Remove Image" class="custom" data-command="remove"> 
+					<img th:src="@{/images/user-trash.png}" />
+				</button>
+
+				<select >
+					<option>Operations...</option>
+					<option value="info">View Configuration</option>
+					<option value="create">Create Container</option>
+					<option value="remove">Remove Image from Host</option>
+					<option value="pull">Pull from repository</option>
+					<option value="batch">OS Shell...</option>
+				</select>
+			</div>
+
+
+			<div id="fileEditorTemplate"> 
+				<div class="fileEditor"> 
+					<textarea spellcheck="false" readonly="true"></textarea>
+				</div>
+			</div>
+
+			<div id="priorityPrompt" style="width: 40em;">
+				<div>
+					For permanent changes, use CS-AP Capability Editor to assign prior to process definition (it will auto apply on restarts).
+					<br/><br/>
+					<select class="priorityDesc">
+						<option value="999">Current...</option>
+						<option value="0">Normal (0)</option>
+						<option value="-5">More Cpu (-5)</option>
+						<option value="-10">Most Cpu (-10)</option>
+						<option value="5">Less Cpu(+5)</option>
+						<option value="10">Least Cpu (+10)</option>
+					</select>
+
+					<a style="padding-left: 3em" class="simple" target="_blank" href="http://www.ibm.com/developerworks/library/l-lpic1-v3-103-6/">About linux priorites</a>
+
+				</div>
+			</div>
+		</div>
+
+
+
+	</body>
+
+
+</html>

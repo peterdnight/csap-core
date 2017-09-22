@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+
+		<title th:replace="~{ performance/perf-head :: pageContent }">loaded from template</title>
+
+	</head>
+
+	<body th:inline="text">
+
+		<div id="timeOutWarning"></div>
+
+		<header>
+			<span >CS-AP Performance: </span> 
+			<select id="projectSelect" title="Projects" ></select> 
+
+			<span style="padding-left: 2em">Life Cycle: </span>
+			<select id="lifeSelect" title="" >
+			</select> 
+
+			<div id="appIdDiv">
+				<label data-qtip="Filter project selection by Application Generics registered in ADAM" >AppId:</label>
+				<select id="appIdFilterSelect" 
+						></select>
+			</div>
+		</header>
+
+		<div class="loadingLargePanel" id="loadMessage">
+			Data is being loaded - time taken is proportional to time period selected.
+		</div>
+
+
+		<div id="reportTabs">
+			<ul>
+				<li data-tab="tableCompute" data-report="compute"        data-qtip="Show compute resources">
+					<a href="#computeDiv">Overview <img src="../images/16x16/os.png"/></a></li>
+
+				<li data-tab="tableVm" data-report="vm"        data-qtip="Show VMs Summary Table - view/compare VM resource consumption">
+					<a href="#vmDiv">Hosts <img src="../images/16x16/x-office-spreadsheet.png"/></a></li>
+
+				<li data-tab="tableService" data-report="service"   data-qtip="Show Services OS Summary Table - view/compare service resource consumption">
+					<a href="#serviceDiv">Services 
+						<img src="../images/16x16/x-office-spreadsheet.png"/></a></li>
+
+				<li  data-tab="tableUser" data-report="userid"    data-qtip="Show User activity counts">
+					<a href="#useridDiv" >Users <img src="../images/16x16/x-office-spreadsheet.png"/></a></li>
+
+				<li  data-tab="graphVm" data-metric="resource"  data-qtip="Host Performance Graphs: including load, cpu, sockets,...">
+					<a href="#resourceGraphDiv">Graphs: Host <img src="../images/16x16/x-office-presentation.png"/></a></li>
+
+				<li  data-tab="graphService" data-metric="service"   data-qtip="Host Service Performance Graphs: including top, openfiles, memory, .. ">
+					<a href="#serviceGraphDiv">Graphs: Service <img src="../images/16x16/x-office-presentation.png"/></a></li>
+
+				<li  data-tab="graphJmx" data-metric="jmx"       data-qtip="Application Graphs (JMX,HTTP): including heap usage, tomcat connections, custom attributes, ...">
+					<a href="#jmxGraphDiv">Graphs: Application<img src="../images/16x16/x-office-presentation.png"/></a></li>
+			</ul>
+
+
+			<div th:replace="~{ performance/perf-graphs :: pageContent }"></div>
+
+
+			<div th:replace="~{ performance/perf-service :: pageContent }"></div>
+
+
+			<div id="computeDiv">
+
+				<div id="vmSummary">
+
+					<label >Show:
+						<select id="coreTrendingSelect" title="Show Trending" style="">
+							<option value="7" >1 Week</option>
+							<option value="14" selected="selected">2 Weeks</option>
+							<option value="21">3 Weeks</option>
+							<option value="28">4 Weeks</option>
+							<option value="56">8 Weeks</option>
+							<option value="112">16 Weeks</option>
+							<option value="224">32 Weeks</option>
+							<option value="365">1 Year</option>
+							<option value="3650">All</option>
+						</select>
+					</label>
+
+					<label><input id="isAllCoreLife" type="checkbox" data-qtip="Click to view all Lifecycles"  /> All Life</label>
+
+					<label ><input id="isCustomPerVm" type="checkbox" data-qtip="Click to show hosts with options to select high/low"/> Show Hosts</label>
+
+					<label class="entry" >Top: 
+
+						<select id="topVmCustom" data-qtip="Enter to filter by highest compute" style="width: 5em" >
+							<option >0</option>
+							<option>1</option>
+							<option>2</option>
+							<option>3</option>
+							<option>4</option>
+							<option selected="selected">5</option>
+							<option>10</option>
+							<option>20</option>
+							<option value="999">All</option>
+						</select>
+
+					</label>
+					<label class="entry" >Bottom: 
+
+						<select id="lowVmCustom" data-qtip="Enter to filter by least compute" style="width: 5em" >
+							<option selected="selected">0</option>
+							<option>1</option>
+							<option>2</option>
+							<option>3</option>
+							<option>4</option>
+							<option >5</option>
+							<option>10</option>
+							<option>20</option>
+							<option value="999">All</option>
+						</select>
+
+					</label>
+
+
+
+
+					<label style="font-size: 0.8em" data-qtip="Switch view from stacked graphs to line graphs on ALL analytics tabs. Use settings on graphs tabs.">
+						<input id="isLineGraph" type="checkbox" checked="checked"/> Line Graphs
+					</label>
+
+
+					<label style="font-size: 0.8em" data-qtip="Force Plot to Show 0">
+						<input id="isZeroGraph" type="checkbox" /> Plot 0
+					</label>
+
+
+					<div id="coreSummaryTemplate" style="display: none">
+						<div id="compute24Hour" style="float: right; font-size: 0.8em">
+							<label>24Hour CPU Cores: <span id="coresActive"></span> </label>
+
+
+							<label>Recommended: <span id="vmRecommend"></span>
+								<a class="simple" href="https://github.com/csap-platform/csap-core/wiki#updateRefVirtualized+Infrastructure" 
+								   title="Learn more about configuration of virtualized infrastructure"
+								   style="" target="_blank">
+									<img class="but" th:src="@{/images/16x16/help.png}"/>
+								</a>
+							</label>
+						</div>
+					</div>
+
+					<div id="coreTrending"></div>
+
+
+				</div>
+
+
+			</div>
+
+
+
+
+
+
+			<div id="useridDiv">
+
+				<div class="metricHistogram"></div>
+
+				<div  style="display:inline-block;" >
+					<table id="useridTable" class="bordered reports fixed">
+						<thead>
+
+							<tr>
+								<th>Users</th>
+								<th class="num" >Events Logged</th>
+							</tr>
+
+						</thead>
+
+						<tbody></tbody>
+
+
+						<tfoot>
+							<tr>
+								<td  style="text-align: right" data-math="col-count" data-suffix=" Users"></td>
+								<td class="num" data-math="col-sum"  ></td>
+							</tr>
+							<tr class="averageRow">
+								<td  style="text-align: right"  > Average</td>
+								<td class="num" data-math="col-mean"  ></td>
+							</tr>
+							<tr class="medianRow">
+								<td  style="text-align: right"  > Median</td>
+								<td class="num" data-math="col-median"  ></td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+				<div style="display:inline-block; vertical-align: top;" >
+					<a href="#email" class="simple" id="generateEmailButton" data-qtip="Click to view userids in email format">
+						<img src="../images/mail-reply-all.png"/>Show Email Addresses</a>
+					<br/>
+
+					<div id="emailDialog">
+						<div class="noteHighlight">Copy and paste the addresses below into your email client</div>
+						<br/>
+						<textarea  id="emailText" ></textarea>
+
+					</div>
+				</div>
+			</div>
+
+
+			<div id="vmDiv">
+
+				<div id="reportOptions">
+
+					<label id="reportLabel"> Host Resources: </label>
+
+					<select id="visualizeSelect">
+						<option value="table">View Summary Table</option>
+					</select>
+
+					<!-- table or  totalUsrCpu -->
+
+					<label style="margin-left: 0">When:</label>
+					<input type="text" id="reportStartInput" class="datepicker" placeholder="Now" title="Select date to run report"/>
+
+					Amount: 
+					<select id="numReportDays" title="Number of Days to view" >
+						<option value="1">24 hours</option>
+						<option value="2">2 Days</option>
+						<option value="7">1 Week</option>
+						<option value="14">2 Weeks</option>
+						<option value="28">4 Weeks</option>
+						<option value="56">8 Weeks</option>
+						<option value="112">16 Weeks</option>
+						<option value="224">32 Weeks</option>
+						<option value="365">1 Year</option>
+						<option value="3650">All</option>
+					</select> 
+
+
+					<label id="compareLabel" style="margin-left: 0">Compare:
+						<input type="text" id="compareStartInput" class="datepicker"  style="margin-right: 0" title="Select date to run report" placeholder="none"/>
+						<a href="#clear" id="clearCompareButton" class="simple" title="Clear Compare">
+							<img style="width: 12px" src="../images/16x16/process-stop.png"/>
+						</a>
+					</label>
+
+					<button id="reportCustomizeButton" title="Modify columns shown, lifecycles, etc."
+							class="pushButton"><img class="imageInButton" src="../images/16x16/preferences-system.png"/>Customize</button>
+					
+					
+					<div id="sampleCount" style="margin-left: 0">
+						Samples: <span></span>
+					</div>
+
+
+					<div id="reportSettingsContainer" style="display: none">
+						<div id="reportSettingsDialog" class="">
+							<label>Reports:</label>
+
+							Clusters: <select id="clusterSelect" title="Only differences greater then selected will be displayed" >
+								<option value="all">All</option>
+								<option value="cluster1">cluster1</option>
+							</select>
+
+							Histogram: <select id="histogramSort" title="Sort by host/service or by value of selected metric" >
+								<option value="metric">Sortby Value</option>
+								<option value="label">Sort by Label</option>
+							</select>
+
+							<div style="margin-left: 14em">					
+								<label  data-qtip="By default averages are display. If checked totals will be displayed">
+									<input id="isUseTotal" name="isUseAverage" type="checkbox" />Totals
+								</label>
+								<label data-qtip="Remove Project Filter - all results are aggregated">
+									<input id="isAllProjects" name="isAllProject" type="checkbox"  />
+									All Projects
+								</label>
+								<label data-qtip="Remove Life Cycle Filter - all results are aggregated">
+									<input id="isAllLifes" name="isAllLife" type="checkbox" />
+									All Life Cycles
+								</label>
+								<label data-qtip="Remove ADAM generic Filter - all results are aggregated">
+									<input id="isAllAppIds" name="isAllLife" type="checkbox"  />
+									All App Ids
+								</label>
+							</div>
+
+							<div style="margin-top: 2em">
+								<label style="margin-bottom: 0">Compare configuration:</label>
+
+								Minimum Value Filter: 
+								<input id="compareMinimum" value="3" style="margin-left: 10px; width: 2em;margin-right: 2em; padding: 0;"
+									   title="Use to ignore low / insignifcant absolute values."/>
+
+								Difference Amount: 
+								<select id="compareThreshold" title="Only differences greater then selected will be displayed" >
+									<option value="5">5%</option>
+									<option value="10">10%</option>
+									<option value="15">15%</option>
+									<option value="20" selected="selected">20%</option>
+									<option value="30">30%</option>
+									<option value="40">40%</option>
+									<option value="50">50%</option>
+									<option value="100">100%</option>
+									<option value="200">200%</option>
+								</select>
+
+								<div style="margin-left: 14em">
+									<label data-qtip="Rows not showing matches will not be display" >
+										<input id="isCompareRemoveRows" name="isCompareRemoveRows" type="checkbox" checked="checked"/>
+										Show only Rows With Differences
+									</label>
+									<label  data-qtip="Remove Rows not showing matches" >
+										<input id="isCompareEmptyCells" name="isCompareRemoveRows" type="checkbox" checked="checked"/>
+										Show only Cells With Differences
+									</label>
+								</div>
+							</div>
+
+							<div style="margin-top: 2em">
+
+								<div class="noteHighlight">Column Selection:
+
+
+									<button id="showAllColsButton" class="pushButton">
+										Check/Uncheck All
+									</button>
+								</div> 
+
+								<div id="vmColumnSelector" class="columnSelector"></div>
+								<div id="serviceColumnSelector" class="columnSelector"></div>
+								<div id="jmxColumnSelector" class="columnSelector"></div>
+								<div id="jmxdetailColumnSelector" class="columnSelector"></div>
+								<div id="servicedetailColumnSelector" class="columnSelector"></div>
+								<div id="jmxCustomdetailColumnSelector" class="columnSelector"></div>
+
+							</div>
+						</div>	
+
+					</div>
+
+				</div>
+
+
+
+				<div id="metricsTrendingContainer">
+
+					<label>Analysis: 
+						<select id="metricsTrendingSelect" title="Show Trending" >
+							<option value="0">Host Comparison</option>
+							<option value="7">1 Week Aggregate Trending</option>
+							<option value="14">2 Week Aggregate Trending</option>
+							<option value="21">3 Week Aggregate Trending</option>
+							<option value="28">4 Week Aggregate Trending</option>
+							<option value="56">8 Week Aggregate Trending</option>
+							<option value="112">16 Week Aggregate Trending</option>
+							<option value="224">32 Week Aggregate Trending</option>
+							<option value="365">1 Year Aggregate Trending</option>
+							<option value="3650">All Aggregate Trending</option>
+						</select>
+					</label>
+
+					<label class="trendOption">
+						<input id="isUseVmTotal" type="checkbox" data-qtip="Uncheck to view per vm average" checked="checked"/>All Vms
+					</label>
+
+					<label>
+						<input id="isUseDailyTotal" type="checkbox" data-qtip="Total for day" />
+						Daily Total
+					</label>
+
+					<label class="trendOption">
+						<input id="isTrendAll" type="checkbox" data-qtip="Total for day" />
+						All LifeCycles
+					</label>
+
+
+					<label id="nomalizeContainer" style="font-size: 0.7em;" 
+						   title="Useful for counters, 30s collected values will be multiplied to reflect collection in minutes/hours/or days" >Unit: 
+						<select>
+							<option value="1">Default (30s)</option>
+							<option value="2">Per Minute</option>
+							<option value="120">Per Hour</option>
+							<option value="2880">Per Day</option>
+						</select>
+					</label>
+				</div>
+
+				<div class="metricHistogram"></div>
+
+				<table id="vmTable" class="bordered reports fixed">
+					<thead>
+						<tr>
+							<th class="projectColumn" >Project</th>
+							<th  >Host</th>
+							<th class="num alt" >Samples</th>
+							<th class="num alt" >Memory GB</th>
+							<th class="num alt" >Swap GB</th>
+							<th class="num alt" title="Memory allocated by not used"> Free GB</th>
+							<th class="num alt" title="Disk IO, as reported by linux mpstat">IO</th>
+							<th class="num" title="Combined user and system cpu from mpstat">Cpu</th>
+							<th class="num" title="User Activity from CSAP audit records">Activity</th>
+							<th class="num" >Usr Cpu</th>
+							<th class="num" >Sys Cpu</th>
+							<th class="num alt" >Cores</th>
+							<th class="num" >Load</th>
+							<th class="num" title="Any time Cpu > 60%, or load > core count, alert count is incremented">Alerts</th>
+							<th class="num" title="Csap Thread count - based on csap install user">Threads</th>
+							<th class="num" title="Total Threads on VM">VM Threads</th>
+							<th class="num" >Sockets</th>
+							<th class="num" title="Sockets In Wait State">Wait</th>
+							<th class="num alt" title="Csap open file count - based on csap install user">Files</th>
+							<th class="num alt" title="All Open files on VM">VM Files</th>
+							
+							<th class="num alt" title="Time to run CPU loop test, measured in seconds. Shorter is better.">Cpu(s)</th>
+							<th class="num alt" title="Time to run Disk Write test, measured in seconds. Shorter is better.">Disk(s)</th>
+							
+							
+							<th class="num alt" title="iostat - total device reads (MB)">Reads</th>
+							<th class="num alt" title="iostat - total device writes (MB)">Writes</th>
+						</tr>
+					</thead>
+
+					<tbody></tbody>
+
+					<tfoot>
+
+						<tr>
+							<td  ></td>
+							<td  class="col1" style="text-align: right"  data-math="col-count" data-suffix=" Hosts" data-prefix=" Totals: "></td>
+							<td class="num alt" data-math="col-sum"></td>
+							<td class="num alt" data-math="col-sum"></td>
+							<td class="num alt" data-math="col-sum"></td>
+							<td class="num alt" data-math="col-sum"></td>
+							<td class="num alt" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num alt" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num" data-math="col-sum"></td>
+							<td class="num alt" data-math="col-sum"></td> 
+							<td class="num alt" data-math="col-sum"></td> 
+							<td class="num alt" data-math="col-sum"></td> 
+							<td class="num alt" data-math="col-sum"></td> 
+							<td class="num alt" data-math="col-sum"></td> 
+							<td class="num alt" data-math="col-sum"></td> 
+						</tr>
+
+						<tr class="averageRow">
+							<td  ></td>
+							<td  style="text-align: right"  > Average</td>
+							<td class="num alt" data-math="col-mean"></td>
+							<td class="num alt" data-math="col-mean"></td>
+							<td class="num alt" data-math="col-mean"></td>
+							<td class="num alt" data-math="col-mean"></td>
+							<td class="num alt" data-math="col-mean"></td>
+							<td class="num alt" data-math="col-mean"></td>
+							<td class="num alt" data-math="col-mean"></td>
+							<td class="num alt" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num alt" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num" data-math="col-mean"></td>
+							<td class="num alt" data-math="col-mean"></td> 
+							<td class="num alt" data-math="col-mean"></td> 
+							<td class="num alt" data-math="col-mean"></td> 
+							<td class="num alt" data-math="col-mean"></td> 
+							<td class="num alt" data-math="col-mean"></td> 
+							<td class="num alt" data-math="col-mean"></td> 
+						</tr>
+
+						<tr class="medianRow">
+							<td  ></td>
+							<td style="text-align: right"  > Median</td>
+							<td class="num alt" data-math="col-median"></td>
+							<td class="num alt" data-math="col-median"></td>
+							<td class="num alt" data-math="col-median"></td>
+							<td class="num alt" data-math="col-median"></td>
+							<td class="num alt" data-math="col-median"></td>
+							<td class="num alt" data-math="col-median"></td>
+							<td class="num alt" data-math="col-median"></td>
+							<td class="num alt" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num alt" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num" data-math="col-median"></td>
+							<td class="num alt" data-math="col-median"></td> 
+							<td class="num alt" data-math="col-median"></td> 
+							<td class="num alt" data-math="col-median"></td> 
+							<td class="num alt" data-math="col-median"></td> 
+							<td class="num alt" data-math="col-median"></td> 
+							<td class="num alt" data-math="col-median"></td> 
+						</tr>
+					</tfoot>
+				</table>
+
+
+
+			</div>
+			
+				
+		</div>
+
+	</body>
+
+</html>

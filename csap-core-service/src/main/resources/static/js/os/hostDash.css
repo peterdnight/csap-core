@@ -1,0 +1,167 @@
+#tabs>div  {
+	display: none;
+	min-height: 800px;
+	padding: 5px;
+}
+
+
+div.quote {
+	color: graytext;
+	margin: 5px;
+}
+
+#initialMessage, #timeOutWarning {
+	position: absolute;
+	top: 10em;
+	z-index: 9999;
+}
+
+.controls a.simple {
+	font-weight: normal;
+	border: 1px solid grey;
+	border-radius: 3px;
+	min-width: 3em;
+	text-align: center;
+}
+
+.controls a.simple:hover {
+	background-color: white;
+}
+
+span.port {
+	font-style: italic ;
+	float: right;
+}
+
+header label {
+	
+	margin-bottom: 0;
+}
+.quote .simple, .quote .simple:active, .quote .simple:visited, .quote .simple:hover, .quote label {
+	display: inline;
+	margin-left: 2em;
+	font-size: 8pt;
+	margin-bottom: 0;
+}
+
+#loadRow td {
+	background-color: #aa0000 ;
+}
+.inlineDiv {
+	vertical-align: top;  
+	margin: 0.5em;
+	margin-top: 1em; 
+	display: inline-block
+}
+
+#filterCsap {
+	vertical-align: middle;
+}
+#filterProcess {
+	
+	padding: 1px;
+	font-size: 0.9em;
+	width: 8em;
+}
+.osProcess {
+	word-break: break-all;
+	word-wrap: break-word;
+}
+
+.template, .hostLaunch {
+	display: none;
+}
+.promptButton {
+	line-height: 12px;
+	font-size: 0.8em;
+	font-weight: bold ;
+	margin-left: 2em;
+}
+
+
+a.formSmallButton {
+	margin: 0;
+	margin-left: 3px;
+}
+
+.ui-widget {
+	font-size: 0.8em;
+}
+
+#tabs .ui-tabs-anchor {
+	padding: 2px;
+	padding-left: 1em;
+	padding-right: 1em;
+	font-size: 0.9em;
+}
+.ui-tabs-anchor img {
+	padding: 0;
+	padding-left: 5px;
+	width: 12px;
+}
+
+.but {
+	padding-left: 5px;
+}
+
+.tabHeader {
+	margin: 2em;
+}
+
+.pushButton {
+	height: 18px;
+    line-height: 20px;
+    font-size: 0.9em;
+}
+.ajs-message .pushButton {
+	height: auto;
+}
+
+#serviceTab .pushButton, #vmGraphs .pushButton {
+	height: auto;
+}
+
+.custAlert {
+
+	display: inline-block;
+	float: left;
+    font-weight: bold;
+    padding: 1em;
+    text-align: left;
+}
+
+
+#processTable a.formSmallButton {
+	margin: 0;
+	margin-left: 3px;
+}
+
+#processTable {
+	font-size: 0.9em;
+	min-width: 80em;
+}
+
+#processTable th:first-child {
+    -moz-border-radius: 10px 0 0 0;
+    -webkit-border-radius: 10px 0 0 0;
+    border-radius: 10px 0 0 0;
+}
+
+
+#processTable th:last-child {
+    -moz-border-radius: 0 10px 0 0;
+    -webkit-border-radius: 0 10px 0 0;
+    border-radius: 0 10px 0 0;
+    border-right: 0;
+}
+
+#processTable td:first-child, #processTable th:first-child {
+    border-right: 1px solid #ccc;
+	width: 10em;
+    word-break: break-all;
+}
+
+#swapTableDiv table td, #swapTableDiv table th {
+	text-align: center;
+}
+

@@ -1,0 +1,358 @@
+#dockerTree div.name {
+	display: inline-block;
+	min-width: 5em;
+	vertical-align: middle;
+}
+
+#dockerTree .fancytree-container {
+	min-height: 800px;
+}
+
+#dockerTree .fileHidden {
+	display: none;
+}
+
+#dockerTree table.simple {
+	margin: 5px;
+}
+
+#dockerTree label.container  {
+	display: inline-block;
+	min-width: 10em;
+}
+
+#dockerTree label.image  {
+	display: inline-block;
+	min-width: 28em;
+}
+
+#dockerTree table.simple td, #dockerTree table.simple th {
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+#dockerTree label.processName, #dockerTree label.summary {
+	display: inline-block;
+	min-width: 15em;
+}
+
+#dockerTree span.normal {
+	font-weight: bold;
+	color: black ;
+}
+
+#dockerTree span.warning {
+	font-weight: bold;
+	color: red ;
+}
+
+#dockerTree div.comment {
+	display: inline-block;
+	font-style: italic;
+	margin: 0;
+	margin-left: 2em;
+}
+
+#pullImageDialog label {
+	margin-left: 3em;
+}
+
+#pullButton {
+	margin-left: 1em;
+}
+
+#dockerTree label.name {
+	display: inline-block;
+	min-width: 10em;
+}
+
+#dockerTree div.empty {
+	display: inline-block;
+	font-style: italic;
+	margin-left: 10px;
+}
+
+#treeLastValue {
+	margin-left: 3em;
+	max-width: 5em;
+	overflow: hidden;
+	display: inline-block;
+	word-wrap: normal;
+	max-height: 1em;
+	float: right;
+}
+
+
+#dockerTree div.value {
+	display: inline-block;
+	border: 1px solid black;
+	color: black;
+	margin-left: 10px;
+	padding: 3px;
+	border-radius: 2px;
+	background-color: #E6E6E6;
+	max-width: 40em;
+	white-space: normal;
+	vertical-align: top;
+}
+
+#dockerTree div.user {
+	display: inline-block;
+	color: grey;
+	margin-left: 10px;
+	border-radius: 2px;
+	white-space: normal;
+	vertical-align: middle;
+	font-style: italic;
+}
+
+div.dockerResults {
+	font-family: Lucida Console;
+	-moz-tab-size: 4;
+	tab-size: 4 ;
+	white-space: pre-wrap;
+	display: inline-block;
+	border: 1px solid black;
+	margin: 0.5em;
+	padding: 0.5em;
+	border-radius: 2px;
+	background-color: white;
+	width: 98%;
+	overflow-y: auto;
+}
+
+#filterControls {
+	display: inline-block;
+	margin-left: 3em;
+	font-size: 8pt;
+	border: 1px dashed grey;
+}
+
+#fileFilter {
+	padding: 0px;
+	padding-left: 3px;
+	padding-right: 3px;
+	width: 6em;
+	font-size: 8pt;
+	margin-top: 2px;
+	margin-right: 0.5em;
+}
+
+#removeContainerDialog input, #stopContainerDialog input {
+	vertical-align: middle ;
+	margin-right: 4px;
+	margin-left: 4em;
+}
+.pullContainer {
+	margin-bottom: 1em;
+	margin-top: 1em;
+	display: inline-block;
+}
+
+#containerControls select, #imageControls select {
+	font-size: 8pt;
+	vertical-align: middle;
+	display: inline-block;
+	padding: 0px;
+	margin-top: 2px;
+}
+
+#containerControls button, #imageControls button, button.tree {
+	width: 14px;
+	height: 14px;
+	padding: 0;
+	vertical-align: middle;
+	margin: 0;
+	margin-right: 10px;
+	position: relative;
+	top: -2px;
+}
+
+#containerControls button img, #imageControls button img , button.tree img {
+	position: relative;
+	top: -2px;
+	left: -2px;
+}
+
+#containerControls, #imageControls {
+	display: inline-block;
+	margin-left: 3em;
+	font-size: 8pt;
+	border: 1px dashed grey;
+	padding-left: 1em;
+}
+
+#createContainerDialog label {
+	text-align: right;
+	display: inline-block;
+	font-weight: bold;
+}
+
+#createContainerDialog {
+	height: 45%;
+}
+
+#createContainerDialog div {
+	height: calc(100% - 26px) ;
+	width: 45%;
+	min-width: 20em;
+	margin-right: 1em;
+	margin-top: 1em;
+	display: inline-block;
+	font-weight: bold;
+}
+
+#createContainerDialog div.quote {
+	font-size: 9pt;
+	vertical-align: top;
+	border: 1px solid gray;
+	padding: 1em;
+	width: auto;
+	height: 3em;
+	position: absolute;
+	display: none;
+	background: white;
+	top: 4em;
+	right: 2em;
+	color: black;
+	border-radius: 10px;
+}
+#createContainerDialog ul {
+	list-style: disc ;
+	margin-left: 1em;
+}
+
+#createContainerDialog button img {
+	vertical-align: middle;
+	padding: 2px;
+	width: 12px;
+}
+
+#createContainerDialog textarea {
+	width: 100%;
+	height: 100%;
+	min-height: 15em;
+	box-sizing: border-box;
+}
+
+#createContainerDialog #createContainerEntry, #createContainerDialog #createContainerCommand {
+	vertical-align: top;
+	min-height: 2em;
+	height: 3em;
+	width: 50em;
+	white-space: normal;
+}
+
+#createContainerDialog label span {
+	display:inline-block ;
+	width: 9em;
+	text-align: right;
+	margin-right: 5px;
+}
+
+textarea {
+	-moz-tab-size: 2;
+	tab-size: 2 ;
+}
+
+#dockerTree span.fancytree-node.default>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/16x16/packages.png');
+}
+
+#dockerTree span.fancytree-node.ft_more>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/format-indent-more.png');
+}
+
+#dockerTree span.fancytree-node.ft_db>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/dbSmall.png');
+}
+
+#dockerTree span.fancytree-node.ft_images>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/folder.png');
+}
+
+#dockerTree span.fancytree-node.ft_attribute>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/text-x-script.png');
+}
+
+#dockerTree span.fancytree-node.ft_stopped>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/16x16/process-stop.png');
+}
+
+#dockerTree span.fancytree-node.ft_red>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/16x16/red.png');
+}
+
+#dockerTree span.fancytree-node.ft_green>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/16x16/green.png');
+}
+
+#dockerTree span.fancytree-node.ft_jms>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/16x16/mail-send-receive.png');
+}
+
+#dockerTree span.fancytree-node.ft_script>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/16x16/files.png');
+}
+
+#dockerTree span.fancytree-node.ft_java>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/javaSmall.png');
+}
+
+#dockerTree span.fancytree-node.ft_SpringBoot>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/bootSmall.png');
+}
+
+#dockerTree span.fancytree-node.ft_tomcatEol>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/tomcatEol.png');
+	background-size: 16px;
+}
+
+#dockerTree span.fancytree-node.ft_tomcatLatest>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/tomcatLarge.png');
+	background-size: 16px;
+}
+
+#dockerTree span.fancytree-node.ft_os>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/16x16/os.png');
+}
+
+#dockerTree span.fancytree-node.ft_wrapper>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/16x16/run2.png');
+}
+
+#dockerTree span.fancytree-node.ft_settings>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/16x16/preferences-system.png');
+}
+
+#dockerTree span.fancytree-node.ft_performance>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/16x16/x-office-spreadsheet.png');
+}
+
+#dockerTree span.fancytree-node.ft_monitor>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/16x16/note.png');
+}
+
+#dockerTree span.fancytree-node.ft_jsonedit>span.fancytree-icon {
+	background-position: 0 0;
+	background-image: url('../../images/emblem-symbolic-link.png');
+}

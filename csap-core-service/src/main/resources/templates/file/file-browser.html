@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+	<head >
+
+		<title th:inline="text"> [[ ${ host } ]] Files</title>
+
+		<script th:replace="~{ csap/fragments/libsAndStyles :: pageContent }"></script>
+
+		<!-- https://github.com/mar10/fancytree/releases -->
+		<link th:href="@{/webjars/fancytree/2.19.0/dist/skin-win7/ui.fancytree.min.css}" rel="stylesheet" type="text/css" />
+		<script th:src="@{/webjars/fancytree/2.19.0/dist/src/jquery.fancytree.js}"></script>
+
+
+		<script th:src="@{/js/csapLibs/lineNums/jquery-linedtextarea.js}" ></script>
+		<link th:href="@{/js/csapLibs/lineNums/jquery-linedtextarea.css}"  rel="stylesheet" type="text/css"
+			  media="screen"/>
+
+		<link  th:href="@{/webjars/jQuery-contextMenu/1.6.5/jquery.contextMenu.css}" rel="stylesheet" type="text/css" media="screen" />
+		<script th:src="@{/webjars/jQuery-contextMenu/1.6.5/jquery.contextMenu.js}" ></script>
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/fancytree/jquery.fancytree.contextMenu.js')} }"></script>
+
+
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/dropzone/dropzone.js')} }"></script>
+		<link th:href="@{ ${csapApp.versionedUrl('/js/csapLibs/dropzone/dropzone.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/commonJQ.js')} }"></script>
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/csapUtils/CsapUser.js')} }"></script>
+
+
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/csapLibs/qtip/jquery.qtip.min.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/qtip/jquery.qtip.min.js')} }"></script>
+
+
+
+
+		<script th:inline="javascript">
+
+		Dropzone.autoDiscover = false;
+			var isAdmin = [[ ${ adminRole } ]];
+			var GET_FILES_URL = [[ @{/file/getFilesJson} ]];
+			var MANAGER_URL = [[ @{/file/FileManager} ]];
+			var contextUrl = [[ @{/file/} ]];
+			var browseId = [[ ${ browseId } ]] || "";
+			var browseGroup = [[ ${ browseGroup } ]] || "";
+			var osUrl = [[ @{ ${T(org.csap.agent.CsapCoreService).OS_URL + '/command'} }]];
+			var user = [[ ${ user } ]];
+			var serviceName = [[ ${ serviceName }  ]];
+			var folder = [[ ${ fromFolder }  ]];
+			var diskPathsForTips = [[ ${ diskPathsForTips }  ]];
+			var propDisk = [[ ${ propDisk }  ]];
+			var processingDisk = [[ ${ processingDisk }  ]];
+			var homeDisk = [[ ${ homeDisk }  ]];
+			var installDisk = [[ ${ installDisk }  ]];
+			var stagingDisk = [[ ${ stagingDisk }  ]];
+			var hostName = [[ ${ host }  ]];
+		</script>
+
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/file/fileBrowser.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+
+		<script  th:attr="data-main=@{ ${csapApp.requiresUrl('/js/file/modules/fileBrowser.js')}   }" 
+			th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script>
+
+	</head>
+
+
+
+	<body th:inline="text">
+
+
+		<header style="text-align: left;">
+			File Browser:  
+			<div class="noteHighlight" 
+				 th:if="${serviceName} != null" >[[ ${ serviceName }  ]]</div> on <div class="noteHighlight" >[[ ${ host }  ]]</div>
+
+			<div class="resourceConfig">
+
+				<label>Sort: </label>
+				
+				<label class="radio"  title="Sort using file name"  >
+					<input id="sortName" class="custom" type="radio" name="sortRadio" value="name"  checked="checked"/>
+					Name
+				</label>
+				
+				<label class="radio" title="Sort using file size">
+					<input id="sortSize" class="custom" type="radio" name="sortRadio" value="size" />
+					Size
+				</label>
+				
+				<label  style="margin-left: 2em" class="radio" title="issue linux du command to calculate disk usage for folders. Very large folders may time out - use CSAP shell to run command.">
+					Folder Size:
+					<input id="showDu" class="customCheck" type="checkbox" />
+				</label>
+				
+				<label class="radio" title="Use host ls command to view extended output. If permitted, root privilege to browse file system">
+					OS list:
+					<input id="useRoot" class="customCheck" type="checkbox" />
+				</label>
+				
+				<label class="radio" title="Show file size and date. Open and close folder to update" >
+					Details:
+					<input id="showMeta" class="customCheck" type="checkbox" checked="checked" />
+				</label>
+				
+				<label class="radio" title="folders are lazy loaded and results saved. Uncheck to hit server every time." >
+					Cache:
+					<input id="cacheResults" class="customCheck" type="checkbox" />
+				</label>
+			</div>
+		</header>
+
+
+		<div id="jsTemplates" style="display:none">
+			
+			<div id="filterControls">
+				<input id="fileFilter" placeholder="filter *.*" title="Filter files shown" />
+				<button id="newWindow" title="Open folder in new window" class="custom"> 
+					<img th:src="@{/images/maxWindow.gif}" />
+				</button>
+			</div>
+			
+			<div id="fileControls">
+				
+				<button id="quickView" class="custom">QuickView</button>
+				<span th:if=" ${ browseId == null }">
+					or
+					<select id="fileOptions">
+						<option>Select...</option>
+						<option>edit</option>
+						<option>view</option>
+						<option>tail</option>
+						<option>download</option>
+						<option th:if="${ adminRole }">script</option>
+						<option th:if="${ adminRole }">delete</option>
+					</select>
+				</span>
+			</div>
+			
+			
+			<div id="fileEditorTemplate"> 
+				<div class="fileEditor"> 
+					<textarea spellcheck="false" readonly="true"></textarea>
+				</div>
+			</div>
+			
+		</div>
+
+			<ul id="myMenu" class="contextMenu ui-helper-hidden" style="font-size: 0.8em">
+
+				<li id="popName">Loading</li>
+
+
+			</ul>
+		<div id="fileTree"></div>
+
+		<section id="uploadSection"  class="dropzone">
+			<div class="title">Upload to:<span id="uploadToSpan"></span> 
+				<input id="overWriteFile" class="custom" type="checkbox" title="Enable to overwrite existing file" />Overwrite
+				<a href="#close" class="simple" id="hideUpload" title="Close upload dialog">
+					<img style="width: 24px; margin-left: 3em" th:src="@{/images/16x16/close.jpg}" />
+				</a>
+			</div>
+		</section>
+
+		<div id="preview-template" style="display: none;">
+			<div class="dz-preview dz-file-preview">
+				<div class="dz-details">
+					<div class="dz-filename">
+						<span data-dz-name></span>
+					</div>
+					<div class="dz-size" data-dz-size></div>
+					<img data-dz-thumbnail />
+				</div>
+				<div class="dz-progress">
+					<span class="dz-upload" data-dz-uploadprogress></span>
+				</div>
+				<div class="dz-success-mark">
+					<span><img class="but" th:src="@{/images/16x16/internet-web-browser.png}"></span>
+				</div>
+				<div class="dz-error-mark">
+					<span><img class="but" th:src="@{/images/16x16/internet-web-browser.png}"></span>
+				</div>
+				<div class="dz-error-message">
+					<span data-dz-errormessage></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="news" style="font-weight: bold;">
+			Usage:  <span style="font-weight: normal;">After selecting an item, right mouse click on text to view command menu</span></div>
+	</body>
+</html>

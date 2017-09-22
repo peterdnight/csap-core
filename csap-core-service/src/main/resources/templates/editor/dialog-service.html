@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  xmlns:th="http://www.thymeleaf.org">
+
+
+	<head>
+
+		<title th:inline="text">Service Editor Dialog</title>
+
+		<script th:replace="~{ csap/fragments/libsAndStyles :: pageContent }"></script>
+
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/editor/editor-dialog-service.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+		<link th:href="@{ ${csapApp.versionedUrl('/js/editor/editor.css')} }" rel="stylesheet"  type="text/css" media="screen" />
+
+
+		<link th:href="@{/js/csapLibs/qtip/jquery.qtip.min.css}" rel="stylesheet"
+			  type="text/css" media="screen" />
+		<script th:src="@{/js/csapLibs/qtip/jquery.qtip.min.js}"></script>
+
+		<script th:src="@{/js/csapLibs/lineNums/jquery-linedtextarea.js}"></script>
+		<link th:href="@{/js/csapLibs/lineNums/jquery-linedtextarea.css}" rel="stylesheet"
+			  type="text/css" media="screen" />
+
+
+		<script  th:attr="data-main=@{/js/editor/modules/service-test}" th:src="@{/webjars/requirejs/2.1.20/require.min.js}"></script>
+
+
+		<script th:src="@{ ${csapApp.versionedUrl('/js/csapLibs/commonJQ.js')} }"></script>
+
+		<script th:inline="javascript">
+
+			var baseUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).BASE_URL}}]];
+			var serviceEditUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).EDIT_URL}}]] + '/serviceDialog';
+			var serviceDefUrl = [[@{ ${ T(org.csap.agent.CsapCoreService).DEFINITION_URL}}]] + '/service';
+			var serviceName = [[ ${param.serviceName } ]][0];
+			var hostName = "*";
+			// initialize is done in service-test
+
+		</script>
+
+	</head>
+
+	<body th:inline="text">
+
+
+		<header th:replace="csap/fragments/page :: header"></header>
+		<span style="margin-right: 1em;">Package Editor:</span> <select
+			class="releasePackage"
+			style="width: 14em">
+			<option
+				th:each="name : ${packageNames}"
+				th:selected="${name == selectedRelease }"
+				th:value="${name}"
+				th:text="${name}">package names updated here</option>
+		</select>
+		<button  id="showServiceDialog" class="pushButton">Show Service Dialog</button>
+
+
+		<section id='dialogContents' class='editDialog'>
+
+			<div id="serviceTemplates" style="display: none">
+				<select class="attType">
+					<option value="mbean">Java MBean</option>
+					<option value="simonCounter">Java Counter</option>
+					<option value="simonMedianTime">Java Median Time</option>
+					<option value="simonMinTime">Java Min Time</option>
+					<option value="simonMaxTime">Java Max Time</option>
+					<option value="http">REST</option>
+					<option value="config">HTTP Setup</option>
+				</select>
+				<select class="attUnit">
+					<option value="1000000">Milliseconds</option>
+					<option value="1000000000">Seconds</option>
+					<option value="60000000000">Minutes</option>
+				</select>
+
+
+			</div>
+
+
+			<div class="serviceLoading loadingLargePanel">
+				Loading <br/>Service 
+			</div>
+
+			<div id='dialogResult' class='editDialog' >
+				<div >
+					Updated: <div class="noteAlt"></div>. 
+					<br/><br/> Changes will be loaded once they have been applied or checked in with the
+					<a th:href="@{/edit/application(releasePackage=${servicePackage})}" class="simple" target="_blank">Application Editor</a>.
+				</div>
+
+			</div>
+
+			<div id="dialogOpsContainer">
+				<label > <span> Service:  </span>
+					<select
+						th:if="${ param.newService == null }"
+						id="dialogServiceSelect"
+						class="dialogServiceSelect"
+						style="width: 14em">
+						<option
+							th:each="nameFromList : ${ servicesInPackage }"
+							th:selected="${nameFromList == param.serviceName[0] }"
+							th:value="${nameFromList}"
+							th:text="${nameFromList}">Will be updated with service names</option>
+					</select>
+					<input 
+						th:if="${ param.newService != null }"
+						id="dialogServiceSelect"
+						class="dialogServiceSelect"
+						style="width: 14em" th:value=" ${ param.serviceName[0] } "/>
+				</label> 
+
+				<button class="pushButton notifyButton" title="Send changes to infrastructure admin for review and provisioning.">
+					Request
+				</button>
+
+				<div th:if="${ ( infraRole == null) }" class="news" title="Your userid is not a member of infra admins, so request will be sent for review">
+					Review Required
+				</div>
+				<span th:if="${ ( infraRole != null) }">
+					<span
+						th:if="${ (param.newService == null) }" >
+						<button class="pushButton updateDefButton">
+							Update
+						</button>
+
+						<button id="rename" class="pushButton renameDefButton">
+							Rename
+						</button>
+
+						<button id="copy" class="pushButton copyDefButton">
+							Copy
+						</button>
+
+						<button class="pushButton deleteDefButton">
+							Delete
+						</button>
+					</span>
+					<span
+						th:if="${ param.newService != null }" >
+						<button class="pushButton addDefButton">
+							Add
+						</button>
+					</span>
+
+					<label id="validateOnly" title="Changes will be validated, but not updated">
+						Validate Only:
+						<input id="validateOnlyCheckbox" type="checkbox" />
+					</label>
+				</span>
+			</div>
+
+
+
+			<div id='serviceEditor'>
+				<ul>
+					<li><a href="#os">OS Process</a></li>
+					<li><a class="osPackagesTab" href="#osExtended">OS Packages</a></li>
+					<li><a class="tomcatTab" href="#tomcat">Tomcat</a></li>
+					<li><a  class="jobsTab" href="#jobs">Jobs</a></li>
+					<li data-tab="docker"><a  class="dockerTab" href="#docker">Docker</a></li>
+					<li><a class="deployTab" href="#deploy">Deployment</a></li>
+					<li><a href="#alerts">Alerts</a></li>
+					<li><a href="#performance">Performance</a></li>
+					<li><a class="javaLimitsTab" href="#java">Java Limits</a></li>
+					<li><a href="#life">Lifecycle Customization</a></li>
+					<li><a href="#props">Property Overrides</a></li>
+					<li><a href="#jsonEditor">Json Editor</a></li>
+				</ul>
+
+
+				<div id="jsonEditor" class="group serviceDef">
+					<textarea id="serviceJson" name="serviceJson" spellcheck=false data-path="ROOT">Loading</textarea> 
+					<br/>
+				</div>
+
+				<div id="os"  class="group">
+
+					<div class="info">
+						<label class="lastModified" style="">Last modified by:<div class="noteAlt" >----</div> </label>
+
+						Use the <a th:href="@{/edit/application(releasePackage=${servicePackage})}" class="simple" target="_blank">Application Editor</a>
+						for host assignment and additional shared settings.
+
+						For help with using variables, property files, and more, refer to   
+						<a href="https://github.com/csap-platform/csap-core/wiki#updateRefService+Definition" class="simple" target="_blank">
+							Service Definition
+						</a>.
+
+
+
+
+					</div> 
+
+					<div id="containerConfig" class="greenSection">
+						<label style="margin-top: 0.5em"><span>Description:</span> 
+							<input class="wide serviceDesc" data-path="description" 
+								   th:value="${'Added by ' + userid + '. Service provides ...' }"/>
+						</label>
+
+						<label class="" title="Dashboard launch: relative to java servlet context - by default root context is used">
+							<span>Launch Url - Java:</span> <input class="wide" data-path="launchUrl" placeholder="service context" />
+						</label>
+
+						<label class="" title="Dashboard launch: one or more comma separated urls can be used. $host may be used to indicate current host">
+							<span>Base Url:</span> <input class="wide" data-path="url" placeholder="http://$host:port" />
+						</label>
+
+
+						<label class="" ><span>Help Url:</span> 
+							<input class="wide serviceHelp" data-path="docUrl" 
+								   th:value="${csapApp.lifeCycleSettings().getUserLookupUrl(userid)}"/>
+						</label>
+					</div>
+					<div id="containerConfig" class="blueSection">
+						<div class="heading">OS Process Configuration</div>
+						<div >
+							<label style="width: 25em" class="" >
+								<span>Type:</span>
+								<select class="serviceContainer" title="Select Application Container" data-path="server" style="margin-right: 2px">
+
+
+									<option class="jeeOptions"
+											th:each="name : ${ tomcatServers }"
+											th:value="${name}" th:text="${name}">filled</option>
+
+
+									<option class="osOptions"
+											value="wrapper">CSAP Package</option>
+
+									<option class="osOptions"
+											value="os">OS Process Monitor</option>
+
+									<option class="osOptions"
+											value="docker">Docker</option>
+
+								</select>
+								<a target="_blank" title="Learn more about CSAP Runtime Support" class="simple"  href="https://github.com/csap-platform/csap-core/wiki#updateRefRuntime+Support">
+									<img th:src="@{/images/16x16/help.png}"/>
+								</a>
+							</label>
+
+
+
+							<label title="Linux OS Process Matching, regular expressions are supported. eg. .*java.*activemq.*" ><span>
+									Process Match:</span> 
+								<input class="" placeholder="serviceName" data-path="processFilter" />
+							</label>
+
+
+						</div>
+
+						<div>
+
+
+							<label style="width: 25em" title="Linux OS Process Priority, 0 is default, lower indicate higher priority eg. -10" >
+								<span>Priority:</span> 
+								<input class="smallJson" placeholder="0" data-path="osProcessPriority" />
+							</label>
+
+
+							<label title="Csap MetaData used to customize service behaviour and attributes. Attributes include: isScript, isOsWrapper, skipJmxCollection, killWarnings, isDataStore, isJms, webServerIntegration, etc." 
+								   class=""><span>Config Attributes:</span> 
+								<input class="medium" data-path="metaData" placeholder="Optional configuration to customize CSAP process handling" style="margin-right: 2px"/>
+								<a target="_blank" title="View Help" class="simple" href="https://github.com/csap-platform/csap-core/wiki#updateRefInstance+Configuration">
+									<img th:src="@{/images/16x16/help.png}"/>
+								</a>
+							</label>
+
+						</div>
+
+						<div>
+							<label style="width: 25em" class="" title="When host is restarted, services will be sorted and started" >
+								<span>Start Order:</span> 
+								<input class="smallJson" placeholder="manual" data-path="autoStart" />
+							</label>
+
+							<label class="" title="Folder will be scanned for EOL components. Omit leading / to be relative to the service directory" >
+								<span>Library Folder:</span> 
+								<input class="medium" placeholder="default folder defined for server" data-path="libDirectory" />
+							</label>
+						</div>
+
+						<div class="heading">
+							OS Process Parameters passed when starting service: no newlines permitted. CSAP custom: -DcsapLegacy, -DcsapJava7, -DcsapJava8
+						</div>
+						<textarea id="params" class="paramJdk"  rows="2" spellcheck=false  
+								  data-path="parameters" data-plain="true" 
+								  data-fit="true"  data-removenewlines="true"
+								  ></textarea> 
+					</div>
+					<div id="containerConfig" class="greySection">
+
+						<div class="heading">
+							Optional: Add any environment variables that will be set prior to starting service. Custom values will be substituted for: <br/>
+							"$serviceRef:someServicName" - hosts names for service , "$lifeCycleRef:attributeName", or "doDecode:$lifeCycleRef:attributeName" - lifecycle attributes: 
+						</div>
+						<textarea id="environmentVariable"  rows="2"  spellcheck=false  
+								  data-fit="true" data-path="environmentVariables" 
+								  ></textarea> 
+					</div>
+				</div>
+
+				<div id="osExtended" class="group textGroup">
+
+
+					<div id="containerConfig" class="greenSection">
+						<div class="heading">
+							OS packages enable any software package to be deployed and managed. Learn more: 
+							<a target="_blank" title="View Help" class="simple"  href="https://github.com/csap-platform/csap-core/wiki#updateRefCSAP+Packages">
+								CSAP Package Reference Guide
+							</a>
+
+						</div><br/>
+						<label class="" title="User is used when launching and monitoring services running under OS user accounts other then Agent">
+							<span>OS User:</span> <input placeholder="CSAP User" class="" data-path="user" />
+						</label>
+
+						<label class="" title="Port is used for reservations and passed as a parameter when operations are performed">
+							<span>Http Port:</span> <input placeholder="0" class="smallJson" data-path="port" />
+						</label>
+
+						<label class="" title="JMX Port is used for java collections, set to -1 to disable collections for non java. By default, it is the http port +6.">
+							<span>JMX Port:</span> <input placeholder="-" class="smallJson" data-path="jmxPort" />
+						</label>
+
+
+						<label class="" title="Property folder will be the first link when file manager is launched">
+							<span>Property Folder:</span> <input placeholder="Package Folder" class="wide" data-path="propDirectory" />
+						</label>
+					</div>
+					<div id="containerConfig" class="blueSection">
+
+						<div class="heading">
+							Log configuration. Note that log rotation policy is placed in the specified log folder. Learn more: 
+							<a target="_blank" title="View Help" class="simple"  href="https://github.com/csap-platform/csap-core/wiki#updateRefLogRotate">
+								CSAP Log Rotation Reference Guide
+							</a>
+						</div>
+
+						<label class="" title="Folder containing log files">
+							<span>Log Folder</span> 
+							<input placeholder="$workingFolder/logs" class="wide" data-path="logDirectory" />
+						</label>
+
+						<label class="" title="When logs are launched - specified file is displayed with others selectable">
+							<span>Default Log File:</span> 
+							<input placeholder="First text file found" class="medium" data-path="defaultLogToShow" />
+						</label>
+
+						<label class="" title="Only files matching regular expression will be included in log viewer">
+							<span>Log Filter:</span> 
+							<input placeholder=".*" class="medium" data-path="logRegEx" />
+						</label>
+					</div>
+
+				</div>
+
+
+				<div id="tomcat" class="group textGroup">
+
+					<div class="tomcatWar" >
+						<div class="info" >
+							While apache Tomcat runtimes are highly configurable, 
+							<span>domain expertise and reviews are strongly recommended</span> 
+							prior to modifying defaults. 
+							CSAP can auto-configure the most common settings shown below,    
+							if additional configuration is needed, teams can optionally package their own server.xml, 
+							or use a 
+							<a class="simple" href="https://github.com/csap-platform/csap-core/wiki#updateRefCSAP+Packages" target="_blank">
+								completely custom distribution
+							</a>
+							<br/><br/>
+							References: 
+							CSAP <a class="simple" href="https://github.com/csap-platform/csap-core/wiki#updateRefTomcat+Advanced+Configuration" target="_blank">
+								Advanced Tomcat Guide
+							</a>
+							and Apache
+							<a class="simple"  href="https://tomcat.apache.org/tomcat-8.0-doc/config/ajp.html" target="_blank">
+								Tomcat Connector Configuration
+							</a>
+
+						</div>
+
+						<div id="containerConfig" class="greenSection">
+
+							<div class="heading">Servlet context is the base path of the all the HTTP/AJP urls - RECOMMEND leave the default</div>
+
+							<label class="" title="Servlet Context">
+								<span>context:</span> <input placeholder="war name" class="" data-path="context" />
+							</label>
+							<label class="" title="JMX Port is used for java collections, set to -1 to disable collections for non java. By default, it is the http port +6.">
+								<span>JMX Port:</span> <input placeholder="-" class="smallJson" data-path="jmxPort" />
+							</label>
+
+
+							<div class="heading">
+								CSAP has global compression enabled for all csap web server traffic, including Tomcat AJP. 
+								Tomcat Http direct traffic can also be enabled if bypassing AJP.
+							</div>
+							<label class="" title="Compression will be performed if response is larger then bytes specified">
+								<span>Compression Minimum Bytes:</span> <input placeholder="disabled" class="" data-path="compression" />
+							</label>
+
+							<label class="" title="Http Types to apply compression">
+								<span>Mime Types:</span> <input placeholder="text/html,text/xml,text/javascript,text/css" class="medium" data-path="compressableMimeType" />
+							</label>
+
+
+							<div class="heading">
+								Extended cookie configuration: It is strongly recommended to keep defaults and not override unless atypical use cases require it.
+							</div>
+							<label class="" title="Connections are limited to prevent overloading services">
+								<span>Cookie Name:</span> <input placeholder="JSESSIONID" class="" data-path="cookieName" />
+							</label>
+							<label class="" title="Connections are limited to prevent overloading services">
+								<span>Cookie Path:</span> <input placeholder="servlet context root" class="" data-path="cookiePath" />
+							</label>
+							<label class="" title="Connections are limited to prevent overloading services">
+								<span>Cookie Domain:</span> <input placeholder="server name" class="" data-path="cookieDomain" />
+							</label>
+
+						</div>
+						<div id="containerConfig" class="redSection">
+
+							<div class="heading">Prevent run away resource consumption and cascading outages by carefully configuring and testing tom limits</div>
+							<label class="" title="Connections are limited to prevent overloading services">
+								<span>max Connections(active):</span> <input placeholder="50" class="smallJson" data-path="servletMaxConnections" />
+							</label>
+
+							<label class="" title="The maximum queue length for incoming connection requests.">
+								<span>accept count (Queued):</span> <input placeholder="0" class="smallJson" data-path="servletAccept" />
+							</label>
+
+
+							<label class="" title="The maximum number of request processing threads to be created.">
+								<span>max Threads (servlet):</span> <input placeholder="50" class="smallJson" data-path="servletThreadCount" />
+							</label>
+
+
+							<label class="" title="The number of milliseconds this Connector will wait, after accepting a connection.">
+								<span>connection Timeout (ms ):</span> <input placeholder="30000" class="smallJson" data-path="servletTimeoutMs" />
+							</label>
+						</div>
+
+					</div>
+
+					<div class="bootTomcat info" >
+						While all Spring Boot components (including embedded Tomcat containers)  are highly configurable, 
+						<span>domain expertise and reviews are strongly recommended</span>. The csap enterprise starter by 
+						default leverages application.yml for configuration for both readability and ease of updates when working
+						in Boot enable IDES (provides content assist and inline documentation).
+
+						<br/><br/>
+						References: 
+						<a class="simple" href="https://github.com/csap-platform/csap-core/wiki#updateRefRuntime+Support" target="_blank">
+							CSAP Application Runtimes,
+						</a>
+						<a class="simple"  href="http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html" target="_blank">
+							Spring Boot Common Properties,
+						</a>
+						and
+						<a class="simple"  href="http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html" target="_blank">
+							Spring Boot External Configuration
+						</a>
+
+					</div>
+
+					<div id="containerConfig" class="greySection">
+						<div class="heading">
+							Optional: Default log settings are strongly recommend. Carefully review prior to modifying
+						</div>
+						<label class="" title="Folder containing log files">
+							<span>Log Folder</span> 
+							<input placeholder="$workingFolder/logs" class="wide" data-path="logDirectory" />
+						</label>
+
+						<label class="" title="When logs are launched - specified file is displayed with others selectable">
+							<span>Default Log File:</span> 
+							<input placeholder="consoleLogs.txt" class="medium" data-path="defaultLogToShow" />
+						</label>
+
+						<label class="" title="Only files matching regular expression will be included in log viewer">
+							<span>Log Filter:</span> 
+							<input placeholder=".*" class="smallJson" data-path="logRegEx" />
+						</label>
+
+
+						<div class="heading">
+							Optional:  instance can be configured as a remote collection service.
+						</div>
+						<textarea id="apacheModJk"  rows="1"  spellcheck=false  
+								  data-fit="true" data-path="remoteCollections" 
+								  ></textarea> 
+
+
+						<div class="heading">
+							Optional: Apache ModJk Loadbalancing Configuration. Note that loadbalance array is cluster level rules,
+							while connection array is applied to every ajp instance <br/>
+							For more information, refer to: <a class="simple" target="_blank" href="http://tomcat.apache.org/connectors-doc/reference/workers.html">Modjk Configuration</a> 
+						</div>
+						<textarea id="apacheModJk"  rows="2"  spellcheck=false  
+								  data-fit="true" data-path="apacheModJk" 
+								  ></textarea> 
+
+						<div class="heading">
+							Optional: Apache mod_rewrite enables custom routing<br/>
+							For more information, refer to: <a class="simple" target="_blank" href="http://httpd.apache.org/docs/current/mod/mod_rewrite.html">Mod Rewrite Configuration</a> 
+						</div>
+						<textarea id="apacheModReWrite"  rows="2"  spellcheck=false  data-convert_lines="true"
+								  data-fit="true" data-path="apacheModRewrite" 
+								  ></textarea> 
+					</div>
+
+				</div>
+
+				<div id="jobs"  class="group">
+
+
+					<div class="heading">
+						Jobs configuration: Use $workingFolder, $logFolder,   
+						<a target="_blank" title="Learn more about CSAP Runtime Support" class="simple"  href="https://github.com/csap-platform/csap-core/wiki#updateRefRuntime+Support">
+							(see more)
+						</a>
+						Note: all service environment variables can be referenced, including passwords, csapWorkingDir, etc
+					</div>
+
+					<div id="containerConfig" class="greenSection">
+
+						<div class="heading">
+							Scripts: frequency: onDemand, daily or hourly. hour defaults to "01" (1am). 
+							Specify ".*" to run every hour.
+							Use service env variables if parameters are needed.
+							NOTE: scripts are launched using linux nohup into the background.
+						</div>
+						<textarea id="jobs"  rows="2"  spellcheck=false  
+								  data-fit="true" data-path="scheduledJobs.scripts" 
+								  ></textarea> 
+					</div>
+					<div id="containerConfig" class="blueSection">
+						<div class="heading">
+							Log Rotation: optional use of lifecycles (default is all) to filter settings
+							For more information, refer to 
+							<a class="simple" target="_blank" href="https://github.com/csap-platform/csap-core/wiki#updateRefLog+Configuration">
+								reference manual
+							</a>
+						</div>
+						<textarea id="jobs"  rows="2"  spellcheck=false  
+								  data-fit="true" data-path="scheduledJobs.logRotation" 
+								  ></textarea> 
+					</div>
+					<div id="containerConfig" class="greySection">
+
+						<div class="heading">
+							Disk Cleanup: defaults: "maxDepth": 3, "pruneEmptyFolders": false. To test:  touch -d "60 days ago" demo_old_file. Note: path can contain wildcards eg. $processing/*.log
+						</div>
+						<textarea id="jobs"  rows="2"  spellcheck=false  
+								  data-fit="true" data-path="scheduledJobs.diskCleanUp" 
+								  ></textarea> 
+					</div>
+
+
+				</div>
+
+				<div id="docker"  class="group"> 
+
+					<div class="heading" style="margin-top: 3px">
+
+						<label id="dockerContainerSelect" style="width: 20em" class="" title="Deployment will leverage selected image to create a container using the default working directory" >
+							<span>Enable Docker:</span> 
+
+							<select class="useDockerJavaContainer" data-path="useDockerJavaContainer" style="margin-right: 2px">
+								<option selected="selected">false</option>
+								<option>true</option>
+							</select>
+						</label>
+
+						For more information on settings, refer to: 
+						<a target="_blank" title="View Help" class="simple"  href="https://docs.docker.com/engine/reference/commandline/run/">
+							<img class="but" th:src="@{/images/16x16/help.png}"/>Docker run command
+						</a>
+
+						<select id="dockerTemplateSelect" style="margin-left: 3em">
+							<option value="default">Load docker template...</option>
+							<option value="csapBase">csap-base with embedded java (spring boot)</option>
+							<option value="csapBaseWithHostJava">csap-base with host java</option>
+							<option value="csapHostedOracle">csap-base with host java and host oracle</option>
+							<option value="csapOracleDriver">csap-oracle with embedded java and oracle</option>
+							<option value="csapTestApp">csap-test-app fully contained java</option>
+							<option value="csapTomcat">csap-tomcat with embedded java and tomcat</option>
+							<option value="csapTomcatOracle">csap-tomcat with embedded java, tomcat, oracle</option>
+							<option value="csspLegacy">Cssp Legacy</option>
+						</select>
+
+					</div>
+
+					<div class="greenSection">
+						<div>
+							<label title="Unique name to manage container operations">
+								<span>Container Name:</span>
+								<input style="" data-path="docker.containerName"/>
+							</label>
+
+							<label title="Unique name to manage container operations">
+								<span>Image:</span>
+								<input class="medium" data-path="docker.image"/>
+							</label>
+
+						</div>
+						<div>
+							<label title="current directory when container is started" >
+								<span>Working Directory:</span>
+								<input class="medium" data-path="docker.workingDirectory"/>
+							</label>
+							
+							<label title="Container user. Allowed: uid:gid, containerUser:containerGroup. Also:  $csapUser or $user will use host uid/gid for specified user">
+								<span>User:</span>
+								<input style="" data-path="docker.runUser" placeholder="default"/>
+							</label>
+
+						</div>
+
+						<div>
+							<label title="Entry Point: 1 entry per line"  >
+								<span>Entry Point:</span>
+								<textarea id="entryPoint"  rows="2"  spellcheck=false  
+										  data-convert_lines="true" data-fit="true" data-adjustwidth="200" data-path="docker.entryPoint" 
+										  ></textarea>
+							</label>
+
+						</div>
+
+						<div>
+							<label title="Command: 1 entry per line" >
+								<span>Command:</span>
+								<textarea id="command"  spellcheck=false  
+										  data-convert_lines="true" data-fit="true" data-adjustwidth="200" data-path="docker.command" 
+										  ></textarea>
+							</label>
+						</div>
+					</div>
+					<div class="redSection" style="margin-top: 5px;">
+
+						<div style="display: inline-block; width: 35em;">
+
+							<label title="Policy: no,always,unless-stopped,on-failure:numberOfAttempts. eg. on-failure:3">
+								<span>Restart on exit:</span>
+								<input style="" data-path="docker.restartPolicy" placeholder="no"/>
+							</label>
+
+							<label title="Use cgroups quotas to constrain maximum cpus used">
+								<span>Cpu cores max:</span>
+								<input style="" data-path="docker.limits.cpuCoresMax" placeholder="unlimited"/>
+							</label>
+
+							<label title="restrict which cores will be used by container. Setting 0-7 on a 2 core host will prevent container being started">
+								<span>Cpus Assigned:</span>
+								<input style="" data-path="docker.limits.cpuCoresAssigned" placeholder="unlimited"/>
+							</label>
+
+							<label title="">
+								<span>Memory (Mb):</span>
+								<input style="" data-path="docker.limits.memoryInMb" placeholder="unlimited"/>
+							</label>
+							<label title="Skip ulimit validation">
+								<span>Skip Validation:</span>
+								<input style="" data-path="docker.limits.skipValidation" placeholder="false"/>
+							</label>
+							<label id="logsLabel" 
+								   title='Default: system manages logs: /var/log/messages OR: if csap container: via logrotate. Docker log support includes: {	"type": "json-file",	"max-size": "10m",	"max-file": "2"} '>
+								<span >Logs:</span>
+								<input style="width: 25em" class="wide" data-json="true" data-path="docker.limits.logs" placeholder="system managed"/>
+							</label>
+							<div class="noteAlt">
+								Optional: container limits are used to constrain resources consumed by container.
+							</div>
+						</div>
+
+						<label title="" style="display: inline-block; width: 35em;vertical-align: top" >
+							<span style="min-width: 0">OS ulimits:</span>
+							<textarea id="osUlimits"  rows="2"  spellcheck=false  
+									  data-fit="true"  data-fixedwidth="300" data-path="docker.limits.ulimits" 
+									  ></textarea>
+						</label>
+					</div>
+
+					<div  class="blueSection">
+						<label title="1 per line in form of name=value, no quotes, no empty lines" style="width: 35em; vertical-align: top">
+							<span style="text-align: left">Environment Variables:</span><br/>
+							<textarea id="environmentVariablesDocker"  rows="2"  spellcheck=false  
+									  placeholder="demoName=demoValue"
+									  data-convert_lines="true" data-adjust="20" data-fit="true" data-fixedwidth="400" data-path="docker.environmentVariables" 
+									  ></textarea> <br/>
+							<div class="noteAlt">
+								Optional: container configuration is used to customize behavior
+							</div>
+						</label>
+
+						<label title="" style="width: 35em; vertical-align: top">
+							<span style="text-align: left">Volumes:</span><br/>
+							<textarea id="volumes"  rows="2"  spellcheck=false  
+									  data-fit="true" data-fixedwidth="400" data-path="docker.volumes" 
+									  ></textarea>
+						</label>
+					</div>
+					<div class="greySection">
+						<label title="Container network mode. Default is bridge (private). Use host to use shared."
+							   style="width: 35em;">
+							<span style="text-align: left">Network Mode:</span><br/>
+							<input style="" data-path="docker.networkMode" placeholder="bridge"/><br/>
+
+							<div class="noteAlt">
+								Optional: container network configuration
+							</div>
+						</label>
+						<label title="" style="display: inline-block; width: 35em;vertical-align: top">
+							<span style="text-align: left">Port Mappings:</span><br/>
+							<textarea id="portMappings"  rows="2"  spellcheck=false  
+									  data-fit="true" data-fixedwidth="400" data-path="docker.portMappings" 
+									  ></textarea>
+						</label>
+					</div>
+
+				</div>
+
+				<div id="deploy"  class="group">
+
+
+					<div  class="greenSection">
+						<div class="heading">
+							Versioned artifacts from maven are required to enable reproducible deployments and roll backs. Typically 10MB or larger
+						</div>
+
+						<label class="" title="Deployment artifact to deploy">
+							<span>Artifact:</span> 
+							<input class="wide" data-path="maven.dependency" />
+						</label>
+
+						<label class="">
+							<span>Version Override:</span> <input  data-path="maven.enableReleaseFile" placeholder="true"/>
+							<div class="heading" style="display: inline">*Optional: allow override of version using external release files.</div>
+						</label>
+
+						<label class="" title="Maven repository to retreive artifact">
+							<span>Repository:</span> 
+							<input class="wide" placeholder="Application Default" data-path="maven.repo" />
+						</label>
+					</div>
+
+					<div  class="blueSection">
+						<div class="heading">Source Code Deployments are the quickest option for development integration where frequent builds are done. Typically only 1kb or less based on code changes.</div>
+
+						<label class=""><span>Source Code:</span> <input class="wide" data-path="source.path" /></label>
+						<br/>
+						<label class="" title="git, svn and others on request">
+							<span>Type: </span> <input class="smallJson" data-path="source.scm" />
+						</label>
+
+						<label class="" title="Location in source tree for build">
+							<span>Build Location: </span> 
+							<input  placeholder="." data-path="source.buildLocation" />
+						</label>
+
+						<label class="" title="The maximum time allowed for completing the deployment request.">
+							<span>Time Out (minutes): </span> 
+							<input  class="smallJson" placeholder="5" data-path="deployTimeoutMinutes" />
+						</label>
+
+
+						<label class="">
+							<span>Branch: </span> <input  data-path="source.branch" />
+							<div class="heading" style="display: inline">eg. svn: trunk, git: none|refs/heads/master</div>
+						</label>
+
+					</div>
+					<br/><br/>
+					<div class="heading">
+						Notes: 
+						<ol style="list-style: lower-alpha; padding-left: 3em">
+							<li>Any of the attributes may be selectively over-ridden per Lifecycles tab</li>
+							<li>svn branching is done by replacing trunk in the url with specified branch name</li>
+							<li>git branching typically requires refs/heads/your_branch_name. Specifying none will check out the master</li>
+						</ol>
+					</div>
+				</div>
+
+
+				<div id="alerts" class="group">
+
+					<div  class="greenSection">
+						<div class="heading">Alert Thresholds: Defaults and optional override. Note lifecycle settings are used to set warning and kill thresholds.</div>
+						<label class="alerts">
+							<span>Cpu: </span> 
+							<div class="noteAlt"  th:text="${ limits.get('topCpu') }" ></div>
+							<input  data-path="monitors.max_topCpu" />
+						</label>
+						<label class="alerts">
+							<span>Threads: </span> 
+							<div class="noteAlt"  th:text="${ limits.get('threadCount') }" ></div>
+							<input  data-path="monitors.max_threadCount" />
+						</label>
+
+						<label class="alerts" title="No unit indicates bytes, best practice is to use m (megabytes) or g(gigabytes)">
+							<span>Memory(|m|g): </span> 
+							<div class="noteAlt"  th:text="${ limits.get('rssMemory') }" ></div>
+							<input  data-path="monitors.max_rssMemory" />
+						</label>
+
+
+
+
+						<br/>
+						<label class="alerts">
+							<span>Open Sockets: </span>
+							<div class="noteAlt"  th:text="${ limits.get('socketCount') }" ></div>
+							<input  data-path="monitors.max_socketCount" />
+						</label>
+
+						<label class="alerts">
+							<span>Tomcat Connections: </span> 
+							<div class="noteAlt"  th:text="${ limits.get('tomcatConnections') }" ></div>
+							<input  data-path="monitors.max_tomcatConnections" />
+						</label>
+
+						<label class="alerts">
+							<span>Open Files: </span> 
+							<div class="noteAlt"  th:text="${ limits.get('fileCount') }" ></div>
+							<input  data-path="monitors.max_fileCount" />
+						</label>
+
+						<br/>
+
+						<label
+							class="alerts">
+							<span>Heartbeat Enabled:</span>
+							<div class="noteAlt" th:text="${ limits.get('jvm_jmxHeartbeat')  }" ></div>
+							<input  data-path="monitors.jvm_jmxHeartbeat" />
+						</label>
+
+
+					</div>
+					<div  class="blueSection">
+						<div class="heading">Service folder(s) to be monitored, delimited by space. eg.  $workingFolder /home/ssadmin/someFolder1. device names also supported: sda1 cstg_volume_group-ssadminLV, etc</div>
+
+						<label class="" style="display:block" title="OS Disk usage will be collected and checked against limits.">
+							<span>Service Disk:</span> <input placeholder="$workingFolder" class="wide" data-path="disk" />
+						</label>
+
+						<label class="alerts" title="No unit indicates mb, best practice is to use m (megabytes) or g(gigabytes). eg. 10m or 5g">
+							<span>Disk Alert(m|g): </span> 
+							<div class="noteAlt"  th:text="${ limits.get('diskUtil') }" ></div>
+							<input  data-path="monitors.max_diskUtil" />
+						</label>
+
+						<label class="alerts" title="Unit is KiloBytes per second as report for linux pidstat">
+							<span>Disk Writes(Kb): </span> 
+							<div class="noteAlt"  th:text="${ limits.get('diskWriteKb') }" ></div>
+							<input  data-path="monitors.max_diskWriteKb" />
+						</label>
+
+
+					</div>
+					<div  class="greySection">
+						<div class="heading">Optional: CSAP Health Report Integration</div>
+						<label class=""><span>Status Attribute:</span>
+							<input value=''  placeholder="HealthStatus"
+								   class="" data-path="health.statusAttribute" />
+						</label>
+						<label class=""><span>Mbean:</span> 
+							<input value=''  placeholder="org.csap:application=CsapPerformance,name=PerformanceMonitor"
+								   class="medium" data-path="health.statusMbean" />
+						</label>
+						<label class=""><span>Report Attribute:</span>
+							<input value=''  placeholder="HealthReport"
+								   class="" data-path="health.reportAttribute" />
+						</label>
+						<label class=""><span>Mbean:</span> 
+							<input value=''  placeholder="org.csap:application=CsapPerformance,name=PerformanceMonitor"
+								   class="medium" data-path="health.reportMbean" />
+						</label>
+
+						<br/>
+
+						<div class="heading">Optional: Nagios Integration enables automated integration with external systems.</div>
+						<label class=""><span>Nagios Monitor:</span> 
+							<input value=''  placeholder="*sample: check_http! -v -u /your/service/url --regex \&quot;.*Healthy.*true.*\&quot;"
+								   class="wide" data-path="monitors.nagiosCommand" />
+						</label>
+
+						<br/>
+
+						<div class="heading">Notifications: email will be sent when service alerts are triggered.</div>
+						<label title="comma separated email addresses. specify disabled to terminate notifications" class="">
+							<span>Addresses:</span> 
+							<input placeholder="disabled"
+								   class="wide" data-path="notifications.csapAddresses" />
+						</label>
+
+						<br/>
+
+
+						<label style="" title="Email is sent on first occurence of alert, then minimum time before another email is sent" >
+							<span>frequency:</span> 
+							<input class="smallJson" placeholder="4" data-path="notifications.csapFrequency" />
+						</label>
+
+						<label style="" title="Time unit of email intervals: hours or minutes" >
+							<span>time-units:</span> 
+							<input class="smallJson" placeholder="hours" data-path="notifications.csapTimeUnit" />
+						</label>
+
+						<label style="" title="Maximum number of items to be included in email" >
+							<span>Max Items:</span> 
+							<input class="smallJson" placeholder="100" data-path="notifications.csapMaxBacklog" />
+						</label>
+
+						<br/>
+					</div>
+
+				</div>
+
+				<div id="performance" class="group textGroup">
+
+					<div class="heading" style="margin-top: 0">
+						In-line edits and ordering are supported by clicking on links below, alternately:
+						<button 
+							class="pushButton toggleAppCollect">Json Editor</button>
+
+						<a class="simple" 
+						   title="Application data points to be collected.   Use jvisualvm to confirm mbean or simon endpoints"
+						   style="display: inline" href="https://github.com/csap-platform/csap-core/wiki#updateRefCustom+Metrics" target="_blank">
+							Learn More</a><br/>
+					</div>
+
+
+					<div class="appCollectToggle">
+						<table class="simple appCollect" >
+							<thead>
+
+								<tr>
+									<th>Label<div>*optional include ms </div></th>
+									<th>Collection ID<div>*modifying looses history</div></th>
+									<th>Collection<br/>Source</th>
+									<th>Attribute Identifier<div>*Click items to edit in place.  Avoid typing: use copy/paste</div></th>
+									<th>Max</th>
+								</tr>
+							</thead>
+
+							<tbody></tbody>
+
+						</table>
+					</div>
+
+					<div class="appCollectToggle" style="display: none">
+						<textarea  spellcheck=false data-path="customMetrics" ></textarea> 
+					</div>
+
+					<div class="missingMetrics" style="display: none">
+						<span style="background-color: yellow">No Application Metrics are configured - production SLA is impacted</span>
+
+						<div class="quote">
+							It is strongly recommended - and standard engineering practice - that every service exports at least a single data point indicative of processing activity. 
+							This is necessary in order to correlate work produced with resources consumed.
+							This can include anything from API invocation (counts and duration), active users, devices processed, etc.
+						</div>
+						CSAP can collect Application metrics from  any http or Java (JMX) endpoint(s).<br/>
+						To learn more, visit:  
+						<a class="simple" style="display: inline" href="https://github.com/csap-platform/csap-core/wiki#updateRefCustom+Metrics" target="_blank">
+							How To Configure</a>
+					</div>
+
+				</div>
+
+				<div id="java" class="group textGroup">
+					<div class="heading">
+						Life cycle specific settings: used to selectively over-ride attributes
+					</div>
+					<textarea id="javaJmxLimits"  spellcheck=false data-path="standardJmx" ></textarea> 
+
+				</div>
+
+
+
+
+				<div id="props" class="group textGroup">
+					<div class="heading">
+						Property over ride files are stored in the propertyOverride folder of the 
+						<a class="simple" target="_blank" href="https://github.com/csap-platform/csap-core/wiki#updateRefApplication+Definition">Application Definition</a>, 
+						and copied to service working directory prior to start being initiated.
+					</div>
+
+					<label style="" title="File will be copied to run time folder" >
+						<span>Modify:</span> 
+						<select id="propertyFileSelect" style="font-family: monospace">
+							<option>No Property Files</option>
+						</select>
+					</label>
+					<button id="addFileButton" class="pushButton"><img th:src="@{/images/16x16/document-new.png}">Add</button>
+					<button id="deleteFileButton" class="pushButton"><img th:src="@{/images/16x16/process-stop.png}">Delete</button>
+
+					<div id="fileContainer" style="display: none">
+
+						<label style="" title="File will be copied to run time folder" >
+							<span>File Name:</span> 
+							<input id="propFileName" class="" placeholder="name of file" data-path="files[0].name" />
+						</label>
+						<label style="" title="Target lifecycle of service" >
+							<span>Lifecycle: </span> 
+							<input id="propLifecycle" class="" placeholder="common" data-path="files[0].lifecycle" />
+						</label>
+						<label style="" title="Store as external file in properties override" >
+							<span>External:</span> 
+							<input id="propExternal" class="" placeholder="true" data-path="files[0].external" />
+						</label>
+						<textarea id="propFileText" data-convert_lines="true" spellcheck=false data-path="files[0].contents" >Not supported yet</textarea>
+
+					</div>
+
+				</div>
+
+
+
+
+				<div id="life" class="group textGroup">
+					<div class="heading">
+						Life cycle specific settings: used to selectively over-ride attributes
+					</div>
+					<textarea id="lifeAttributes"  spellcheck=false data-path="version" ></textarea> 
+
+				</div>
+
+			</div>
+
+		</section>
+
+
+
+
+
+		<footer th:replace="csap/fragments/page :: footer"></footer>
+	</body>
+
+</html>
