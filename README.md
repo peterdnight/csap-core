@@ -1,6 +1,7 @@
-# csap-core _**powered by: [csap-starter](https://github.com/csap-platform/csap-starter/wiki)**_
 
-**Documentation:**  [Csap Wiki](https://github.com/csap-platform/csap-core/wiki)
+
+**Documentation:**  [Csap Wiki](https://github.com/csap-platform/csap-core/wiki), 
+_**powered by: [csap-starter](https://github.com/csap-platform/csap-starter/wiki)**_
 
 **projects:**
 - csap-core-service: based on spring profile, it provides:
