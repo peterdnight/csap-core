@@ -39,23 +39,22 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * 
- * Simple tests to validate  specific configuration of Spring LDAP
- * Template.
+ * Simple tests to validate specific configuration of Spring LDAP Template.
  * 
  * Similar to sql - LDAP has a DSL for interacting with provider, which in turn
  * is abstracted somewhat by Java nameing apis. Spring Ldap makes this much more
  * developer friendly.
  * 
  * Prior to jumping to code, it is highly recommended to make use of a desktop
- * LDAP browser to browse  LDAP tree to familiarize your self with syntax
- * and available attributes.
+ * LDAP browser to browse LDAP tree to familiarize your self with syntax and
+ * available attributes.
  * 
  * Softerra ldap browser is nice way to approach
  * 
  * 
  * @author someDeveloper
-
  *
+ * 
  * @see <a href=
  *      "http://docs.spring.io/spring-ldap/docs/1.3.2.RELEASE/reference/htmlsingle/#introduction-overview">
  *      Spring LDAP lookup </a>
@@ -147,15 +146,13 @@ public class SimpleTests {
 				logger.info( "path: {}", path );
 				String content;
 				try {
-					content = new String (Files.readAllBytes(path),Charset.forName("UTF-8"));
+					content = new String( Files.readAllBytes( path ), Charset.forName( "UTF-8" ) );
 					fileNode.put( path.toFile().getName(), content );
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} 
+				}
 			} );
-
-		
 
 		logger.info( "fileNode: {}", CSAP.jsonPrint( jacksonMapper, fileNode ) );
 
@@ -270,7 +267,6 @@ public class SimpleTests {
 		logger.info( "alphanumeric only: \n{}\n\n{}", params, params.replaceAll( "[^A-Za-z0-9]", "_" ) );
 
 	}
-	
 
 	@Test
 	public void lifeReplace ()
@@ -278,12 +274,14 @@ public class SimpleTests {
 
 		String params = "JAVA_OPTS=$life -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.port=8046 -Dcom.sun.management.jmxremote.rmi.port=8046 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false  -DcsapProcessId=ServletSample_8041  -Djava.security.egd=file:/dev/./urandom -DcsapDockerJava";
 
-		logger.info( "params: \n{}\n\n{}\n{}", params, params.replaceAll( Matcher.quoteReplacement("$life"),  Matcher.quoteReplacement("$peter")  ) );
-		
-//		String result = params.trim().replaceAll( "\\" + CSAP.SERVICE_PARAMETERS, "-D test.life=$dev".replaceAll( "$", "\\$" ) );
-//		
-//		logger.info( "CSAP.SERVICE_PARAMETERS: {}", result);
+		logger.info( "params: \n{}\n\n{}\n{}", params,
+			params.replaceAll( Matcher.quoteReplacement( "$life" ), Matcher.quoteReplacement( "$peter" ) ) );
 
+		// String result = params.trim().replaceAll( "\\" +
+		// CSAP.SERVICE_PARAMETERS, "-D test.life=$dev".replaceAll( "$", "\\$" )
+		// );
+		//
+		// logger.info( "CSAP.SERVICE_PARAMETERS: {}", result);
 
 	}
 
@@ -300,6 +298,17 @@ public class SimpleTests {
 		logger.info( "Matched: {}", dev.matches( "p(?!rod)" ) );
 		logger.info( "Matched: {}", dev.matches( "p(?!rod)" ) );
 		logger.info( "^d.* Matched: {}", dev.matches( "^sd.*" ) );
+
+		String buildResponse = "peter \nDiffEntry[MODIFY CiscoServices/testFileForGitJunits.txt]";
+		
+		Pattern searchWithNewLinesPattern = Pattern.compile(
+			".*" + Pattern.quote( "DiffEntry[MODIFY" ) + ".*testFileForGitJunits.txt.*"
+			, Pattern.DOTALL);
+		
+		logger.info( "buildResponse: {} contains",
+			searchWithNewLinesPattern.matcher( buildResponse ).find() ) ;
+//			buildResponse.matches(
+//				".*" + Pattern.quote( "DiffEntry[MODIFY" ) + ".*testFileForGitJunits.txt.*") );
 	}
 
 	@Test

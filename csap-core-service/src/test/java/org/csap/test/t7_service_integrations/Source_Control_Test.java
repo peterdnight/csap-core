@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -43,8 +44,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-
-
 @RunWith ( SpringRunner.class )
 @SpringBootTest
 @ConfigurationProperties ( prefix = "test.variables" )
@@ -59,6 +58,26 @@ public class Source_Control_Test {
 	}
 
 	// updated by @ConfigurationProperties
+	private String privateFileValidate = null;
+
+	public String getPrivateFileValidate () {
+		return privateFileValidate;
+	}
+
+	public void setPrivateFileValidate ( String privateFileValidate ) {
+		this.privateFileValidate = privateFileValidate;
+	}
+
+	private String privateRepository = null;
+
+	public String getPrivateRepository () {
+		return privateRepository;
+	}
+
+	public void setPrivateRepository ( String privateRepository ) {
+		this.privateRepository = privateRepository;
+	}
+
 	private String scmUserid = null;
 
 	public void setScmUserid ( String scmUserid ) {
@@ -119,11 +138,15 @@ public class Source_Control_Test {
 	private StandardPBEStringEncryptor encryptor;
 
 	@Test
-	public void verify_setup () {
+	public void verify_setup () throws InterruptedException {
 
 		logger.info( "Got here: {}", scmUserid );
 
-		assertThat( isSetupOk() ).as( "setup ok, ~home/csap/application-company.yml loaded" ).isTrue();
+		// assertThat( isSetupOk() ).as( "setup ok, ~home/csap/application-company.yml loaded" ).isTrue();
+		if ( ! isSetupOk() ) {
+			logger.warn( "junits requiring a private repo to test will be skipped;  update application-company.yml");
+			Thread.sleep( 3000 );
+		}
 
 	}
 
@@ -131,8 +154,17 @@ public class Source_Control_Test {
 
 		ServiceInstance serviceInstance = csapApp.findFirstServiceInstanceInLifecycle( "CsapSimple" );
 
-		if ( scmUserid == null || scmPass == null || serviceInstance == null )
+		if ( scmUserid == null
+				|| scmPass == null
+				|| serviceInstance == null
+				|| getPrivateFileValidate() == null
+				|| getPrivateRepository() == null )
 			return false;
+		
+		if ( scmPass.equals( "changeme" ) ) {
+			logger.info( "scm-userid is not set" );
+			return false;
+		}
 
 		logger.info( "serviceInstance: {}", serviceInstance.getScmBuildLocation() );
 
@@ -143,11 +175,17 @@ public class Source_Control_Test {
 	public void verify_git_service_checkout ()
 			throws Exception {
 
+		logger.info( InitializeLogging.TC_HEAD );
 		if ( !isSetupOk() )
 			return;
 
-		logger.info( InitializeLogging.TC_HEAD );
 		ServiceInstance serviceInstance = csapApp.findFirstServiceInstanceInLifecycle( "CsapSimple" );
+		checkOutAndVerifyService( serviceInstance );
+
+	}
+
+	private void checkOutAndVerifyService ( ServiceInstance serviceInstance )
+			throws Exception {
 		File serviceBuildFolder = new File( csapApp.getBUILD_DIR(), serviceInstance.getServiceName_Port() );
 		File buildPom = new File( serviceBuildFolder, serviceInstance.getScmBuildLocation() + "/pom.xml" );
 
@@ -158,13 +196,15 @@ public class Source_Control_Test {
 					+ serviceInstance.getServiceName_Port()
 					+ "_testDeploy" );
 
-		logger.info( "Perform git checkout of {} to destination: {}", 
+		logger.info( "Perform git checkout of {} to destination: {}",
 			serviceInstance.getServiceName_Port(),
 			serviceBuildFolder.getAbsolutePath() );
 
 		sourceControlManager.checkOutFolder(
 			scmUserid, encryptor.encrypt( scmPass ),
-			serviceInstance.getDefaultBranch(), serviceInstance.getServiceName_Port(), serviceInstance,
+			serviceInstance.getDefaultBranch(),
+			serviceInstance.getServiceName_Port(),
+			serviceInstance,
 			outputFm.getBufferedWriter() );
 
 		assertThat( buildPom )
@@ -176,9 +216,7 @@ public class Source_Control_Test {
 			.forEach( System.out::println );
 
 		FileUtils.deleteDirectory( serviceBuildFolder );
-
 	}
-
 
 	@Test
 	public void verify_git_service_checkout_default_branch ()
@@ -199,7 +237,7 @@ public class Source_Control_Test {
 					+ serviceInstance.getServiceName_Port()
 					+ "_testDeploy" );
 
-		logger.info( "Perform git checkout of {} to destination: {}", 
+		logger.info( "Perform git checkout of {} to destination: {}",
 			serviceInstance.getServiceName_Port(),
 			serviceBuildFolder.getAbsolutePath() );
 
@@ -219,44 +257,48 @@ public class Source_Control_Test {
 		FileUtils.deleteDirectory( serviceBuildFolder );
 
 	}
-	
-//	@Test
-//	public void verify_git_sourceControlManager_default_branch_checkout ()
-//			throws Exception {
-//
-//		String csapService_Port = "springmvc-showcase_8061";
-//		String scmBranch = sourceControlManager.GIT_NO_BRANCH;
-//		String scmLocation = "https://github.com/spring-projects/spring-mvc-showcase.git";
-//
-//		File checkOutLocation = new File( csapApp.getBUILD_DIR() + csapService_Port );
-//		FileUtils.deleteQuietly( checkOutLocation );
-//
-//		OutputFileMgr outputFm = new OutputFileMgr(
-//			csapApp.getProcessingDir(), "/"
-//					+ csapService_Port
-//					+ "_testDeploy" );
-//		String message = "Perform git checkout of " + csapService_Port + " to destination: ";
-//		logger.info( InitializeLogging.TC_HEAD + message );
-//
-//		CSAP.setLogToInfo( "org.eclipse.jgit" );
-//
-//		ServiceInstance serviceInstance = new ServiceInstance();
-//		serviceInstance.setScmLocation( scmLocation );
-//		serviceInstance.setScm( SourceControlManager.ScmProvider.git.key );
-//		serviceInstance.setDefaultBranch( scmBranch );
-//		;
-//
-//		sourceControlManager.checkOutFolder(
-//			scmUserid, encryptor.encrypt( scmPass ),
-//			scmBranch, csapService_Port, serviceInstance,
-//			outputFm.getBufferedWriter() );
-//
-//		File buildPom = new File( csapApp.getBUILD_DIR() + csapService_Port + "/pom.xml" );
-//		assertThat( buildPom )
-//			.as( "Pom file found" )
-//			.exists().isFile();
-//
-//	}
+
+	// @Test
+	// public void verify_git_sourceControlManager_default_branch_checkout ()
+	// throws Exception {
+	//
+	// String csapService_Port = "springmvc-showcase_8061";
+	// String scmBranch = sourceControlManager.GIT_NO_BRANCH;
+	// String scmLocation =
+	// "https://github.com/spring-projects/spring-mvc-showcase.git";
+	//
+	// File checkOutLocation = new File( csapApp.getBUILD_DIR() +
+	// csapService_Port );
+	// FileUtils.deleteQuietly( checkOutLocation );
+	//
+	// OutputFileMgr outputFm = new OutputFileMgr(
+	// csapApp.getProcessingDir(), "/"
+	// + csapService_Port
+	// + "_testDeploy" );
+	// String message = "Perform git checkout of " + csapService_Port + " to
+	// destination: ";
+	// logger.info( InitializeLogging.TC_HEAD + message );
+	//
+	// CSAP.setLogToInfo( "org.eclipse.jgit" );
+	//
+	// ServiceInstance serviceInstance = new ServiceInstance();
+	// serviceInstance.setScmLocation( scmLocation );
+	// serviceInstance.setScm( SourceControlManager.ScmProvider.git.key );
+	// serviceInstance.setDefaultBranch( scmBranch );
+	// ;
+	//
+	// sourceControlManager.checkOutFolder(
+	// scmUserid, encryptor.encrypt( scmPass ),
+	// scmBranch, csapService_Port, serviceInstance,
+	// outputFm.getBufferedWriter() );
+	//
+	// File buildPom = new File( csapApp.getBUILD_DIR() + csapService_Port +
+	// "/pom.xml" );
+	// assertThat( buildPom )
+	// .as( "Pom file found" )
+	// .exists().isFile();
+	//
+	// }
 
 	@Ignore
 	@Test
@@ -274,168 +316,135 @@ public class Source_Control_Test {
 		outputFm.opCompleted();
 	}
 
-	@Ignore
+	// @Ignore
 	@Test
 	public void verify_git_checkout_of_agent_at_github ()
 			throws Exception {
 
-		String csapService_Port = "CsAgent_8011_Junit";
-		String scmBranch = sourceControlManager.GIT_NO_BRANCH;
-		String scmLocation = "https://bitbucket.yourcompany.com/bitbucket/scm/csap/agent.git";
+		if ( !isSetupOk() )
+			return;
 
-		assertThat( scmPass ).isNotEqualTo( "FIXME" ).as( "Update the password" );
-
-		File checkOutLocation = new File( csapApp.getBUILD_DIR() + csapService_Port );
-
-		boolean forceCloneEveryTime = false;
-		if ( forceCloneEveryTime ) {
-			FileUtils.deleteQuietly( checkOutLocation );
-
-			if ( checkOutLocation.exists() ) {
-				assertThat( true ).as( "Unable to delete: " + checkOutLocation.getCanonicalPath() ).isFalse();
-			}
-		}
-
-		OutputFileMgr outputFm = new OutputFileMgr(
-			csapApp.getProcessingDir(), "/"
-					+ csapService_Port
-					+ "_gitClone" );
-
-		String message = "Perform git checkout of " + csapService_Port + " to destination: ";
-		logger.info( InitializeLogging.TC_HEAD + message );
-
-		CSAP.setLogToInfo( "org.eclipse.jgit" );
-
-		ServiceInstance serviceInstance = new ServiceInstance();
-		serviceInstance.setScmLocation( scmLocation );
-		serviceInstance.setScm( SourceControlManager.ScmProvider.git.key );
-
-		sourceControlManager.checkOutFolder(
-			scmUserid, encryptor.encrypt( scmPass ),
-			scmBranch, csapService_Port, serviceInstance,
-			outputFm.getBufferedWriter() );
-
-		// sourceControlManager.updateGitRepository( checkOutLocation,
-		// outputFm.getBufferedWriter() );
-
-		// File buildPom = new File( csapApp.getBUILD_DIR() + csapService_Port +
-		// "/BootReference/pom.xml" );
-		File buildPom = new File( csapApp.getBUILD_DIR() + csapService_Port + "/pom.xml" );
-		assertThat( buildPom )
-			.as( "Pom file found" )
-			.exists().isFile();
+		logger.info( InitializeLogging.TC_HEAD );
+		ServiceInstance serviceInstance = csapApp.findFirstServiceInstanceInLifecycle( "CsAgent" );
+		checkOutAndVerifyService( serviceInstance );
 
 	}
 
-	@Ignore
 	@Test
-	public void verify_git_checkout_of_agent ()
+	public void verify_git_checkout_of_private_repo ()
 			throws Exception {
 
-		String csapService_Port = "CsAgent_8011_Junit";
-		String scmBranch = sourceControlManager.GIT_NO_BRANCH;
-		String scmLocation = "https://bitbucket.yourcompany.com/bitbucket/scm/csap/agent.git";
+		logger.info( InitializeLogging.TC_HEAD );
+		if ( !isSetupOk() )
+			return;
 
-		assertThat( scmPass ).isNotEqualTo( "FIXME" ).as( "Update the password" );
+		File serviceBuildFolder = checkOutPrivateRepository();
 
-		File checkOutLocation = new File( csapApp.getBUILD_DIR() + csapService_Port );
-
-		boolean forceCloneEveryTime = false;
-		if ( forceCloneEveryTime ) {
-			FileUtils.deleteQuietly( checkOutLocation );
-
-			if ( checkOutLocation.exists() ) {
-				assertThat( true ).as( "Unable to delete: " + checkOutLocation.getCanonicalPath() ).isFalse();
-			}
-		}
-
-		OutputFileMgr outputFm = new OutputFileMgr(
-			csapApp.getProcessingDir(), "/"
-					+ csapService_Port
-					+ "_gitClone" );
-
-		String message = "Perform git checkout of " + csapService_Port + " to destination: ";
-		logger.info( InitializeLogging.TC_HEAD + message );
-
-		CSAP.setLogToInfo( "org.eclipse.jgit" );
-
-		ServiceInstance serviceInstance = new ServiceInstance();
-		serviceInstance.setScmLocation( scmLocation );
-		serviceInstance.setScm( SourceControlManager.ScmProvider.git.key );
-
-		sourceControlManager.checkOutFolder(
-			scmUserid, encryptor.encrypt( scmPass ),
-			scmBranch, csapService_Port, serviceInstance,
-			outputFm.getBufferedWriter() );
-
-		// sourceControlManager.updateGitRepository( checkOutLocation,
-		// outputFm.getBufferedWriter() );
-
-		// File buildPom = new File( csapApp.getBUILD_DIR() + csapService_Port +
-		// "/BootReference/pom.xml" );
-		File buildPom = new File( csapApp.getBUILD_DIR() + csapService_Port + "/pom.xml" );
-		assertThat( buildPom )
-			.as( "Pom file found" )
-			.exists().isFile();
+		logger.info( "Deleting: {}", serviceBuildFolder.getAbsolutePath() );
+		FileUtils.deleteQuietly( serviceBuildFolder );
 
 	}
 
-	@Ignore
 	@Test
-	public void verify_git_checkout_of_multi_project ()
+	public void verify_git_checkin ()
 			throws Exception {
 
-		String csapService_Port = "BootReference_7111";
+		logger.info( InitializeLogging.TC_HEAD );
+		if ( !isSetupOk() )
+			return;
+
+		File serviceBuildFolder = checkOutPrivateRepository();
+
+		// update the folder with new content, files, etc
+		File definitionFile = new File( serviceBuildFolder, getPrivateFileValidate() );
+		//
+		checkInFileWithNoChanges(
+			SourceControlManager.ScmProvider.git,
+			getPrivateRepository(),
+			scmUserid, encryptor.encrypt( scmPass ),
+			SourceControlManager.GIT_NO_BRANCH,
+			definitionFile );
+		//
+		checkinFileWithChanges(
+			SourceControlManager.ScmProvider.git,
+			getPrivateRepository(),
+			scmUserid, encryptor.encrypt( scmPass ),
+			SourceControlManager.GIT_NO_BRANCH,
+			definitionFile );
+
+		// //
+		File fileCreatedByJunit = checkinWithNewFileAdded(
+			SourceControlManager.ScmProvider.git,
+			getPrivateRepository(),
+			scmUserid, encryptor.encrypt( scmPass ),
+			SourceControlManager.GIT_NO_BRANCH,
+			definitionFile.getParentFile() );
+		
+		
+		// // File newFile = new File(sourceFolderOnFileSystem,
+		// // "testJan.18-11.42.58");
+		 deleteGitFile( 
+			 definitionFile, 
+			 getPrivateRepository(),
+			 scmUserid, encryptor.encrypt( scmPass ),
+			 SourceControlManager.GIT_NO_BRANCH,
+			 fileCreatedByJunit );
+
+		logger.info( "Deleting: {}", serviceBuildFolder.getAbsolutePath() );
+		FileUtils.deleteQuietly( serviceBuildFolder );
+
+	}
+
+	private File checkOutPrivateRepository ()
+			throws IOException, Exception {
 		String scmBranch = sourceControlManager.GIT_NO_BRANCH;
-		String scmBuildSubDir = "/BootReference";
-		String scmLocation = "https://bitbucket.yourcompany.com/bitbucket/scm/csap/javasamples.git";
 
-		assertThat( scmPass ).isNotEqualTo( "FIXME" ).as( "Update the password" );
+		ServiceInstance serviceInstance = new ServiceInstance();
+		serviceInstance.setScmLocation( getPrivateRepository() );
+		serviceInstance.setScm( SourceControlManager.ScmProvider.git.key );
+		serviceInstance.setServiceName( "privaterepotest" );
+		serviceInstance.setPort( "6060" );
 
-		File checkOutLocation = new File( csapApp.getBUILD_DIR() + csapService_Port );
+		File serviceBuildFolder = new File( csapApp.getBUILD_DIR(), serviceInstance.getServiceName_Port() );
+		File validationFile = new File( serviceBuildFolder, serviceInstance.getScmBuildLocation() + getPrivateFileValidate() );
 
 		boolean forceCloneEveryTime = false;
 		if ( forceCloneEveryTime ) {
-			// set to true to force clone evry time
-			FileUtils.deleteQuietly( checkOutLocation );
+			FileUtils.deleteQuietly( serviceBuildFolder );
 
-			if ( checkOutLocation.exists() ) {
-				assertThat( true ).as( "Unable to delete: " + checkOutLocation.getCanonicalPath() ).isFalse();
+			if ( serviceBuildFolder.exists() ) {
+				assertThat( true ).as( "Unable to delete: " + serviceBuildFolder.getCanonicalPath() ).isFalse();
 			}
 		}
 
 		OutputFileMgr outputFm = new OutputFileMgr(
 			csapApp.getProcessingDir(), "/"
-					+ csapService_Port
-					+ "_gitClone" );
+					+ serviceInstance.getServiceName_Port()
+					+ "_testclone" );
 
-		logger.info( InitializeLogging.TC_HEAD + "Perform git checkout of {} to {}, output in: {}", csapService_Port, checkOutLocation,
-			outputFm.getOutputFile().getCanonicalPath() );
+		logger.info( "Perform git checkout of {} to destination: {}",
+			serviceInstance.getServiceName_Port(),
+			serviceBuildFolder.getAbsolutePath() );
 
 		CSAP.setLogToInfo( "org.eclipse.jgit" );
 
-		ServiceInstance serviceInstance = new ServiceInstance();
-		serviceInstance.setScmLocation( scmLocation );
-		serviceInstance.setScmBuildLocation( scmBuildSubDir );
-		serviceInstance.setScm( SourceControlManager.ScmProvider.git.key );
-
 		sourceControlManager.checkOutFolder(
 			scmUserid, encryptor.encrypt( scmPass ),
-			scmBranch, csapService_Port, serviceInstance,
+			scmBranch,
+			serviceInstance.getServiceName_Port(),
+			serviceInstance,
 			outputFm.getBufferedWriter() );
 
-		// sourceControlManager.updateGitRepository( checkOutLocation,
-		// outputFm.getBufferedWriter() );
-
-		// File buildPom = new File( csapApp.getBUILD_DIR() + csapService_Port +
-		// "/BootReference/pom.xml" );
-		File buildPom = new File( csapApp.getBUILD_DIR() + csapService_Port + scmBuildSubDir + "/pom.xml" );
-		assertThat( buildPom )
-			.as( "Pom file found" )
+		assertThat( validationFile )
+			.as( "validationFile found" )
 			.exists().isFile();
 
-		logger.info( "Results: {}", FileUtils.readFileToString( outputFm.getOutputFile() ) );
+		logger.info( "Listing for: {}",
+			validationFile.getParentFile().getAbsolutePath() );
 
+		Files.list( validationFile.getParentFile().toPath() )
+			.forEach( System.out::println );
+		return serviceBuildFolder;
 	}
 
 	@Ignore // requires a legit id for checkout
@@ -540,7 +549,6 @@ public class Source_Control_Test {
 	//
 	// }
 
-
 	@Ignore
 	@Test
 	public void verify_git_checkin_of_definition ()
@@ -571,18 +579,18 @@ public class Source_Control_Test {
 		String encryptedPass = encryptor.encrypt( rawPass ); // immediately
 		String definitionLocation = "src/test/java/org/csap/test/data/gitDefinition/Application.json";
 
-		definitionCheckOut( scmUserid, encryptedPass, svnBranch, svcName,
+		checkOutFolder( scmUserid, encryptedPass, svnBranch, svcName,
 			serviceInstance, sourceFolderOnFileSystem, definitionLocation );
 
 		// update the folder with new content, files, etc
 		File definitionFile = new File( sourceFolderOnFileSystem, definitionLocation );
 		//
-		definitionCheckInPlain( SourceControlManager.ScmProvider.git, definitionUrl, scmUserid, encryptedPass, svnBranch, definitionFile );
+		checkInFileWithNoChanges( SourceControlManager.ScmProvider.git, definitionUrl, scmUserid, encryptedPass, svnBranch, definitionFile );
 		//
-		definitionCheckInChanges( SourceControlManager.ScmProvider.git, definitionUrl, scmUserid, encryptedPass, svnBranch,
+		checkinFileWithChanges( SourceControlManager.ScmProvider.git, definitionUrl, scmUserid, encryptedPass, svnBranch,
 			definitionFile );
 		//
-		File newFile = verify_application_update_with_adds_and_deletes(
+		File newFile = checkinWithNewFileAdded(
 			ScmProvider.git,
 			definitionUrl, scmUserid, encryptedPass, svnBranch,
 			definitionFile.getParentFile() );
@@ -620,10 +628,15 @@ public class Source_Control_Test {
 
 	}
 
-	private void definitionCheckOut (	String scmUserid, String encryptedPass, String svnBranch, String svcName,
-										ServiceInstance instanceConfig, File sourceFolderOnFileSystem,
+	private void checkOutFolder (
+										String scmUserid, String encryptedPass,
+										String svnBranch, String svcName,
+										ServiceInstance instanceConfig,
+										File sourceFolderOnFileSystem,
 										String definitionLocation )
+
 			throws IOException, Exception {
+
 		StringWriter sw = new StringWriter();
 		BufferedWriter stringWriter = new BufferedWriter( sw );
 
@@ -639,7 +652,6 @@ public class Source_Control_Test {
 			.as( "Application created" )
 			.exists();
 
-		// FileUtils.deleteDirectory(svnCheckoutFolder);
 		stringWriter.flush();
 		String coResults = sw.toString();
 		logger.debug( "output messages: {}", coResults );
@@ -662,7 +674,7 @@ public class Source_Control_Test {
 
 	}
 
-	private void definitionCheckInPlain (	ScmProvider scmType, String definitionUrl, String scmUserid, String encryptedPass,
+	private void checkInFileWithNoChanges (	ScmProvider scmType, String definitionUrl, String scmUserid, String encryptedPass,
 											String svnBranch,
 											File definitionFile )
 			throws IOException, Exception {
@@ -692,13 +704,14 @@ public class Source_Control_Test {
 
 	}
 
-	private void definitionCheckInChanges (	ScmProvider scmType,
-											String definitionUrl, String scmUserid, String encryptedPass,
-											String branch, File definitionFile )
-			throws IOException, Exception {
+	private void checkinFileWithChanges (
+											ScmProvider scmType,
+											String definitionUrl,
+											String scmUserid, String encryptedPass,
+											String branch,
+											File definitionFile )
 
-		// String[] definitionLines = FileUtils.readFileToString( definitionFile
-		// ).split( "\n" );
+			throws IOException, Exception {
 
 		List<String> lines = Files.readAllLines( definitionFile.toPath(), Charset.forName( "UTF-8" ) );
 		String now = LocalDateTime.now().format( DateTimeFormatter.ofPattern( "MMM.d-HH.mm.ss" ) );
@@ -715,25 +728,39 @@ public class Source_Control_Test {
 		StringWriter sw = new StringWriter();
 		BufferedWriter stringWriter = new BufferedWriter( sw );
 
+		String comment = "Junit git update test";
+
 		sourceControlManager.checkInFolder(
 			scmType,
-			definitionUrl, definitionFile, scmUserid, encryptedPass,
-			branch, "Updating Application.json test", null, null, stringWriter );
+			definitionUrl, definitionFile,
+			scmUserid, encryptedPass,
+			branch,
+			comment,
+			null, null,
+			stringWriter );
 
 		stringWriter.flush();
-		String ciResults = sw.toString();
-		logger.info( "output messages: {}", ciResults );
+		String checkInResponseText = sw.toString();
+		logger.info( "output messages: {}", checkInResponseText );
 
 		if ( scmType == ScmProvider.svn ) {
-			assertThat( ciResults )
+			assertThat( checkInResponseText )
 				.as( "svn messages" )
 				.contains(
-					"updating: Application.json" );
+					comment );
 		} else {
 
-			assertThat( ciResults )
+			Pattern searchWithNewLinesPattern = Pattern.compile(
+				".*"
+						+ Pattern.quote( "DiffEntry[MODIFY" )
+						+ ".*"
+						+ definitionFile.getName()
+						+ ".*",
+				Pattern.DOTALL );
+
+			assertThat( searchWithNewLinesPattern.matcher( checkInResponseText ).find() )
 				.as( "git messages" )
-				.contains( "MODIFY src/test/java/org/csap/test/data/gitDefinition/Application.json" ); // UP_TO_DATE
+				.isTrue();
 		}
 
 	}
@@ -766,11 +793,14 @@ public class Source_Control_Test {
 
 	}
 
-	private File verify_application_update_with_adds_and_deletes (
+	private File checkinWithNewFileAdded (
 																	ScmProvider scmType,
-																	String definitionUrl, String scmUserid, String encryptedPass,
-																	String svnBranch, File definitionFolder )
-			throws IOException, Exception {
+																	String definitionUrl,
+																	String scmUserid, String encryptedPass,
+																	String svnBranch,
+																	File definitionFolder )
+
+			throws Exception {
 
 		String now = LocalDateTime.now().format( DateTimeFormatter.ofPattern( "MMM.d-HH.mm.ss" ) );
 
@@ -795,7 +825,11 @@ public class Source_Control_Test {
 
 		List<File> filesToAdd = new ArrayList<>();
 
-		File newPropFile = new File( definitionFolder, "test1/testProp" + now + "/test" + now + ".properties" );
+		File newPropFile = new File(
+			definitionFolder,
+			"test1/testProp" + now + "/test" + now + ".properties" );
+		
+		
 		newPropFile.getParentFile().mkdirs();
 		filesToAdd.add( newPropFile );
 
@@ -811,22 +845,31 @@ public class Source_Control_Test {
 
 		sourceControlManager.checkInFolder(
 			scmType,
-			definitionUrl, newDefinitionFile, scmUserid, encryptedPass,
-			svnBranch, "Adding new file for test", filesToAdd, filesToDelete, stringWriter );
+			definitionUrl, 
+			newDefinitionFile, 
+			scmUserid, encryptedPass,
+			svnBranch, 
+			"Adding new file for test", 
+			filesToAdd, 
+			filesToDelete, 
+			stringWriter );
 
+		
 		stringWriter.flush();
-		String ciResults = sw.toString();
-		logger.info( "output messages: {}", ciResults );
+		
+		
+		String checkinResultText = sw.toString();
+		logger.info( "checkinResultText: {}", checkinResultText );
 
 		if ( scmType == ScmProvider.svn ) {
-			assertThat( ciResults )
+			assertThat( checkinResultText )
 				.as( "svn messages" )
 				.contains(
 					"updating: " + newDefinitionFile.getName(),
 					"updating: " + newPropFile.getName() );
 		} else {
 
-			assertThat( ciResults )
+			assertThat( checkinResultText )
 				.as( "git messages" )
 				.contains( "DiffEntry[ADD" ); // DiffEntry[DELETE
 		}

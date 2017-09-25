@@ -47,11 +47,11 @@
 					"user": "$user",
 					"pass": "$pass"
 				},
-				
+
 				"loadBalanceVmFilter": [
 					"none"
 				],
-				
+
 				"lbUrl": "https://csap-secure.yourcompany.com",
 				"autoRestartHttpdOnClusterReload": "no",
 
@@ -117,64 +117,41 @@
 		"CsAgent": {
 			"description": "CsAgent provides core service management capabilities, along with runtimes. admin services uses it extensively.",
 			"docUrl": "https://github.com/csap-platform/csap-core/wiki#updateRefCsAgent",
+			"parameters": "-DcsapJava8 -Dspring.profiles.active=CSAP_LIFE,agent,limits -Dsun.rmi.transport.tcp.responseTimeout=3000 -XX:MaxMetaspaceSize=96M -Xms256M -Xmx256M",
+			"lastModifiedBy": "peterdnight",
 			"autoStart": "01",
-			"osProcessPriority": "-10",
-			"java": "-Xms256M -Xmx256M -XX:MaxPermSize=128m -DskipPlatformEscape=y",
-			"server": "cssp-2.x",
+			"osProcessPriority": "-12",
+			"server": "SpringBoot",
 			"source": {
-				"scm": "svn",
-				"path": "http://yourSvnOrGit/yourPathToSource",
+				"scm": "git",
+				"path": "https://github.com/csap-platform/csap-core",
+				"buildLocation": "/csap-core-service",
 				"branch": "HEAD"
 			},
 			"maven": {
-				"dependency": "com.yourcompany.ca.csp.cso.platform:CsAgent:4.1.3.6:war"
+				"dependency": "org.csap:csap-core-service:6.0.0.0:jar"
 			},
+
 			"customMetrics": {
-				"jmxHeartbeatMs": {
-					"mbean": "spring.application:application=CsAgent,type=CstgCustom,name=HealthCheck",
-					"attribute": "HealthStatus"
-				},
 				"TotalVmCpu": {
 					"mbean": "java.lang:type=OperatingSystem",
-					"attribute": "SystemCpuLoad"
+					"attribute": "SystemCpuLoad",
+					"max": 50,
+					"title": "Host Cpu"
 				},
 				"ProcessCpu": {
 					"mbean": "java.lang:type=OperatingSystem",
-					"attribute": "ProcessCpuLoad"
+					"attribute": "ProcessCpuLoad",
+					"max": 10,
+					"title": "Agent Cpu"
 				},
-				"HostDashboard": {
-					"simonCounter": "http.CsAgent.ui.HostDashboard.GET"
-				},
-				"AdminPings": {
-					"simonCounter": "http.CsAgent.ui.getManagerJson.GET"
-				},
-				"OsCommandsCounter": {
-					"simonCounter": "java.OsCommandRunner.execute"
-				},
-				"OsCommandsMeanMs": {
-					"simonMedianTime": "java.OsCommandRunner.execute",
-					"divideBy": "1000000"
-				},
-				"OsCommandsMaxTimeMs": {
-					"simonMaxTime": "java.OsCommandRunner.execute",
-					"divideBy": "1000000"
-				},
-				"getVmStatsDefault": {
-					"simonCounter": "java.pojo.OsManager.getVmStats()"
-				},
-				"getVmStatsCounterPerSecond": {
-					"simonCounter": "java.pojo.OsManager.getVmStats()",
-					"divideBy": "interval"
-				},
-				"getVmStatsMeanMs": {
-					"simonMedianTime": "java.pojo.OsManager.getVmStats()",
-					"divideBy": "1000000"
-				},
-				"getVmStatsMaxTimeMs": {
-					"simonMaxTime": "java.pojo.OsManager.getVmStats()",
-					"divideBy": "1000000"
+				"AdminPingsMeanMs": {
+					"divideBy": "1000000",
+					"max": 25,
+					"title": "Agent Status (ms)",
+					"simonMaxTime": "AgentStatus"
 				}
-			},
+			}, 
 			"version": {
 				"1": {
 					"dev": {},

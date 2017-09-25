@@ -15,3 +15,12 @@ my-service-configuration.docker.template-repository: "docker.io"
 
 
 csap.info.load-balancer-url: "${csapLbUrl:https://csap-secure.yourCompany.com}"
+
+
+test.variables:
+    
+    #source-control-tests
+    scm-userid: "changeme"
+    scm-pass: "changeme"
+    private-repository: "changeme" 
+    private-file-validate: "changeme"
