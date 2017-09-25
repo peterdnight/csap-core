@@ -45,7 +45,7 @@ my-service-configuration:
   processing: ${PROCESSING:}
   
   docker:
-    url: "tcp://localhost.yourcompany.com:4243"
+    url: "tcp://localhost:4243"
     connection-pool: 5
 
   test:
