@@ -1,8 +1,8 @@
 
 
 **Documentation: [Csap Wiki](https://github.com/csap-platform/csap-core/wiki)**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-_**powered by: [csap-starter](https://github.com/csap-platform/csap-starter/wiki)**_**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-_**[Release Notes](https://github.com/csap-platform/csap-core/wiki/Release-Notes)**_
+_**powered by: [csap-starter](https://github.com/csap-platform/csap-starter/wiki)**_&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+_**view: [Release Notes](https://github.com/csap-platform/csap-core/wiki/Release-Notes)**_
 
 
 
