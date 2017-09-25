@@ -56,11 +56,6 @@ public class Service_Collection_Test {
 
 	private String testDbHost = null;
 	private String testAdminHost1 = null;
-	private String testMongoCollection = null;
-
-	public void setTestMongoCollection ( String testMongoCollection ) {
-		this.testMongoCollection = testMongoCollection;
-	}
 
 	public void setTestAdminHost1 ( String testAdminHost1 ) {
 		this.testAdminHost1 = testAdminHost1;

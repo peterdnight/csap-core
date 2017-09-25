@@ -62,9 +62,15 @@ public class InitializeLogging {
 					+ WordUtils.wrap( System.getProperty( "java.class.path" ).replaceAll( ";", " " ), 140 ) );
 			System.out.println( sbuf );
 			
-			File home = new File(System.getProperty( "user.home" ) + "/csap") ;
-			logger.info( "Adding System property: spring.config.location, {}" ,  home.toPath().toUri()  );
-			System.setProperty( "spring.config.location", home.toPath().toUri().toString() ) ;
+			String testDir = System.getProperty( "csapTest" ) ;
+			if ( testDir == null) {
+				testDir = System.getProperty( "user.home" ) + "/csap" ;
+			}
+			logger.info( "External configuration: " + testDir );
+			File externalConfiguration = new File(testDir) ;
+				
+			logger.info( "Adding System property: spring.config.location, {}" ,  externalConfiguration.toPath().toUri()  );
+			System.setProperty( "spring.config.location", externalConfiguration.toPath().toUri().toString() ) ;
 			
 			File testFolder = new File( "target/junit" );
 			logger.info( "Deleting: {}", testFolder.getAbsolutePath() );

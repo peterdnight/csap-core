@@ -145,7 +145,7 @@ public class Source_Control_Test {
 		// assertThat( isSetupOk() ).as( "setup ok, ~home/csap/application-company.yml loaded" ).isTrue();
 		if ( ! isSetupOk() ) {
 			logger.warn( "junits requiring a private repo to test will be skipped;  update application-company.yml");
-			Thread.sleep( 3000 );
+			Thread.sleep( 5000 );
 		}
 
 	}
@@ -161,7 +161,7 @@ public class Source_Control_Test {
 				|| getPrivateRepository() == null )
 			return false;
 		
-		if ( scmPass.equals( "changeme" ) ) {
+		if ( scmPass.equals( "changeme" ) || scmUserid.equals( "changeme" ) ) {
 			logger.info( "scm-userid is not set" );
 			return false;
 		}

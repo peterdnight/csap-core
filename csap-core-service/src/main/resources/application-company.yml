@@ -19,8 +19,35 @@ csap.info.load-balancer-url: "${csapLbUrl:https://csap-secure.yourCompany.com}"
 
 test.variables:
     
-    #source-control-tests
+    # git integration tests
     scm-userid: "changeme"
     scm-pass: "changeme"
     private-repository: "changeme" 
     private-file-validate: "changeme"
+    
+    # integration tests: definition
+    test-external-application: "changeme"
+    test-mongo-collection: "changeme"
+    
+    # integration tests: collection
+    test-admin-host1: "changeme"
+    test-admin-host2: "changeme"
+    test-db-host: "changeme"
+    csapUser1: "changeme"
+    csapPass1: "changeme"
+    
+    # integration tests: CsapEvents
+    user: "changeme"
+    pass: "changeme"
+    eventUrl: "https://csap-secure.yourcompany.com/data/api/event"
+    eventApiUrl: "https://csap-secure.yourcompany.com/data/eventApi"
+    eventMetricsUrl: "https://csap-secure.yourcompany.com/analytics/api/metrics/"
+    analyticsUiUrl: "https://csap-secure.yourcompany.com/admin/os/performance"
+    historyUiUrl: "https://csap-secure.yourcompany.com/data?appId={appId}&life={life}&category={category}&"
+    
+    
+    # integration tests: nagios
+    nagios-url: "changeme"
+    nagios-token: "changeme"
+    nagios-user: "changeme"
+    nagios-pass: "changeme"
