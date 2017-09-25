@@ -427,7 +427,7 @@ public class FileRequests {
 						}
 						fileCountInLogFolder++;
 
-						logger.info( "Item in log folder: {}, default: {}, initialLogFileToShow: {}", 
+						logger.debug( "Item in log folder: {}, default: {}, initialLogFileToShow: {}", 
 							itemInLogFolder.getName(), csapApp.getDefaultLogFileName( serviceName ), initialLogFileToShow );
 					} else if ( itemInLogFolder.isDirectory() ) {
 						firstFileInFirstDir = findLogFiles( serviceInstance, logFileNamesInSubDir, firstFileInFirstDir,
