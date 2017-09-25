@@ -47,6 +47,7 @@ my-service-configuration:
   docker:
     url: "tcp://localhost:4243"
     connection-pool: 5
+    template-repository: "${csapDockerRepository:docker.io}"
 
   test:
     enabled: false

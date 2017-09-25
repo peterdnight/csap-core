@@ -43,7 +43,7 @@ printfLine redisSentinels $redisSentinels
 printfLine notifications '-'  csapAddresses $csapAddresses csapFrequency "$csapFrequency $csapTimeUnit" csapMaxBacklog $csapMaxBacklog
 printfLine STAGING $STAGING PROCESSING $PROCESSING CLUSTERDEF $CLUSTERDEF
 
-
+printfLine hostUrlPattern $hostUrlPattern mailServer $mailServer csapDockerRepository $csapDockerRepository
 
 showIfDebug() {
 	

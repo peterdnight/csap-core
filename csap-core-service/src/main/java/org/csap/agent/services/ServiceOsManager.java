@@ -401,7 +401,7 @@ public class ServiceOsManager {
 
 	private void addCsapModelEnvVariables ( ServiceInstance serviceInstance, Map<String, String> serviceEnvironmentVariables ) {
 		ObjectNode notifications = serviceInstance.getAttributeAsObject( ServiceAttributes.notifications );
-		;
+		
 		if ( notifications != null ) {
 			if ( notifications.has( "csapAddresses" ) ) {
 				serviceEnvironmentVariables.put( "csapAddresses", notifications.get( "csapAddresses" ).asText() );
@@ -474,6 +474,20 @@ public class ServiceOsManager {
 		serviceEnvironmentVariables.put( "csapHttpPort", serviceInstance.getPort() );
 		serviceEnvironmentVariables.put( "csapJmxPort", serviceInstance.getJmxPort() );
 		serviceEnvironmentVariables.put( "csapServiceLife", serviceInstance.getLifecycle() );
+		
+		// add infra settings
+
+		serviceEnvironmentVariables.put( "hostUrlPattern", csapApp.getAgentHostUrlPattern( true ) );
+		if ( csapApp.isCompanyVariableConfigured( "spring.mail.host" ) ) {
+			serviceEnvironmentVariables.put( "mailServer", csapApp.getCompanyConfiguration( "spring.mail.host", "" ) );
+		}
+		if ( csapApp.isCompanyVariableConfigured( "spring.mail.port" ) ) {
+			serviceEnvironmentVariables.put( "mailPort", csapApp.getCompanyConfiguration( "spring.mail.port", "" ) );
+		}
+		if ( csapApp.isCompanyVariableConfigured( "my-service-configuration.docker.template-repository" ) ) {
+			serviceEnvironmentVariables.put( "csapDockerRepository", csapApp.getCompanyConfiguration( "my-service-configuration.docker.template-repository", "" ) );
+		}
+		
 	}
 
 	private void configureServiceJob ( List<String> paramsInput, ServiceInstance serviceInstance, Map<String, String> envVarMap ) {
