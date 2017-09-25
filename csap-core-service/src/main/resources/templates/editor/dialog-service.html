@@ -184,9 +184,9 @@
 						Use the <a th:href="@{/edit/application(releasePackage=${servicePackage})}" class="simple" target="_blank">Application Editor</a>
 						for host assignment and additional shared settings.
 
-						For help with using variables, property files, and more, refer to   
-						<a href="https://github.com/csap-platform/csap-core/wiki#updateRefService+Definition" class="simple" target="_blank">
-							Service Definition
+						For help with using variables, property files, and more, refer to the  
+						<a href="https://github.com/csap-platform/csap-core/wiki/Service-Settings" class="simple" target="_blank">
+							Reference Guide
 						</a>.
 
 
@@ -289,12 +289,17 @@
 						<textarea id="params" class="paramJdk"  rows="2" spellcheck=false  
 								  data-path="parameters" data-plain="true" 
 								  data-fit="true"  data-removenewlines="true"
-								  ></textarea> 
+								  ></textarea> Global-Environment-Variables
 					</div>
 					<div id="containerConfig" class="greySection">
 
 						<div class="heading">
-							Optional: Add any environment variables that will be set prior to starting service. Custom values will be substituted for: <br/>
+							Optional: 
+							In addition to the
+							<a href="https://github.com/csap-platform/csap-core/wiki/Global-Environment-Variables" class="simple" target="_blank">
+								csap global environment variables
+							</a>, custom variables can be added as needed.
+							Add any environment variables that will be set prior to starting service. Custom values will be substituted for: <br/>
 							"$serviceRef:someServicName" - hosts names for service , "$lifeCycleRef:attributeName", or "doDecode:$lifeCycleRef:attributeName" - lifecycle attributes: 
 						</div>
 						<textarea id="environmentVariable"  rows="2"  spellcheck=false  
@@ -790,7 +795,13 @@
 				<div id="alerts" class="group">
 
 					<div  class="greenSection">
-						<div class="heading">Alert Thresholds: Defaults and optional override. Note lifecycle settings are used to set warning and kill thresholds.</div>
+						<div class="heading">
+							Alert Thresholds: Defaults and optional override. Note lifecycle settings are used to set warning and kill thresholds.
+							For more information, refer to:
+							<a href="https://github.com/csap-platform/csap-core/wiki/Performance" class="simple" target="_blank">
+								Reference Guide
+							</a>.
+						</div>
 						<label class="alerts">
 							<span>Cpu: </span> 
 							<div class="noteAlt"  th:text="${ limits.get('topCpu') }" ></div>
@@ -930,8 +941,8 @@
 
 						<a class="simple" 
 						   title="Application data points to be collected.   Use jvisualvm to confirm mbean or simon endpoints"
-						   style="display: inline" href="https://github.com/csap-platform/csap-core/wiki#updateRefCustom+Metrics" target="_blank">
-							Learn More</a><br/>
+						   style="display: inline" href="https://github.com/csap-platform/csap-core/wiki/Performance" target="_blank">
+							Reference Guide</a><br/>
 					</div>
 
 
