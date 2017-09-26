@@ -5,7 +5,8 @@
 		"scm": "https://github.com/csap-platform/sample-definition.git",
 		"repoUrl": "https://repo.maven.apache.org/maven2/",
 		"helpMenuItems": {
-			"Release Notes": "https://github.com/csap-platform/csap-core/wiki#updateRefConsole+Release+Notes"
+			"Release Notes": "https://github.com/csap-platform/csap-core/wiki/Release-Notes",
+			"Reference Guide": "https://github.com/csap-platform/csap-core/wiki"
 		}
 	},
 	"clusterDefinitions": {
