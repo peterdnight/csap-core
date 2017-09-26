@@ -988,7 +988,7 @@ require( ["editPackage", "service-os-panel", "service-app-panel", "./service-gra
 	/** @memberOf ServiceAdmin */
 	function displayResults( resultsJson, append ) {
 
-		console.log("results", resultsJson) ;
+		//console.log("results", resultsJson, append) ;
 		var results = JSON.stringify( resultsJson, null, "\t" );
 		results = results.replace( /\\n/g, "<br />" );
 
@@ -1147,6 +1147,7 @@ require( ["editPackage", "service-os-panel", "service-app-panel", "./service-gra
 	/** @memberOf ServiceAdmin */
 	function showResultsDialog( commandName ) {
 
+		console.log("commandName: ", commandName) ;
 		// if dialog is active, just updated scroll and return
 		if ( _resultsDialog != null ) {
 			var heightToScroll = $resultsPre[0].scrollHeight;
@@ -1155,6 +1156,7 @@ require( ["editPackage", "service-os-panel", "service-app-panel", "./service-gra
 			return;
 		}
 
+		console.log("building results dialog: ", commandName) ;
 
 
 		if ( !alertify.results ) {
@@ -1811,6 +1813,7 @@ require( ["editPackage", "service-os-panel", "service-app-panel", "./service-gra
 	/** @memberOf ServiceAdmin */
 	function cleanServiceBuild( isGlobal ) {
 
+		_resultsDialog=null ;
 		displayResults( "Cleaning service sources files" );
 		$( 'body' ).css( 'cursor', 'wait' );
 		var paramObject = {
