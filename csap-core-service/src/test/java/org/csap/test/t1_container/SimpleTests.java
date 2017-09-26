@@ -299,7 +299,7 @@ public class SimpleTests {
 		logger.info( "Matched: {}", dev.matches( "p(?!rod)" ) );
 		logger.info( "^d.* Matched: {}", dev.matches( "^sd.*" ) );
 
-		String buildResponse = "peter \nDiffEntry[MODIFY CiscoServices/testFileForGitJunits.txt]";
+		String buildResponse = "peter \nDiffEntry[MODIFY Services/testFileForGitJunits.txt]";
 		
 		Pattern searchWithNewLinesPattern = Pattern.compile(
 			".*" + Pattern.quote( "DiffEntry[MODIFY" ) + ".*testFileForGitJunits.txt.*"

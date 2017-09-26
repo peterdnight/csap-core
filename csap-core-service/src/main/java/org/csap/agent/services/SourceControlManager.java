@@ -566,7 +566,7 @@ public class SourceControlManager {
 		String results = null;
 		List<String> parmList = Arrays.asList( "cvs", "-d", ":pserver:"
 				+ cvsUser + ":" + encryptor.decrypt( encodedPass )
-				+ "@repository.cisco.com:2401/opt/cvsroot/Repository",
+				+ "@repository.yourcompany.com:2401/opt/cvsroot/Repository",
 			"login" );
 
 		logger.info( "Logging into cvs" );

@@ -250,19 +250,25 @@
 	"jvms": {
 		"CsAgent": {
 			"description": "CsAgent provides core service management capabilities, along with runtimes. admin services uses it extensively.",
-			"docUrl": "https://github.com/csap-platform/csap-core/wiki#updateRefCsAgent",
+			"docUrl": "https://github.com/csap-platform/csap-core/wiki",
 			"parameters": "-DcsapJava8 -Dspring.profiles.active=CSAP_LIFE,agent,limits -Dsun.rmi.transport.tcp.responseTimeout=3000 -XX:MaxMetaspaceSize=96M -Xms256M -Xmx256M",
-			"lastModifiedBy": "someDeveloper",
+			"lastModifiedBy": "someUser",
+			"environmentVariables": {
+				"hostUrlPattern": "http://CSAP_HOST.yourcompany.com:8011/CsAgent",
+				"mailServer": "outbound.yourMail.com",
+				"csapDockerRepository": "docker.io"
+			},
 			"autoStart": "03",
 			"osProcessPriority": "-12",
 			"server": "SpringBoot",
 			"source": {
 				"scm": "git",
-				"path": "https://bitbucket.yourcompany.com/bitbucket/scm/csap/agent.git",
+				"path": "https://github.com/csap-platform/csap-core",
+				"buildLocation": "/csap-core-service",
 				"branch": "HEAD"
 			},
 			"maven": {
-				"dependency": "org.csap:agent:5.1.7.2:jar"
+				"dependency": "org.csap:csap-core-service:6.0.0.1:jar"
 			},
 			"version": {
 				"1": {
@@ -270,9 +276,6 @@
 					"stage": {},
 					"lt": {},
 					"prod": {
-						"maven": {
-							"dependency": "org.csap:agent:5.1.7.2:jar"
-						}
 					}
 				},
 				"2": {
@@ -481,12 +484,12 @@
 			"server": "SpringBoot",
 			"source": {
 				"scm": "git",
-				"path": "https://github.com/csap-platform/csap-core.git",
-				"branch": "HEAD",
-				"buildLocation": "/agent"
+				"path": "https://github.com/csap-platform/csap-core",
+				"buildLocation": "/csap-core-service",
+				"branch": "HEAD"
 			},
 			"maven": {
-				"dependency": "org.csap:agent:5.1.7.2:jar"
+				"dependency": "org.csap:csap-core-service:6.0.0.1:jar"
 			},
 			"version": {
 				"1": {
@@ -494,10 +497,7 @@
 					"stage": {},
 					"lt": {},
 					"prod": {
-						"maven": {
-							"dependency": "org.csap:agent:5.1.7.2:jar"
-						},
-						"metaData": "webServerIntegration"
+
 					}
 				},
 				"2": {
