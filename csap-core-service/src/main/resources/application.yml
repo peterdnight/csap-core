@@ -2,8 +2,8 @@
 # CSAP agent sets based on lifecycle
 # csapDefaultConfiguration add for testing default config on desktop
 #spring.profiles.active: desktop,admin,company
-#spring.profiles.active: desktop,agent,company
-spring.profiles.active: desktop,agent,company,csapDefaultConfiguration
+spring.profiles.active: desktop,agent,company
+#spring.profiles.active: desktop,agent,company,csapDefaultConfiguration
 
 ---
 #
@@ -328,7 +328,7 @@ my-service-configuration:
   definition-folder: "../../dev-definition"
   
   docker:
-    url: "tcp://localhost:4243"
+    url: "tcp://localhost:2375" #tcp://localhost:2375 tcp://linuxhost:4243
   
 
 server:
@@ -350,7 +350,7 @@ csap:
     algorithm: PBEWITHMD5ANDDES
     property-files:
       - "csapSecurity.properties"
-      - "${user.home}/csap/csapSecurity.properties"   #overwrite the above if it exists
+      - "${csapTest}/csapSecurity.properties"
       
 
       

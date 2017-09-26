@@ -115,6 +115,15 @@ loggers:
       - ref : errorsAppender
         level: warn
       
+    - name: org.csap.integations.CsapEncryptableProperties
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: errorsAppender
+        level: warn
+      
+      
     - name: org.csap.agent.services.ServiceManager
       level: info
       additivity: false
@@ -155,6 +164,7 @@ loggers:
       - ref: errorsAppender
         level: warn
       
+
     - name: org.sample
       level: info
       additivity: false

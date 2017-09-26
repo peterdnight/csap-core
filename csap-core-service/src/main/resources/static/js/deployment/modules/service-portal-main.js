@@ -242,20 +242,6 @@ require( ["editPackage", "service-os-panel", "service-app-panel", "./service-gra
 			return false; // prevents link
 		} );
 
-
-
-
-		$( '#cleanServiceBuild' ).click( function () {
-			cleanServiceBuild( false );
-			return false; // prevents link
-		} );
-
-		$( '#cleanGlobalBuild' ).click( function () {
-			cleanServiceBuild( true );
-			return false; // prevents link
-		} );
-
-
 		$( '#showFiles' ).click( function () {
 			launchFiles( $( "#instanceTable *.selected" ) );
 			return false; // prevents link
@@ -980,6 +966,21 @@ require( ["editPackage", "service-os-panel", "service-app-panel", "./service-gra
 						.trigger( "click" );
 			}
 		} );
+		
+		
+		
+
+
+		$( '#cleanServiceBuild' ).click( function () {
+			cleanServiceBuild( false );
+			return false; // prevents link
+		} );
+
+		$( '#cleanGlobalBuild' ).click( function () {
+			cleanServiceBuild( true );
+			return false; // prevents link
+		} );
+
 
 	}
 
@@ -987,6 +988,7 @@ require( ["editPackage", "service-os-panel", "service-app-panel", "./service-gra
 	/** @memberOf ServiceAdmin */
 	function displayResults( resultsJson, append ) {
 
+		console.log("results", resultsJson) ;
 		var results = JSON.stringify( resultsJson, null, "\t" );
 		results = results.replace( /\\n/g, "<br />" );
 
@@ -1825,7 +1827,7 @@ require( ["editPackage", "service-os-panel", "service-app-panel", "./service-gra
 		$.post( serviceBaseUrl + "/purgeDeployCache", paramObject,
 				function ( results ) {
 
-					displayResults( results );
+					displayResults( results, false );
 
 				} );
 

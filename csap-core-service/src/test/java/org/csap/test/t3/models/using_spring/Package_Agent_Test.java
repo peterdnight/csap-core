@@ -88,7 +88,7 @@ public class Package_Agent_Test {
 		logger.info( "platformVersions: {}", platformVersions );
 		assertThat( platformVersions )
 			.as( "Get Latest version for csap scorecards on landing page" )
-			.matches( "5.*8u.*6.*" );
+			.matches( "6.*8u.*6.*" );
 
 	}
 

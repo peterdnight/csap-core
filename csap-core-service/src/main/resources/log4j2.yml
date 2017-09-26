@@ -116,6 +116,22 @@ loggers:
       - ref: consoleAppender
       - ref : errorsAppender
         level: warn
+        
+    - name: org.csap.integations
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref : errorsAppender
+        level: warn
+      
+    - name: org.csap.integations.CsapEncryptableProperties
+      level: info
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      - ref: errorsAppender
+        level: warn
       
     - name: org.sample
       level: info
@@ -140,6 +156,20 @@ loggers:
       - ref: consoleAppender
       - ref : errorsAppender
         level: warn
+
+    - name: org.springframework.boot
+      level: warn 
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      
+      
+    - name: org.springframework.boot.autoconfigure.logging
+      level: info 
+      additivity: false
+      AppenderRef:  
+      - ref: consoleAppender
+      
       
     - name: org.springframework.security
       level: warn

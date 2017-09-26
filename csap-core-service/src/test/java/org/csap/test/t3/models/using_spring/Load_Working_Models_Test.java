@@ -85,7 +85,7 @@ public class Load_Working_Models_Test {
 		CSAP.setLogToDebug( Application.class.getName() );
 		assertThat( csapApplication.updatePlatformVersionsFromCsapTools( true ) )
 			.as( "Get Latest version for csap scorecards on landing page" )
-			.matches( "5.*8u.*6.*" );
+			.matches( "6.*8u.*6.*" );
 		CSAP.setLogToInfo( Application.class.getName() );
 
 	}
