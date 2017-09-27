@@ -406,6 +406,12 @@ require( ["real-time-meter", "app-trends"], function ( realTimeMeter, appTrends 
 		} );
 
 		$( '#activityCount' ).click( function () {
+			console.log("contents", $( '#activityCount' ).text() ) ;
+			if ( $( '#activityCount' ).text().contains("disabled") ) {
+				alertify.csapWarning("csap-events-service is currently disabled in your Application.json definition") ;
+				return false;
+			}
+
 			var targetUrl = historyUrl;
 			var curPackage = $( '.releasePackage' ).val();
 			if ( curPackage != "All Packages" ) {

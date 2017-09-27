@@ -3,7 +3,6 @@
 # csapDefaultConfiguration add for testing default config on desktop
 #spring.profiles.active: desktop,admin,company
 spring.profiles.active: desktop,agent,company
-#spring.profiles.active: desktop,agent,company,csapDefaultConfiguration
 
 ---
 #
@@ -323,10 +322,12 @@ spring:
  
  
 my-service-configuration:
+
   staging: target/STAGING
   processing: target/PROCESSING
-  definition-folder: "../../dev-definition"
   
+  definition-folder: "src/main/resources/shellScripts/defaultConf/"  # "../../dev-definition"
+
   docker:
     url: "tcp://localhost:2375" #tcp://localhost:2375 tcp://linuxhost:4243
   
@@ -344,7 +345,7 @@ server:
 csap:
   security: 
     enabled: true
-    ldap-enabled: true   # requires csapSecurity.properties in your home dir
+    ldap-enabled: false   # set env csapTest to folder with csapSecurity.properties
   encryptable-properties:
     enabled: true
     algorithm: PBEWITHMD5ANDDES
@@ -353,32 +354,4 @@ csap:
       - "${csapTest}/csapSecurity.properties"
       
 
-      
----
-
-#
-#  ================ profile for testing csap default (no ldap, etc).
-#
-
-spring:
-    profiles: csapDefaultConfiguration
-    resources:
-        cache-period: 0
-        
-
-my-service-configuration:
-  staging: target/STAGING
-  processing: target/PROCESSING
-  definition-folder: "src/main/resources/shellScripts/defaultConf/" 
-  
-    
-csap:
-  security: 
-    enabled: true
-    ldap-enabled: false   # requires csapSecurity.properties in your home dir
-  encryptable-properties:
-    enabled: true
-    algorithm: PBEWITHMD5ANDDES
-    property-files:
-      - "csapSecurity.properties"
       

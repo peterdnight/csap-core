@@ -232,14 +232,20 @@ define( [], function ( ) {
 		for ( var i = 0; i < currentResults.data.length; i++ ) {
 			//console.log()
 			currData = currentResults.data[i];
-			seriesToPlot.push( buildSeries( currData[  "date"], currData[  trendItem.metric] ) );
-
+			var metricName = trendItem.metric ;
 			graphTitle = trendItem.label;
+			if ( currData[ metricName ] == undefined) {
+				metricName = "StubData" ;
+				graphTitle += "(Test Data)"
+				console.log("using stub data")
+			}
+			seriesToPlot.push( buildSeries( currData[  "date"], currData[ metricName ] ) );
+
 			// var label = trendItem.label;
 			var label = currData.project;
 //		  if ( currentResults.data.length > 1 )
 //				label += " : " + currData.project + " "; // currData.lifecycle
-			if ( has10kValue( currData[  trendItem.metric] ) )
+			if ( has10kValue( currData[  metricName] ) )
 				graphTitle += " (1000's)";
 
 			if ( currentResults.lastUpdateMs < 0 ) {

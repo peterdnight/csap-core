@@ -10,6 +10,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.apache.commons.io.FileUtils;
+import org.csap.agent.CSAP;
 import org.csap.agent.model.Application;
 import org.javasimon.SimonManager;
 import org.javasimon.Split;
@@ -20,6 +23,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,7 +32,7 @@ import org.springframework.web.client.RestTemplate;
  * @author someDeveloper
  */
 @Component
-@CacheConfig(cacheNames = "AnalyticsTrendingCache")
+@CacheConfig ( cacheNames = "AnalyticsTrendingCache" )
 public class TrendCache {
 
 	final Logger logger = LoggerFactory.getLogger( this.getClass() );
@@ -39,56 +43,73 @@ public class TrendCache {
 	Application csapApp;
 
 	@Autowired
-	@Qualifier("trendRestTemplate")
+	@Qualifier ( "trendRestTemplate" )
 	private RestTemplate trendRestTemplate;
 
 	DateFormat shortFormatter = new SimpleDateFormat( "HH:mm:ss MMM-dd" );
 
-	final static String KEY_IS_RESTURL="{#restUrl}" ;
-	
-	@Cacheable( key = KEY_IS_RESTURL )  
-	public ObjectNode get(String restUrl) throws Exception {
+	final static String KEY_IS_RESTURL = "{#restUrl}";
+
+	@Cacheable ( key = KEY_IS_RESTURL )
+	public ObjectNode get ( String restUrl )
+			throws Exception {
 
 		ObjectNode resultsJson = refreshRequiredResponse();
 
 		resultsJson.put( TrendCacheManager.HASH,
-				buildReportHash( restUrl ) );
-		
+			buildReportHash( restUrl ) );
+
 		resultsJson.put( TrendCacheManager.NEEDS_LOAD, "initialLoadInProgress" );
 
 		return resultsJson;
 	}
 
-	private ObjectNode refreshRequiredResponse() {
+	private ObjectNode refreshRequiredResponse () {
 		ObjectNode resultsJson = jacksonMapper.createObjectNode();
 
 		resultsJson.put( TrendCacheManager.LAST_UPDATE_TOKEN, 0 );
 		return resultsJson;
 	}
 
-	// Report Hashes used to prevent multiple request for the same report being scheduled
+	// Report Hashes used to prevent multiple request for the same report being
+	// scheduled
 	// Large number of users could hit..
-	static public Integer buildReportHash(String restUrl) {
+	static public Integer buildReportHash ( String restUrl ) {
 		return restUrl.hashCode();
 	}
 
-	@CachePut(key = KEY_IS_RESTURL)
-	public ObjectNode update(String restUrl, String timerName) throws Exception {
+	private static final ClassPathResource trendStub = new ClassPathResource( "events/trendingReport.json" );
+
+	@CachePut ( key = KEY_IS_RESTURL )
+	public ObjectNode update ( String restUrl, String timerName )
+			throws Exception {
 
 		ObjectNode resultsJson = refreshRequiredResponse();
 
-		int reportHash
-				= buildReportHash( restUrl );
-		//	logger.info( "ReportHash: {}, url: {} ", reportHash, restUrl );
+		int reportHash = buildReportHash( restUrl );
+		// logger.info( "ReportHash: {}, url: {} ", reportHash, restUrl );
 
-//		logger.warn( "SLEEEPING ++++++++++++++ ");
-//		Thread.sleep(10000) ;
+		// logger.warn( "SLEEEPING ++++++++++++++ ");
+		// Thread.sleep(10000) ;
 		Split allTimer = SimonManager.getStopwatch( "trendCache.reload" ).start();
-		timerName = "trendCache.reload." + timerName.replaceAll( "/", "-" ).replaceAll( " ", "-" ).replaceAll( "=", "-" ).replaceAll( "\\?", "." ).replaceAll( "&", "." );
+		timerName = "trendCache.reload." + timerName.replaceAll( "/", "-" ).replaceAll( " ", "-" ).replaceAll( "=", "-" )
+			.replaceAll( "\\?", "." ).replaceAll( "&", "." );
 		Split trendTimer = SimonManager.getStopwatch( timerName ).start();
 		try {
 
-			ObjectNode restResponse = trendRestTemplate.getForObject( restUrl, ObjectNode.class );
+			ObjectNode restResponse = null;
+
+			if ( !csapApp.lifeCycleSettings().isEventPublishEnabled() ) {
+				logger.info( "Stubbing out data for trends - add csap events services" );
+
+				restResponse = (ObjectNode) jacksonMapper.readTree( trendStub.getFile() );
+
+				resultsJson.put( "message", "csap-event-service disabled - using stub data" );
+
+			} else {
+				restResponse = trendRestTemplate.getForObject( restUrl, ObjectNode.class );
+			}
+
 			resultsJson = restResponse;
 			if ( resultsJson != null ) {
 				resultsJson.put( "source", restUrl );
@@ -96,11 +117,13 @@ public class TrendCache {
 				resultsJson.put( TrendCacheManager.LAST_UPDATE_TOKEN, System.currentTimeMillis() );
 
 			}
-		} catch ( Exception e ) {
-			logger.error( "Failed getting report from url: {}, Reason: ", restUrl, e.getMessage() );
+
+		} catch (Exception e) {
+			String reason = CSAP.getCsapFilteredStackTrace( e );
+			logger.error( "Failed getting report from url: {}, Reason: {}", restUrl, reason );
 			logger.debug( "Stack Trace ", e );
 			resultsJson.put( "url", restUrl );
-			resultsJson.put( "message", "Error during Access: " + e.getMessage() );
+			resultsJson.put( "message", "Error during Access: " + reason );
 		}
 		trendTimer.stop();
 		allTimer.stop();

@@ -5,13 +5,13 @@
 # --spring.config.location=file:c:/Users/yourHomeDir/ 
 
 
-spring.mail.host: "${mailServer:outbound.yourCompany.com}"
-spring.mail.port: "${mailPort:25}"
+#spring.mail.host: "${mailServer:outbound.yourCompany.com}"
+#spring.mail.port: "${mailPort:25}"
     
-csap-agent.host-url-pattern: "${hostUrlPattern:http://CSAP_HOST.yourCompany.com:8011/CsAgent}"
+#csap-agent.host-url-pattern: "${hostUrlPattern:http://CSAP_HOST.yourCompany.com:8011/CsAgent}"
 
-my-service-configuration.docker.url: "tcp://localhost.yourCompany.com:4243" #"tcp://host.yourCompany.com:4243", tcp://localhost:2375, 
-my-service-configuration.docker.template-repository: "docker.io"
+#my-service-configuration.docker.url: "tcp://localhost.yourCompany.com:4243" #"tcp://host.yourCompany.com:4243", tcp://localhost:2375, 
+#my-service-configuration.docker.template-repository: "docker.io"
 
 
 csap.info.load-balancer-url: "${csapLbUrl:https://csap-secure.yourCompany.com}"

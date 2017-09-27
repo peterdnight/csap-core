@@ -2234,6 +2234,14 @@ public class Application {
 	static final long CSAPTOOLS_REFRESH = 1000 * 60 * 60; // every hour
 
 	public String updatePlatformVersionsFromCsapTools ( boolean forceUpdate ) {
+		
+		if ( !lifeCycleSettings().isEventPublishEnabled() ) {
+			logger.info( "Stubbing out data for trends - add csap events services" );
+			csagentCachedRelease="6";
+			linuxCachedRelease="6";
+			jdkCachedRelease="6";
+			return csagentCachedRelease + ", " + jdkCachedRelease + ", " + linuxCachedRelease;
+		}
 
 		if ( !forceUpdate && (System.currentTimeMillis() - lastCsapToolsTimeStamp < CSAPTOOLS_REFRESH) ) {
 

@@ -57,6 +57,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -188,9 +189,15 @@ public class ServiceRequests {
 
 			resultsJson.put( "message", "cache disabled: " + restUrl );
 		}
+		if ( ! csapApp.lifeCycleSettings().isEventPublishEnabled() ) {
+			logger.info( "Stubbing out data for trends - add csap events services" );
+			resultsJson.put( "count", "disabled" );
+			resultsJson.put( "message", "csap-event-service disabled - using stub data" );
+			return resultsJson ;
+		}
 
 		try {
-
+			
 			ObjectNode restResponse = csapEventsService.getForObject( restUrl, ObjectNode.class );
 
 			resultsJson.put( "url", restUrl );
@@ -486,7 +493,6 @@ public class ServiceRequests {
 	}
 
 	DateFormat shortFormatter = new SimpleDateFormat( "HH:mm:ss MMM-dd" );
-
 	// #path1.concat('peter')
 	@Cacheable ( CsapCoreService.TIMEOUT_CACHE_60s )
 	@RequestMapping ( value = "/report" )
@@ -549,8 +555,20 @@ public class ServiceRequests {
 		}
 
 		try {
+			
+			ObjectNode restResponse ;
 
-			ObjectNode restResponse = analyticsTemplate.getForObject( restUrl, ObjectNode.class );
+			if ( !csapApp.lifeCycleSettings().isEventPublishEnabled() ) {
+				ClassPathResource reportStub = new ClassPathResource( "events/report-" + report + ".json" );
+				logger.info( "Stubbing out report data using: {},  add csap events services", reportStub );
+				restResponse = (ObjectNode) jacksonMapper.readTree( reportStub.getFile() );
+
+				resultsJson.put( "message", "csap-event-service disabled - using stub data" );
+
+			} else {
+				restResponse = analyticsTemplate.getForObject( restUrl, ObjectNode.class );
+			}
+			
 
 			resultsJson = restResponse;
 			if ( resultsJson != null ) {
@@ -560,10 +578,11 @@ public class ServiceRequests {
 
 			}
 		} catch (Exception e) {
-			logger.error( "Failed getting report from url: {}, Reason: ", restUrl, e.getMessage() );
-			logger.debug( "Stack Trace ", e );
+			String reason = CSAP.getCsapFilteredStackTrace( e );
+			logger.error( "Failed getting report from url: {}, Reason: {}", restUrl, reason );
+			logger.debug( "Stack Trace {}", reason);
 			resultsJson.put( "url", restUrl );
-			resultsJson.put( "message", "Error during Access: " + e.getMessage() );
+			resultsJson.put( "message", "Error during Access: " + reason );
 		}
 
 		return resultsJson;
