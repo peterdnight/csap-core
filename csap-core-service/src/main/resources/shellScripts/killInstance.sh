@@ -112,13 +112,8 @@ if [ "$csapServer" == "wrapper" ] ; then
 
 	svcPid="$csapPids"
 
-	#
-	# source checkForWrapperExtract.sh
-	#svcPid=`ps -u $USER -f| grep  "$serviceName" | grep -v -e grep -e $0 -e "$STAGING"  | awk '{ print $2 }'`
-	# pids will use csap Assigned
-
 	skipApiExtract="true" ;
-	source checkForWrapperExtract.sh
+	source loadPackageApi.sh
 	skipApiExtract="" ;
 	
 	if [ "$apiFound" == "true" ] ; then 

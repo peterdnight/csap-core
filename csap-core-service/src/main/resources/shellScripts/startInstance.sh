@@ -272,7 +272,7 @@ if [ "$serverRuntime" == "wrapper" ] ; then
 	
 	cd $runDir ;
 	
-	source checkForWrapperExtract.sh
+	source loadPackageApi.sh
 	startWrapper
 	
 	echo == Wrapper started

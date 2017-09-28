@@ -389,7 +389,7 @@ if  [ "$commonWarDir" != "" ]  ; then
 		#source $STAGING/temp/scripts/consoleCommands.sh
 		savedWorking="$csapWorkingDir"
 		csapWorkingDir="$STAGING/temp" ;
-		source checkForWrapperExtract.sh
+		source loadPackageApi.sh
 		csapWorkingDir=$savedWorking
 		
 		
@@ -452,7 +452,7 @@ if [ "$serverRuntime" == "wrapper" ]  ; then
 	#source $STAGING/temp/scripts/consoleCommands.sh
 	savedWorking="$csapWorkingDir"
 	csapWorkingDir="$STAGING/temp" ;
-	source checkForWrapperExtract.sh
+	source loadPackageApi.sh
 	csapWorkingDir=$savedWorking
 		
 	showIfDebug == Switch to temp folder so wrappers can do builds in a temp folder

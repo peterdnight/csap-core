@@ -33,7 +33,7 @@ fi ;
 if [ "$serverRuntime" == "wrapper" ] ; then
 	
 	printIt "Loading csapApi commands"
-	source checkForWrapperExtract.sh
+	source loadPackageApi.sh
 	
 	printLine "invoking stopWrapper"
 	stopWrapper
