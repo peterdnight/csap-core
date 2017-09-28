@@ -117,16 +117,15 @@ if [ "$csapServer" == "wrapper" ] ; then
 	#svcPid=`ps -u $USER -f| grep  "$serviceName" | grep -v -e grep -e $0 -e "$STAGING"  | awk '{ print $2 }'`
 	# pids will use csap Assigned
 
-	showIfDebug  "killInstance.sh\t: == "
-	showIfDebug  "killInstance.sh\t: == Found a wrapper loading custom $runDir/scripts/consoleCommands.sh"
-	showIfDebug  "killInstance.sh\t:" ==
-
-	if [ -e $runDir/scripts/consoleCommands.sh ] ; then 
-		printIt "Found wrapper api, loading $runDir/scripts/consoleCommands.sh"
-		source $runDir/scripts/consoleCommands.sh
+	skipApiExtract="true" ;
+	source checkForWrapperExtract.sh
+	skipApiExtract="" ;
+	
+	if [ "$apiFound" == "true" ] ; then 
+		printIt "Invoking csapApi kill"
 		killWrapper
 	else 
-		printIt "Skipping wrapper kill because api not found: $runDir/scripts/consoleCommands.sh"
+		printIt "csapApi not found - skipping kill"
 	fi;
 fi ;
 	

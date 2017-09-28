@@ -386,7 +386,12 @@ if  [ "$commonWarDir" != "" ]  ; then
 		find $STAGING/temp/scripts/* -name "*.*" -exec native2ascii '{}' '{}' \;
 		
 		showIfDebug == loading custom $STAGING/temp/scripts/consoleCommands.sh
-		source $STAGING/temp/scripts/consoleCommands.sh
+		#source $STAGING/temp/scripts/consoleCommands.sh
+		savedWorking="$csapWorkingDir"
+		csapWorkingDir="$STAGING/temp" ;
+		source checkForWrapperExtract.sh
+		csapWorkingDir=$savedWorking
+		
 		
 		showIfDebug == Switch to temp folder so wrappers can do builds in a temp folder
 		cd $STAGING/temp
@@ -444,8 +449,12 @@ if [ "$serverRuntime" == "wrapper" ]  ; then
 	find $STAGING/temp/scripts/* -name "*.*" -exec native2ascii '{}' '{}' \;
 	
 	showIfDebug == loading custom $STAGING/temp/scripts/consoleCommands.sh
-	source $STAGING/temp/scripts/consoleCommands.sh
-	
+	#source $STAGING/temp/scripts/consoleCommands.sh
+	savedWorking="$csapWorkingDir"
+	csapWorkingDir="$STAGING/temp" ;
+	source checkForWrapperExtract.sh
+	csapWorkingDir=$savedWorking
+		
 	showIfDebug == Switch to temp folder so wrappers can do builds in a temp folder
 	cd $STAGING/temp
 	

@@ -31,14 +31,11 @@ if [ "$serverRuntime" == "SpringBoot" ] ; then
 fi ;
 
 if [ "$serverRuntime" == "wrapper" ] ; then
-	echo ==
-	echo == Found a wrapper loading custom $runDir/scripts/consoleCommands.sh
-	echo ==
 	
+	printIt "Loading csapApi commands"
 	source checkForWrapperExtract.sh
 	
-	source $runDir/scripts/consoleCommands.sh
-	echo == invoking stopWrapper
+	printLine "invoking stopWrapper"
 	stopWrapper
 	echo Flag to exit read loop in AdminController.java XXXYYYZZZ_AdminController ;
 	echo == exiting wrapper

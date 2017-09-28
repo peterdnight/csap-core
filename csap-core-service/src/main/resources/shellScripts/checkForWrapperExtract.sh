@@ -1,16 +1,31 @@
 #!/bin/bash 
 
 
-echo == checking if we need to extract wrapper commands
+printIt "checking for CSAP package API"
 
-if [ ! -e $runDir/scripts/consoleCommands.sh ] ; then
-	echo ==
-	echo == Did not find a wrapper...extracting $STAGING/warDist/$serviceName.zip to $runDir
-	echo ==
+
+if [ "$skipApiExtract" == "" ] && [ ! -e $csapWorkingDir/scripts/consoleCommands.sh ] &&  [ ! -e $csapWorkingDir/csapApi.sh ] ; then
 	
-	echo = hook for versioning in wrappers, deleting $runDir/version
-	\rm -rf  $runDir/version
-	/usr/bin/unzip -o -qq $STAGING/warDist/$serviceName.zip -d $runDir
-	find $runDir/scripts/* -name "*.*" -exec native2ascii '{}' '{}' \;
-	chmod -R 755 $runDir
+	printIt "Did not find api, extracting $STAGING/warDist/$serviceName.zip to $csapWorkingDir"
+	
+	printLine "Versioning support: deleting $csapWorkingDir/version"
+	\rm -rf  $csapWorkingDir/version
+	/usr/bin/unzip -o -qq $STAGING/warDist/$serviceName.zip -d $csapWorkingDir
+	find $csapWorkingDir/scripts/* -name "*.*" -exec native2ascii '{}' '{}' \;
+	chmod -R 755 $csapWorkingDir
 fi ;
+
+if [ -e $csapWorkingDir/csapApi.sh ] ; then 
+	printIt "Loading: $csapWorkingDir/csapApi.sh" ;
+	source $csapWorkingDir/csapApi.sh ;
+	apiFound="true";
+	
+elif [ -e $csapWorkingDir/scripts/consoleCommands.sh ] ; then 
+	printIt "Legacy api in use: $csapWorkingDir/scripts/consoleCommands.sh,  switch to csapApi.sh" ;
+	source $csapWorkingDir/scripts/consoleCommands.sh ;
+	apiFound="true";
+		
+else 
+	printIt "Warning: did not find $csapWorkingDir/csapApi.sh"
+	apiFound="false";
+fi;
