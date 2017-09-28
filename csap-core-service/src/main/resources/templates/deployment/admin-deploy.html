@@ -103,7 +103,7 @@
 
 					<div id="dockerContainerNotice"   style="" th:if="${ useDockerContainer } != null">
 						<img class="but" src="images/docker.png"/> Docker Container Enabled</div>
-					
+
 					<div id="deployDialog" style="display: none">
 
 
@@ -178,27 +178,53 @@
 
 								<div id="sourceOptions">
 
-									<label> userid: <input id="scmUserid" style="width: 6em"
-														   name="scmUserid" th:value="${ userid }">
-									</label> <label> password: <input id="scmPass"
-																	  style="width: 17.5em;" name="scmPass" value="" type="password">
-									</label> <br/> <label title="Adds deploy to maven command">
-										upload to maven: <input id="isScmUpload" name="isScmUpload"
-																type="checkbox">
-									</label> <label
+									<label> <span style="font-weight: bold;padding-left: 5em;">userid: </span>
+										<input id="scmUserid" style="width: 6em"
+											   name="scmUserid" th:value="${ userid }">
+									</label> 
+									<label> password: 
+										<input id="scmPass"
+											   style="width: 17.5em;" name="scmPass" value="" type="password">
+									</label> 
+									<br/> 
+									<label title="Adds deploy to maven command">
+										upload to maven: 
+										<input id="isScmUpload" name="isScmUpload"
+											   type="checkbox">
+									</label> 
+
+									<label
 										title="This value will be string substited in URL below with trunk. If you change this you will need to run service clean. Branches are usually named /branches/branchname.">
-										branch/tag: <input id="scmBranch" style="width: 15em"
-														   name="scmBranch"
-														   th:value="${ serviceInstance.getDefaultBranch() }"
-														   >
-									</label> <br/> <label> buildCommand: <input id="scmCommand"
-																				style="width: 30em" name="scmCommand"
-																				th:value="${ lifeCycleSettings.getMavenCommand() }"
-																				>
-									</label> <br/> <span class="comment"
-														 title="Click to browse source location"><a class="simple"
-																			   style="font-style: italic; font-weight: normal" target="_blank"
-																			   th:href="${ serviceInstance.getScmLocation() }"> [[ ${serviceInstance.getScmLocation() } ]]</a>
+										branch/tag: 
+										<input id="scmBranch" style="width: 15em"
+											   name="scmBranch"
+											   th:value="${ serviceInstance.getDefaultBranch() }"
+											   >
+									</label> 
+									<br/> 
+
+									<label> 
+										Build Command: 
+										<input id="scmCommand"
+											   style="width: 30em" name="scmCommand"
+											   th:value="${ lifeCycleSettings.getMavenCommand() }"
+											   >
+									</label> 
+									<br/> 
+
+									<span class="comment"
+										  title="Click to browse source location">
+										<span style="font-weight: bold;padding-left: 3em; font-style: italic;">
+											source:
+										</span>
+										<a class="simple"
+										   style="font-style: italic; font-weight: normal; display: inline" target="_blank"
+										   th:href="${ serviceInstance.getScmLocation() }"> [[ ${serviceInstance.getScmLocation() } ]]</a>
+										
+										<span style="font-weight: bold;padding-left: 3em; font-style: italic;"
+											th:if="${ serviceInstance.getScmBuildLocation().length() > 0 }">
+											build folder: [[ ${serviceInstance.getScmBuildLocation() } ]]
+										</span>
 									</span>
 
 
@@ -300,12 +326,12 @@
 								</label>
 
 								<label>
-								<a style="vertical-align: middle" class="simple"
-								   href="https://github.com/csap-platform/csap-core/wiki#updateRefJava+Garbage+Collection"
-								   target="_blank"
-								   title="View Garbage Collection in CS-AP reference guide">
-									<img class="but" th:src="@{/images/16x16/help.png}"/>GC Hints
-								</a>
+									<a style="vertical-align: middle" class="simple"
+									   href="https://github.com/csap-platform/csap-core/wiki#updateRefJava+Garbage+Collection"
+									   target="_blank"
+									   title="View Garbage Collection in CS-AP reference guide">
+										<img class="but" th:src="@{/images/16x16/help.png}"/>GC Hints
+									</a>
 								</label>
 							</span>
 
@@ -327,9 +353,9 @@
 
 
 						<div style="height: calc(100% - 100px)">
-							
+
 							<div class="heading" style="padding-top: 0; margin-top: 0">Start parameters</div>
-							
+
 							<textarea id="serviceParameters" spellcheck="false"
 									  style="width: 90%; height: 90%; min-height: 3em;box-sizing: border-box;"
 									  title="Note these can be permanently updated by selecting Edit Configuration button"
@@ -472,7 +498,7 @@
 
 
 
-					   <!-- th:if="${serviceInstance.hasJobs()}"-->
+					<!-- th:if="${serviceInstance.hasJobs()}"-->
 					<a id="jobsButton" 
 					   class="simple toolsButton" href="#jobs"
 					   title="Invokes scheduled jobs for testing">
@@ -503,10 +529,10 @@
 						<div id="jobDetails" class="info" style="white-space: pre-wrap">
 							No custom jobs defined. Default log rotation job can be invoked.
 						</div>
-						
+
 						<br/>
-						
-						
+
+
 					</div>
 
 					<a id="hostHelpButton" class="simple toolsButton"
