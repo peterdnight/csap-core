@@ -63,13 +63,13 @@ import static java.util.Comparator.comparing;
 import org.csap.security.CsapUser;
 
 @Controller
-@RequestMapping(value = CsapCoreService.BASE_URL)
-@CsapDoc(title = "CSAP Application Portal", notes = {
+@RequestMapping ( value = CsapCoreService.BASE_URL )
+@CsapDoc ( title = "CSAP Application Portal" , notes = {
 		"CSAP Application Portal provides core application management capabilities, including "
 				+ "starting/stoping/deploying services, viewing log files, and much more.",
 		"<a class='pushButton' target='_blank' href='https://github.com/csap-platform/csap-core/wiki'>learn more</a>",
 		"<img class='csapDocImage' src='CSAP_BASE/images/csapboot.png' />"
-				+ "<img class='csapDocImage' src='CSAP_BASE/images/portals.png' />" })
+				+ "<img class='csapDocImage' src='CSAP_BASE/images/portals.png' />" } )
 public class CorePortals {
 
 	final Logger logger = LoggerFactory.getLogger( getClass() );
@@ -86,30 +86,32 @@ public class CorePortals {
 	Application application;
 	CsapInformation csapInformation;
 
-	@Autowired(required = false)
+	@Autowired ( required = false )
 	CsapSecurityConfiguration csapSecurityConfiguration;
 
 	CsapEventClient csapEventClient;
 
 	@GetMapping
-	@CsapDoc(notes = { "Default page load for Application. It redirects to the services portal" })
+	@CsapDoc ( notes = { "Default page load for Application. It redirects to the services portal" } )
 	public String applicationDefault_loadServicesPortal ( Model springViewModel ) {
 		return "redirect:/services";
 	}
-	
-//	@GetMapping("/error")
-//	@CsapDoc(notes = { "Default page load for Application. It redirects to the services portal" })
-//	public String errorPage ( Model springViewModel, HttpServletRequest request ) {
-//		logger.warn( "error on: {} ", request.getRequestURI() );
-//		return "redirect:/test";
-//	}
 
-	@RequestMapping(CsapCoreService.TEST_URL)
+	// @GetMapping("/error")
+	// @CsapDoc(notes = { "Default page load for Application. It redirects to
+	// the services portal" })
+	// public String errorPage ( Model springViewModel, HttpServletRequest
+	// request ) {
+	// logger.warn( "error on: {} ", request.getRequestURI() );
+	// return "redirect:/test";
+	// }
+
+	@RequestMapping ( CsapCoreService.TEST_URL )
 	public String integrationTestsPage ( Model springViewModel ) {
 
-		String pageName="agent@" + Application.getHOST_NAME() ;
+		String pageName = "agent@" + Application.getHOST_NAME();
 		if ( Application.isJvmInManagerMode() ) {
-			pageName="admin@" + Application.getHOST_NAME() ;
+			pageName = "admin@" + Application.getHOST_NAME();
 		}
 		springViewModel.addAttribute( "pageName", pageName );
 		springViewModel.addAttribute( "host", Application.getHOST_NAME() );
@@ -130,10 +132,10 @@ public class CorePortals {
 	// Test UI for function testing apis
 	//
 
-	@RequestMapping("health")
-	@CsapDoc(notes = { "The real time meters dashboard enables teams to quickly view the last collected operational "
+	@RequestMapping ( "health" )
+	@CsapDoc ( notes = { "The real time meters dashboard enables teams to quickly view the last collected operational "
 			+ "metrics for each host. This enables teams to quickly identify if one or more service instances "
-			+ "has encounterd a performance issue or functional escape." })
+			+ "has encounterd a performance issue or functional escape." } )
 	public String health ( ModelMap modelMap, HttpSession session ) {
 
 		if ( logger.isDebugEnabled() ) {
@@ -170,30 +172,30 @@ public class CorePortals {
 		return "health/alertsPortal";
 	}
 
-	@CsapDoc(notes = "Health data showing alerts. Default hours is 4 - and testing is 0", baseUrl = "/csap")
-	@GetMapping(value = "/health/alerts", produces = MediaType.APPLICATION_JSON_VALUE)
+	@CsapDoc ( notes = "Health data showing alerts. Default hours is 4 - and testing is 0" , baseUrl = "/csap" )
+	@GetMapping ( value = "/health/alerts" , produces = MediaType.APPLICATION_JSON_VALUE )
 	@ResponseBody
 	public ObjectNode report (
-								@RequestParam(value = "hours", required = false, defaultValue = "4") int hours,
-								@RequestParam(value = "testCount", required = false, defaultValue = "0") int testCount ) {
+								@RequestParam ( value = "hours" , required = false , defaultValue = "4" ) int hours,
+								@RequestParam ( value = "testCount" , required = false , defaultValue = "0" ) int testCount ) {
 		ObjectNode results = jacksonMapper.createObjectNode();
 
 		ArrayNode alertsTriggered;
 
-		if ( !Application.isJvmInManagerMode() )  {
+		if ( !Application.isJvmInManagerMode() ) {
 			alertsTriggered = jacksonMapper.createArrayNode();
 			ObjectNode t = alertsTriggered.addObject();
 			t.put( "ts", System.currentTimeMillis() );
 
 			// String foundTime = LocalDateTime.now().format(
 			// DateTimeFormatter.ofPattern( "HH:mm:ss , MMM d" ) ) ;
-			t.put( "id", "Agent mode"  );
-			t.put( "type", "."  );
-			t.put( "time", ".");
+			t.put( "id", "Agent mode" );
+			t.put( "type", "." );
+			t.put( "time", "." );
 			t.put( "host", "." );
-			t.put( "service", "."  );
-			t.put( "description", "Switch to admin to view aggregated"  );
-		} else  if ( testCount == 0 ) {
+			t.put( "service", "." );
+			t.put( "description", "Switch to admin to view aggregated" );
+		} else if ( testCount == 0 ) {
 			alertsTriggered = application.getHostStatusManager().getAllAlerts();
 		} else {
 			results.put( "testCount", testCount );
@@ -216,7 +218,7 @@ public class CorePortals {
 				t.put( "description", "description" + rg.nextInt( 20 ) );
 			}
 		}
-		ArrayNode filteredByHoursShow = alertsTriggered ;
+		ArrayNode filteredByHoursShow = alertsTriggered;
 		if ( hours > 0 ) {
 
 			ArrayNode filteredByHours = jacksonMapper.createArrayNode();
@@ -232,10 +234,10 @@ public class CorePortals {
 
 				}
 			} );
-			
-			filteredByHoursShow=filteredByHours;
 
-		} 
+			filteredByHoursShow = filteredByHours;
+
+		}
 
 		results.put( "storeTotal", alertsTriggered.size() );
 		results.put( "filterTotal", filteredByHoursShow.size() );
@@ -252,10 +254,10 @@ public class CorePortals {
 		return timeDayFormat.format( d );
 	}
 
-	@RequestMapping(CsapCoreService.METER_URL)
-	@CsapDoc(notes = { "The real time meters dashboard enables teams to quickly view the last collected operational "
+	@RequestMapping ( CsapCoreService.METER_URL )
+	@CsapDoc ( notes = { "The real time meters dashboard enables teams to quickly view the last collected operational "
 			+ "metrics for each host. This enables teams to quickly identify if one or more service instances "
-			+ "has encounterd a performance issue or functional escape." })
+			+ "has encounterd a performance issue or functional escape." } )
 	public String realTimeMetersDashboard ( ModelMap modelMap, HttpSession session ) {
 
 		if ( logger.isDebugEnabled() ) {
@@ -270,10 +272,10 @@ public class CorePortals {
 	//
 	// Top level browsers for services
 	//
-	@RequestMapping(CsapCoreService.MAINSERVICES_URL)
+	@RequestMapping ( CsapCoreService.MAINSERVICES_URL )
 	public String applicationPortal (	ModelMap modelMap, HttpServletRequest request, HttpSession session,
-										@RequestParam(value = CSAP.PACKAGE_PARAM, required = false) String releasePackage,
-										@CookieValue(value = "JSESSIONID", required = false) String cookie ) {
+										@RequestParam ( value = CSAP.PACKAGE_PARAM , required = false ) String releasePackage,
+										@CookieValue ( value = "JSESSIONID" , required = false ) String cookie ) {
 
 		if ( logger.isDebugEnabled() ) {
 			logger.debug( " Entered" );
@@ -336,9 +338,9 @@ public class CorePortals {
 		}
 	}
 
-	@RequestMapping(CsapCoreService.MAINHOSTS_URL)
+	@RequestMapping ( CsapCoreService.MAINHOSTS_URL )
 	public String applicationHostsPortal (	ModelMap modelMap,
-											@RequestParam(value = CSAP.PACKAGE_PARAM, required = false) String releasePackage,
+											@RequestParam ( value = CSAP.PACKAGE_PARAM , required = false ) String releasePackage,
 											HttpSession session ) {
 
 		if ( logger.isDebugEnabled() ) {
@@ -351,9 +353,9 @@ public class CorePortals {
 		return "/deployment/service-host";
 	}
 
-	@RequestMapping(CsapCoreService.CLUSTERBROWSER_URL)
+	@RequestMapping ( CsapCoreService.CLUSTERBROWSER_URL )
 	public String applicationClusterOperationsDashboard (
-															@RequestParam(value = CSAP.PACKAGE_PARAM, required = false) String releasePackage,
+															@RequestParam ( value = CSAP.PACKAGE_PARAM , required = false ) String releasePackage,
 															ModelMap modelMap, HttpSession session ) {
 
 		if ( logger.isDebugEnabled() ) {
@@ -370,9 +372,9 @@ public class CorePortals {
 		return "/deployment/service-dialog-cluster";
 	}
 
-	@RequestMapping("/batchDialog")
+	@RequestMapping ( "/batchDialog" )
 	public String applicationBatchDeploymentDashboard (
-														@RequestParam(value = CSAP.PACKAGE_PARAM, required = false) String releasePackage,
+														@RequestParam ( value = CSAP.PACKAGE_PARAM , required = false ) String releasePackage,
 														ModelMap modelMap, HttpSession session ) {
 
 		if ( logger.isDebugEnabled() ) {
@@ -431,7 +433,7 @@ public class CorePortals {
 		return "/deployment/service-dialog-batch";
 	}
 
-	@RequestMapping("/find-service/{releasePackage}/{serviceName}")
+	@RequestMapping ( "/find-service/{releasePackage}/{serviceName}" )
 	public ModelAndView servicePortalFind (
 											@PathVariable String serviceName,
 											@PathVariable String releasePackage ) {
@@ -459,13 +461,13 @@ public class CorePortals {
 	//
 	// Service managment - start/stop/deploy
 	//
-	@RequestMapping(CsapCoreService.ADMIN_URL)
+	@RequestMapping ( CsapCoreService.ADMIN_URL )
 	public String servicePortal (
 									ModelMap modelMap, HttpSession session,
 									HttpServletResponse response,
-									@RequestParam(CSAP.SERVICE_PORT_PARAM) String serviceNamePort,
-									@RequestParam(CSAP.PACKAGE_PARAM) String releasePackage,
-									@RequestParam(CSAP.HOST_PARAM) String hostName )
+									@RequestParam ( CSAP.SERVICE_PORT_PARAM ) String serviceNamePort,
+									@RequestParam ( CSAP.PACKAGE_PARAM ) String releasePackage,
+									@RequestParam ( CSAP.HOST_PARAM ) String hostName )
 			throws IOException {
 
 		if ( logger.isDebugEnabled() ) {
@@ -494,7 +496,7 @@ public class CorePortals {
 			.filter( name -> !name.contains( Application.AGENT_ID ) )
 			.forEach( servicesOnHost::add );
 
-		if ( requestedInstance.isUseDockerJavaContainer() || requestedInstance.isDockerContainer()  ) {
+		if ( requestedInstance.isUseDockerJavaContainer() || requestedInstance.isDockerContainer() ) {
 			modelMap.addAttribute( "useDockerContainer", servicesOnHost );
 		}
 		modelMap.addAttribute( "servicesOnHost", servicesOnHost );
@@ -504,7 +506,6 @@ public class CorePortals {
 		modelMap.addAttribute( "serviceInstance", requestedInstance );
 		modelMap.addAttribute( "serviceParameters", requestedInstance.getParameters() );
 
-		
 		ObjectNode jvms = jacksonMapper.createObjectNode();
 		ArrayNode jvmsAvailable = jvms.putArray( "available" );
 
@@ -514,30 +515,31 @@ public class CorePortals {
 		if ( System.getenv( "JAVA8_HOME" ) != null || Application.isRunningOnDesktop() ) {
 			jvmsAvailable.add( "Java 8" );
 		}
-		if ( System.getenv( "JAVA9_HOME" ) != null ) {
+		if ( System.getenv( "JAVA9_HOME" ) != null || Application.isRunningOnDesktop() ) {
 			jvmsAvailable.add( "Java 9" );
 		}
 
 		String javaVersion = requestedInstance.getJavaVersion();
 
-		if ( javaVersion.equals( "default" ) ) {
-
-			javaVersion = "7";
-			// csapApp.getServiceInstanceCurrentHost("jdk")
-
-			logger.debug( "Getting data for: {}", hostName );
-			Optional<ServiceInstance> jdkInstance = application.getModel( releasePackage )
-				.getServicesOnHost( hostName )
-				.filter( serviceInstance -> serviceInstance.getServiceName()
-					.matches( "jdk" ) )
-				.findFirst();
-
-			if ( jdkInstance.isPresent() && jdkInstance.get()
-				.getMavenVersion()
-				.startsWith( "8" ) ) {
-				javaVersion = "8";
-			}
-		}
+//		if ( javaVersion.equals( "default" ) ) {
+//
+//			javaVersion = "7";
+//			// csapApp.getServiceInstanceCurrentHost("jdk")
+//
+//			logger.debug( "Getting data for: {}", hostName );
+//			Optional<ServiceInstance> jdkInstance = application.getModel( releasePackage )
+//				.getServicesOnHost( hostName )
+//				.filter( serviceInstance -> serviceInstance.getServiceName()
+//					.matches( "jdk" ) )
+//				.findFirst();
+//
+//			if ( jdkInstance.isPresent()
+//					&& jdkInstance.get()
+//						.getMavenVersion()
+//						.startsWith( "8" ) ) {
+//				javaVersion = "8";
+//			}
+//		}
 
 		jvms.put( "serviceSelected", "Java " + javaVersion );
 
@@ -553,7 +555,7 @@ public class CorePortals {
 		modelMap.addAttribute( "serviceLimits",
 			ServiceAlertsEnum.getAdminUiLimits( requestedInstance,
 				application.lifeCycleSettings() ) );
-		
+
 		modelMap.addAttribute( "serviceDocker", requestedInstance.getDockerSettings() );
 
 		try {
@@ -641,20 +643,18 @@ public class CorePortals {
 	ObjectMapper jacksonMapper = new ObjectMapper();
 
 	@Inject
-	@Qualifier("csapEventsService")
+	@Qualifier ( "csapEventsService" )
 	private RestTemplate csapEventsService;
-	
 
-	@RequestMapping(CsapCoreService.SCREEN_URL)
+	@RequestMapping ( CsapCoreService.SCREEN_URL )
 	public String csapScreenCastViewer (
 											ModelMap modelMap,
-											@RequestParam("item") String item,
-											@RequestParam(value = "wiki", required = false, defaultValue = "https://github.com/csap-platform/csap-core/wiki") String wiki,
+											@RequestParam ( "item" ) String item,
+											@RequestParam ( value = "wiki" , required = false , defaultValue = "https://github.com/csap-platform/csap-core/wiki" ) String wiki,
 											HttpServletRequest request, HttpSession session )
 			throws IOException {
 
 		String user = CsapUser.currentUsersID();
-
 
 		String mp4 = application.lifeCycleSettings().getToolsServer() + "/screencasts/" + item + ".mp4";
 		String ogg = application.lifeCycleSettings().getToolsServer() + "/screencasts/" + item + ".ogg";
@@ -750,7 +750,7 @@ public class CorePortals {
 		modelMap.addAttribute( "analyticsUrl", application.lifeCycleSettings()
 			.getAnalyticsUiUrl()
 				+ "?life=" + Application.getCurrentLifeCycle() );
-		// 
+		//
 		modelMap.addAttribute( "prodDataUrl", application.lifeCycleSettings()
 			.getAnalyticsUiUrl()
 				+ "?life=prod&report=service/detail&appId=" + application.lifeCycleSettings()

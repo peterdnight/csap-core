@@ -40,8 +40,6 @@ public class CSAP {
 
 	public static final String DOCKER_REPOSITORY = "$dockerRepository";
 	public static final String SERVICE_PARAMETERS = "$parameters";
-	public static final String JAVA8_PARAMETER = "-DcsapJava8";
-	public static final String JAVA7_PARAMETER = "-DcsapJava7";
 	public static final String JMX_PARAMETER = "-DcsapJmxPort=";
 	public static final String DOCKER_JAVA_PARAMETER = "-DcsapDockerJava";
 	

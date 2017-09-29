@@ -1161,8 +1161,7 @@ public class Application {
 			version.append( dockerVersion );
 
 		} else if ( instance.isWrapper() || instance.isSpringBoot() ) {
-			File versionFile = new File( getProcessingDir(), instance.getServiceName() + "_"
-					+ instance.getPort() + "/version" );
+			File versionFile = new File( getProcessingDir(), instance.getServiceName_Port() + "/version" );
 
 			if ( !versionFile.exists() ) {
 				// fallback to propertyFolder
