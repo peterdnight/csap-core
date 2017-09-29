@@ -1,10 +1,37 @@
 
-### Overview: 
+# csap-core-service
+
+## Provides
+csap-core-service enables service management, host management, data collection, and analytics portal.
+
+References: [Reference Guide](https://github.com/csap-platform/csap-core/wiki)
+
+
+### Configuration
+
+Command Line parameters: 
+- uses spring profiles to configure whether running in agent or admin/analytics modes
+```
+-Dspring.profiles.active=CSAP_LIFE,agent,limits
+```
+ 
+
+Environment Variables:
+```
+{
+	"hostUrlPattern": "http://CSAP_HOST.cisco.com:8011/CsAgent",
+	"mailServer": "outbound.cisco.com",
+	"csapDockerRepository": "containers.cisco.com/pnightin"
+}
+```
+
+
+
+### Desktop development:
 - Some tests require provisioned systems, such as LDAP, git, etc.
 	- **application-company.yml**  is a small subset useful for quickly getting started
 - refer to application.yml and application-company.yml for complete set of variables
 
-### Desktop development:
 - dependencies defined using maven, so any IDE works  
 - create csap folder in your home directory, copy and modify
 	- csapSecurity.properties
