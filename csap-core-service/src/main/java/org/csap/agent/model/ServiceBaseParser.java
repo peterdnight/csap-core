@@ -110,6 +110,9 @@ public class ServiceBaseParser extends ServiceBase {
 	public String getJavaVersion () {
 		String params = getParameters();
 
+		if ( params.contains( "csapJava9" ) ) {
+			return "9";
+		}
 		if ( params.contains( "csapJava8" ) ) {
 			return "8";
 		}

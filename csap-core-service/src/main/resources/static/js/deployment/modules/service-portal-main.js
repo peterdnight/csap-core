@@ -601,13 +601,17 @@ require( ["editPackage", "service-os-panel", "service-app-panel", "./service-gra
 			},
 			'onok': function () {
 				var javaOpts = $serviceParameters.val();
+				javaOpts = javaOpts.replace( "-DcsapJava9", " " );
 				javaOpts = javaOpts.replace( "-DcsapJava8", " " );
 				javaOpts = javaOpts.replace( "-DcsapJava7", " " );
 
 				var csapJdkParam = "-DcsapJava7";
 
-				if ( $( '#jdkSelect' ).val().indexOf( "8" ) != -1 )
+				if ( $( '#jdkSelect' ).val().indexOf( "8" ) != -1 ) {
 					csapJdkParam = "-DcsapJava8";
+				} else if ( $( '#jdkSelect' ).val().indexOf( "9" ) != -1 ) {
+					csapJdkParam = "-DcsapJava9";
+				}
 
 				$serviceParameters.val( csapJdkParam + " " + javaOpts );
 			},

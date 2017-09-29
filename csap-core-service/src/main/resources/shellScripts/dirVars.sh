@@ -385,21 +385,29 @@ fi ;
 runDir="$PROCESSING/$svcInstance" ;
 
 if [[  $csapParams == *csapJava8*  ]]  ; then
+	
 	if [ "$JAVA8_HOME" != "" ] ; then
 		export JAVA_HOME=$JAVA8_HOME
 		export PATH=$JAVA8_HOME/bin:$PATH
 	else
-		echo warning: JAVA8_HOME variable is not set. reverting to vm default
+		printIt "warning: JAVA8_HOME variable is not set. reverting to vm default"
 	fi
-fi ;
-if [[  $csapParams == *csapJava7*  ]]  ; then
+	
+elif [[  $csapParams == *csapJava7*  ]]  ; then
 	if [ "$JAVA7_HOME" != "" ] ; then
 		export JAVA_HOME=$JAVA7_HOME
 		export PATH=$JAVA7_HOME/bin:$PATH
 	else
-		echo warning: JAVA7_HOME variable is not set. reverting to vm default
+		printIt "warning: JAVA7_HOME variable is not set. reverting to vm default"
 	fi
 
+elif [[  $csapParams == *csapJava9*  ]]  ; then
+	if [ "$JAVA9_HOME" != "" ] ; then
+		export JAVA_HOME=$JAVA9_HOME
+		export PATH=$JAVA9_HOME/bin:$PATH
+	else
+		printIt "warning: JAVA9_HOME variable is not set. reverting to vm default"
+	fi
 fi ;
 
 printIt JAVA version: $JAVA_HOME 
