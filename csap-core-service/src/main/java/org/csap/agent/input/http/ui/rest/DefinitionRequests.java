@@ -862,12 +862,7 @@ public class DefinitionRequests {
 			serviceNode.set( ServiceAttributes.environmentVariables.value, vars );
 		}
 
-		if ( !serviceNode.has( ServiceAttributes.documentation.value ) ) {
-
-			serviceNode.put( ServiceAttributes.documentation.value,
-				csapApp.lifeCycleSettings().getUserLookupUrl( CsapUser.currentUsersID() ) );
-		}
-		if ( !serviceNode.has( ServiceAttributes.documentation.value ) ) {
+		if ( !serviceNode.has( ServiceAttributes.description.value ) ) {
 
 			serviceNode.put( ServiceAttributes.description.value,
 				CsapUser.currentUsersID() + " added, and needs to update this description" );

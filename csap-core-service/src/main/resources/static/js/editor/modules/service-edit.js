@@ -198,7 +198,7 @@ define( ["./service-edit-config", "./validation-handler", "./json-forms"], funct
 		registerUiComponents();
 
 		configuration.defaultService().description = $( ".serviceDesc" ).val();
-		configuration.defaultService().docUrl = $( ".serviceHelp" ).val();
+		//configuration.defaultService().docUrl = $( ".serviceHelp" ).val();
 
 		var isAddMode = $( ".addDefButton" ).is( ":visible" );
 		if ( !isAddMode ) {
