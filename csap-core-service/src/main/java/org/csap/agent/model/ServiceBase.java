@@ -487,6 +487,9 @@ public abstract class ServiceBase {
 	public String getDocUrl () {
 		if ( docUrl.isEmpty() && !getScmLocation().isEmpty() ) {
 			String target = getScmLocation() ;
+			if ( target.endsWith( ".git" ) ) {
+				target = target.substring( 0, target.length() - 4  ) ;
+			}
 			if ( !getScmBuildLocation().isEmpty() && getScmLocation().contains( "github.com" )) {
 				target += "/tree/master" + getScmBuildLocation() ;
 			}
