@@ -3,7 +3,6 @@
 
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.csap</groupId>
 	<artifactId>csap-core-install</artifactId>
 	<version>6.0.0</version> <!-- Critical to note that buildCommand.sh MUST be updated with version -->
 	<packaging>pom</packaging>
