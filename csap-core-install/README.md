@@ -26,8 +26,7 @@ typical install for new host in existing application
 # Options:
 #   -noPrompt               # skip past all confirmation prompts
 #   -installDisk xxx        # volume group device: default is /dev/sdb . To use root partition: use default
-#   -installCsap 25         # agent disk size in GB ; where services are installed/run
-#   -extraDisk /data 25     # creates another disk mount location in volume group; useful for db disks
+#   -installCsap <size>     # agent disk size in GB ; where services are installed/run
 #   -clone <option>         # Optional: hostname 
 # 	-starterUrl <url>		# Optional: use url to retrieve a base configuration for new applications.
 #   -allInOne               # Optional: Uses -full install package from http://csaptools.cisco.com/csap/
@@ -35,6 +34,9 @@ typical install for new host in existing application
 #   -zone "America/Chicago" # Optional: configures timezone
 #   -fsType <type>          # Optional: default ext4, xfs
 #   -toolsServer <server>   # default: none (uses full installer) Optional: csaptools.cisco.com , rtptools-prd01.cisco.com
+#   -extraDisk /data <size> # Optional: creates disk mount location in volume group; useful for db disks
+#   -installActiveMq <size> # Optional: create mqUser account with disk size in GB, recommend: 10
+#   -installOracle <size>   # Optional: create oracle account with disk size in GB, recommend: 200
 #
 ```
 
