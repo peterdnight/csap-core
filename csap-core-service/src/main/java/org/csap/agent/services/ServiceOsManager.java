@@ -1841,32 +1841,32 @@ public class ServiceOsManager {
 			// complete. Bin contains
 			// command line scripts and must only be done
 			// when no other activity is occuring.
-			if ( serviceInstance.getServiceName().equals( CS_AGENT ) ) {
-				logger.warn( "STAGING/bin being Deployed to all VMs: " + hostList );
-
-				TransferManager stagingBinManager = new TransferManager( csapApp, 30, outputWriter );
-				
-				stagingBinManager.httpCopyViaCsAgent( 
-					userid, 
-					csapApp.getStagingFile( "/bin" ), 
-					Application.FileToken.STAGING.value + "/bin", 
-					hostList );
-
-				// blocking for response on a http thread. Generally - this
-				// should
-				// be less then a couple of minutes
-				String transResults = stagingBinManager.waitForComplete();
-
-				logger.info( "CsAgent Binaries transfered" );
-
-				if ( transResults.contains( CSAP.CONFIG_PARSE_ERROR ) ) {
-					logger.warn( "Found 1 or more errors in transfer results" );
-					outputWriter.write( "\n ===== WARNING: one or more transfers of STAGING/bin failed =====\n" );
-				} else {
-					outputWriter.write( "\n ===== STAGING/bin updated: " + hostList + " =====\n" );
-				}
-				// outputWriter.write( transResults );
-			}
+//			if ( serviceInstance.getServiceName().equals( CS_AGENT ) ) {
+//				logger.warn( "STAGING/bin being Deployed to all VMs: " + hostList );
+//
+//				TransferManager stagingBinManager = new TransferManager( csapApp, 30, outputWriter );
+//				
+//				stagingBinManager.httpCopyViaCsAgent( 
+//					userid, 
+//					csapApp.getStagingFile( "/bin" ), 
+//					Application.FileToken.STAGING.value + "/bin", 
+//					hostList );
+//
+//				// blocking for response on a http thread. Generally - this
+//				// should
+//				// be less then a couple of minutes
+//				String transResults = stagingBinManager.waitForComplete();
+//
+//				logger.info( "CsAgent Binaries transfered" );
+//
+//				if ( transResults.contains( CSAP.CONFIG_PARSE_ERROR ) ) {
+//					logger.warn( "Found 1 or more errors in transfer results" );
+//					outputWriter.write( "\n ===== WARNING: one or more transfers of STAGING/bin failed =====\n" );
+//				} else {
+//					outputWriter.write( "\n ===== STAGING/bin updated: " + hostList + " =====\n" );
+//				}
+//				// outputWriter.write( transResults );
+//			}
 		}
 
 		// Final step - send file to sync deploy complete
