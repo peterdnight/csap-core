@@ -94,18 +94,19 @@ public class ServiceOsManager {
 	public final static String SKIP_HEADERS = "skipHeaders";
 	public static final String MAVEN_DEFAULT_BUILD = "default";
 
-	// public final static String LOG_FILE = "caSvcRollingLogs.txt";
-	static public String START_FILE = "startInstance.sh";
+	// service deployment ops
+	static public String START_FILE = "csap-start.sh";
+	static public String KILL_FILE = "csap-kill.sh";
+	static public String REBUILD_FILE = "csap-deploy.sh";
+	static public String STOP_FILE = "cap-stop.sh";
+	
+	// deploy log file names
 	static public String START_OP = "_start";
 	static public String KILL_OP = "_kill";
 	static public String DEPLOY_OP = "_deploy";
-	static public String STOP_FILE = "stopInstance.sh";
-	static public String THREAD_FILE = "threadDump.sh";
-	static public String SCP_SCRIPT = "pushToOtherHosts.sh";
-	static public String JMX_AUTH_FILE = "resetJmxAuth.sh";
-	static public String KILL_FILE = "killInstance.sh";
-	static private String JOB_RUNNER = "jobRunner.sh";
-	static public String REBUILD_FILE = "rebuildAndDeploySvc.sh";
+	
+	
+	static private String JOB_RUNNER = "csap-job-run.sh";
 
 	private static final String SCRIPT_PARAM_LIFECYCLE = "-l";
 

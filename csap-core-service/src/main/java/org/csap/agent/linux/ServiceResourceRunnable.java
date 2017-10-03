@@ -75,7 +75,7 @@ public class ServiceResourceRunnable implements Runnable {
 				.getServicesOnHost();
 			for ( ServiceInstance instance : svcList ) {
 
-				if ( instance.isScript() || instance.isRemoteCollection() || ! instance.isRunning() ) {
+				if ( instance.isScript() || instance.isRemoteCollection() || !instance.isRunning() ) {
 					// Set all to 0
 					instance.setFileCount( 0 );
 					instance.setSocketCount( 0 );
@@ -109,22 +109,33 @@ public class ServiceResourceRunnable implements Runnable {
 
 	private boolean isPidStatAvailable = (new File( "/usr/bin/pidstat" )).exists();
 
-	// 30 second runs means reads/writes will be about double
-	// final static String PIDSTAT_COMMAND = "pidstat -hd 15 1 | sed 's/ */
-	// /g'";
-	// final static String PIDSTAT_COMMAND = "pidstat -hd 15 1 | sed 's/ */
-	// /g'";
-	private final static String PIDSTAT_SCRIPT = "/bin/servicePidStat.sh";
+	final static String[] pid_stat_lines = {
+			"#!/bin/bash",
+			"pidstat -hd 15 1 | sed 's/  */ /g'",
+			""
+	};
 
 	private String executePidStatCollection () {
-		List<String> parmList = Arrays.asList( "bash", "-c", PIDSTAT_SCRIPT );
 		String pidstatResults = "";
 
 		logger.debug( "***X Starting" );
 		if ( isPidStatAvailable ) {
 
-			File scriptPath = Application.getStagingFile( PIDSTAT_SCRIPT ) ;
-			pidstatResults = osCommandRunner.runUsingRootUser( scriptPath, null );
+			pidstatResults = "Failed to run";
+
+			try {
+
+				pidstatResults = osCommandRunner
+					.runUsingRootUser(
+						"hostSocketCollection",
+						pid_stat_lines );
+
+				logger.debug( "output from: {}  , \n{}", pid_stat_lines[1], pidstatResults );
+			} catch (IOException e) {
+				logger.info( "Failed to collect pidstat info: {} , \n reason: {}", pid_stat_lines,
+					CSAP.getCsapFilteredStackTrace( e ) );
+
+			}
 
 		}
 
@@ -145,7 +156,7 @@ public class ServiceResourceRunnable implements Runnable {
 	final static String SOCKET_STAT_STUB_FILE_RH7 = "/linux/socketStat_rh7.txt";
 	static String SOCKET_STAT_STUB_FILE = SOCKET_STAT_STUB_FILE_RH7;
 
-	public void updateServiceSocketCount ( ServiceInstance service, boolean useRh6 ) {
+	public void testSocketParsing ( ServiceInstance service, boolean useRh6 ) {
 
 		if ( useRh6 ) {
 			SOCKET_STAT_STUB_FILE = SOCKET_STAT_STUB_FILE_RH6;
@@ -155,13 +166,29 @@ public class ServiceResourceRunnable implements Runnable {
 		updateInstanceSockets( executeSocketCollection(), service );
 	}
 
-	private final static String SOCKET_STAT_SCRIPT = "/bin/serviceSocketStat.sh";
+	private final static String[] socket_collection_lines = {
+			"#!/bin/bash",
+			"ss -p",
+			""
+	};
 
 	private String executeSocketCollection () {
-		List<String> parmList = Arrays.asList( "bash", "-c", "ss -p " );
 
-		File scriptPath = Application.getStagingFile( SOCKET_STAT_SCRIPT ) ;
-		String socketStatResult = osCommandRunner.runUsingRootUser( scriptPath, null );
+		String socketStatResult = "Failed to run";
+
+		try {
+
+			socketStatResult = osCommandRunner
+				.runUsingRootUser( "hostSocketCollection",
+					socket_collection_lines );
+
+			logger.debug( "output from: {}  , \n{}", socket_collection_lines[1], socketStatResult );
+
+		} catch (Exception e) {
+			logger.info( "Failed to collect socket info: {} , \n reason: {}", socket_collection_lines,
+				CSAP.getCsapFilteredStackTrace( e ) );
+
+		}
 
 		if ( Application.isRunningOnDesktop() ) {
 			logger.warn( "Desktop detected - loading : {}", SOCKET_STAT_STUB_FILE );
@@ -188,7 +215,7 @@ public class ServiceResourceRunnable implements Runnable {
 		if ( instance.isDockerContainer() && instance.getPid().size() > 0 && instance.getPid().get( 0 ) != ServiceInstance.NO_PIDS ) {
 			String[] lines = {
 					"#!/bin/bash",
-					DockerHelper.socketStatCommand( instance.getPid().get( 0 ) ) ,
+					DockerHelper.socketStatCommand( instance.getPid().get( 0 ) ),
 					"" };
 
 			targetData = "Failed to run";
@@ -200,10 +227,9 @@ public class ServiceResourceRunnable implements Runnable {
 			} catch (IOException e) {
 				logger.info( "Failed to run docker nsenter: {} , \n reason: {}", lines,
 					CSAP.getCsapFilteredStackTrace( e ) );
-				// targetData += ", reason: " + e.getMessage() + " type: " +
-				// e.getClass().getName();
+
 			}
-			socketTimer.stop() ;
+			socketTimer.stop();
 		}
 
 		for ( String pid : instance.getPid() ) {

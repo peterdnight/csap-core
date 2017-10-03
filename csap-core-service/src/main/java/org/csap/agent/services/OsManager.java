@@ -688,7 +688,7 @@ public class OsManager {
 		return 0;
 	}
 
-	private final static String SOCKETS_THREADS_FILES_SCRIPT = "bin/collectHostSocketsThreadsFiles.sh";
+	private final static String SOCKETS_THREADS_FILES_SCRIPT = "bin/collect-host-resources.sh";
 
 	private OsCommandRunner hostRootCommands = new OsCommandRunner( 30, 1, "OsManager" );
 

@@ -429,16 +429,6 @@ public class Application {
 
 	private static boolean jvmInManagerMode = false;
 
-	/**
-	 * getActiveProcessesXml.jsp calls this with userId
-	 *
-	 * @param curUserid
-	 * @return
-	 */
-	// init for tests from
-	// main
-	static public String SHOW_INSTANCES_SCRIPT = "showInstance.sh";
-
 	public static String SKIP_TOMCAT_JAR_SCAN = "skipTomcatJarScan";
 
 	public static final String SYS_USER = "System";

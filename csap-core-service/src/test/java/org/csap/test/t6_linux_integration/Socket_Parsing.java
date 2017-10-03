@@ -77,7 +77,7 @@ public class Socket_Parsing {
 
 		agentInstance.setPid( Arrays.asList( "4149" ) );
 
-		osCollector.updateServiceSocketCount( agentInstance, true );
+		osCollector.testSocketParsing( agentInstance, true );
 		//errer
 		assertThat( agentInstance.getSocketCount() )
 				.as( "socket count" )
@@ -94,7 +94,7 @@ public class Socket_Parsing {
 
 		agentInstance.setPid( Arrays.asList( "4149" ) );
 
-		osCollector.updateServiceSocketCount( agentInstance, false );
+		osCollector.testSocketParsing( agentInstance, false );
 
 		assertThat( agentInstance.getSocketCount() )
 				.as( "socket count" )

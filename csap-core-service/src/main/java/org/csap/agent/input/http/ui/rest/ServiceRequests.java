@@ -152,16 +152,13 @@ public class ServiceRequests {
 	}
 
 	// public final static String LOG_FILE = "caSvcRollingLogs.txt";
-	static public String START_FILE = "startInstance.sh";
 	static public String START_OP = "_start";
 	static public String DEPLOY_OP = "_deploy";
 	static public String KILL_OP = "_kill";
-	static public String STOP_FILE = "stopInstance.sh";
-	static public String THREAD_FILE = "threadDump.sh";
-	static public String MAVEN_VERIFY_FILE = "mavenVerify.sh";
-	static public String JMX_AUTH_FILE = "resetJmxAuth.sh";
-	static public String PURGE_FILE = "purgeDeployCache.sh";
-	static public String REBUILD_FILE = "rebuildAndDeploySvc.sh";
+	
+	static public String MAVEN_VERIFY_FILE = "admin-run-load-test.sh";
+	static public String JMX_AUTH_FILE = "admin-reset-jmx-auth.sh";
+	static public String PURGE_FILE = "admin-clean-deploy.sh";
 
 	public final static String SKIP_HEADERS = "skipHeaders";
 
@@ -1065,12 +1062,13 @@ public class ServiceRequests {
 			logger.info( "service : " + svcName );
 
 			ArrayList<String> params = new ArrayList<String>();
-			// check for host
-			// if
-			// (hostName.equalsIgnoreCase(Application.getHOST_NAME()))
-			// {
+
+			// Runs a blocking request 
 			resultsJson.put( svcName,
-				serviceOsManager.runScript( securityConfig.getUserIdFromContext(), STOP_FILE, svcName,
+				serviceOsManager.runScript( 
+					securityConfig.getUserIdFromContext(), 
+					ServiceOsManager.STOP_FILE, 
+					svcName,
 					params,
 					null, null ) );
 

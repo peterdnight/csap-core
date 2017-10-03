@@ -308,7 +308,7 @@ public class OsCommandRunner {
 				// process.exitValue() ; // will throw exception if it is still
 				// open
 				List<String> parmList = new ArrayList<String>();
-				File scriptPath = Application.getStagingFile( "/bin/killStaging.sh" );
+				File scriptPath = Application.getStagingFile( "/bin/admin-kill-scripts.sh" );
 				File workingDir = scriptPath.getParentFile().getParentFile();
 				
 				parmList.add( "bash" );

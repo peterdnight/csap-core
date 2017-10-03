@@ -470,9 +470,9 @@ public class HostRequests {
 
 		return results.toString();
 	}
-	
-	@Autowired(required=false)
-	private LdapTemplate csapLdap ;
+
+	@Autowired ( required = false )
+	private LdapTemplate csapLdap;
 
 	@SuppressWarnings ( "unchecked" )
 	@RequestMapping ( value = "/testLdap" , produces = MediaType.TEXT_PLAIN_VALUE )
@@ -486,7 +486,6 @@ public class HostRequests {
 		int maxAttempts = numAttempts;
 		int numFailures = 0;
 
-		
 		//
 		if ( ldapUrl == null ) {
 			ldapUrl = securityConfig.getUrl();
@@ -507,7 +506,7 @@ public class HostRequests {
 			logger.debug( "\n\n *****************   Attempt: {}", i );
 
 			LdapTemplate testLdapTemplate = new LdapTemplate();
-			if ( ldapPassword != null) {
+			if ( ldapPassword != null ) {
 				LdapContextSource contextSource = new LdapContextSource();
 
 				contextSource.setUserDn( ldapUser );
@@ -522,12 +521,11 @@ public class HostRequests {
 				logger.debug( "\n\n Ldap connection: {}", contextSource.getBaseLdapPathAsString() );
 			} else {
 				if ( !addedEntry ) {
-					resultsBuffer.append( "\n\n WARNING: ldapPassword not set - cached connection will be used. To validate connections add: &ldapPassword=CHANGE_ME") ;
+					resultsBuffer.append(
+						"\n\n WARNING: ldapPassword not set - cached connection will be used. To validate connections add: &ldapPassword=CHANGE_ME" );
 				}
-				testLdapTemplate = csapLdap ;
+				testLdapTemplate = csapLdap;
 			}
-
-
 
 			String dn = "uid=" + securityConfig.getUserIdFromContext() + "," + securityConfig.getSearchUser();
 
@@ -548,7 +546,7 @@ public class HostRequests {
 				}
 
 			} catch (Exception e) {
-				resultsBuffer.append( "\n\n failure reason: " + CSAP.getCsapFilteredStackTrace( e ) ) ;
+				resultsBuffer.append( "\n\n failure reason: " + CSAP.getCsapFilteredStackTrace( e ) );
 				logger.error( "Failed LDAP: {}", CSAP.getCsapFilteredStackTrace( e ) );
 				numFailures++;
 			}
@@ -838,10 +836,8 @@ public class HostRequests {
 			response.getWriter()
 				.print( "\n\n ========== checkLimits Begin ========\n\n" );
 
-			// Same host as login, so get the processes
-			List<String> parmList = Arrays.asList( "bash", "-c", "checkLimits.sh " );
-			String psResult = osCommandRunner.executeString( parmList, new File( "." ), null, null,
-				600, 10, null );
+			List<String> lines = Files.readAllLines( Application.getStagingFile( "bin/admin-show-limits.sh" ).toPath() );
+			String psResult = osCommandRunner.runUsingRootUser( "adminlimits", lines.toArray(new String[0]) ) ;
 
 			logger.debug( "psResult: {}", psResult );
 
@@ -851,7 +847,7 @@ public class HostRequests {
 				.print( "\n\n ========== checkLimits End ========\n\n" );
 
 		} catch (Exception e) {
-			logger.error( "Failed to rebuild", e );
+			logger.error( "Failed to run limits script: {}", CSAP.getCsapFilteredStackTrace( e ) );
 		}
 	}
 
