@@ -2226,7 +2226,7 @@ public class ServiceRequests {
 					securityConfig.getUserIdFromContext(),
 					hostsToCopyTo,
 					deployFile.getAbsolutePath(),
-					Application.CSAP_WAR_TOKEN,
+					Application.CSAP_PACKAGES_TOKEN,
 					csapApp.getAgentRunUser(),
 					securityConfig.getUserIdFromContext(),
 					false, outputFm.getBufferedWriter() ) );
@@ -2237,7 +2237,7 @@ public class ServiceRequests {
 					securityConfig.getUserIdFromContext(),
 					hostsToCopyTo,
 					versionFile.getAbsolutePath(),
-					Application.CSAP_WAR_TOKEN,
+					Application.CSAP_PACKAGES_TOKEN,
 					csapApp.getAgentRunUser(),
 					securityConfig.getUserIdFromContext(), false,
 					outputFm.getBufferedWriter() ) );

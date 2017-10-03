@@ -1682,9 +1682,6 @@ public class ServiceOsManager {
 		params.add( "-scmBranch" );
 		params.add( scmBranch );
 
-		params.add( "-warDir" );
-		params.add( csapApp.getDeploymentStorageFolder().getAbsolutePath() );
-
 		if ( hotDeploy != null ) {
 			params.add( "-hotDeploy" );
 		}
@@ -1802,10 +1799,10 @@ public class ServiceOsManager {
 				TransferManager transferManager = new TransferManager( csapApp, 120, outputWriter );
 
 				transferManager.httpCopyViaCsAgent( userid, deployFile,
-					Application.CSAP_WAR_TOKEN, hostList );
+					Application.CSAP_PACKAGES_TOKEN, hostList );
 
 				transferManager.httpCopyViaCsAgent( userid, deployVersionFile,
-					Application.CSAP_WAR_TOKEN, hostList );
+					Application.CSAP_PACKAGES_TOKEN, hostList );
 
 				File secondaryFolder = new File( csapApp.getDeploymentStorageFolder(),
 					serviceInstance.getServiceName() + ".secondary" );
@@ -1813,7 +1810,7 @@ public class ServiceOsManager {
 				if ( secondaryFolder.exists() && secondaryFolder.isDirectory() ) {
 
 					syncToOtherHosts( userid, hostList, secondaryFolder.getAbsolutePath(),
-						Application.CSAP_WAR_TOKEN + serviceInstance.getServiceName() + ".secondary",
+						Application.CSAP_PACKAGES_TOKEN + serviceInstance.getServiceName() + ".secondary",
 						csapApp.getAgentRunUser(),
 						userid, false, outputWriter );
 
@@ -1877,7 +1874,7 @@ public class ServiceOsManager {
 		}
 		deployCompleteManager.httpCopyViaCsAgent( userid,
 			deployCompleteFile,
-			Application.CSAP_WAR_TOKEN + "_sync", hostList );
+			Application.CSAP_PACKAGES_TOKEN + "_sync", hostList );
 
 		String transResults = deployCompleteManager.waitForComplete();
 

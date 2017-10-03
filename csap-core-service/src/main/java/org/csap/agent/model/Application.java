@@ -277,7 +277,7 @@ public class Application {
 		
 		httpdIntegration.updateConstants();
 
-		WAR_DIR = STAGING + CSAP_WAR_SUFFIX;
+		WAR_DIR = STAGING + CSAP_SERVICE_PACKAGES;
 		BUILD_DIR = STAGING + "/build/";
 		// Use relative paths to handle all use cases
 		CSAP_DEFINITION_FOLDER_FOR_JUNITs = getDefinitionFile()
@@ -401,8 +401,8 @@ public class Application {
 		}
 	}
 
-	public static final String CSAP_WAR_SUFFIX = "/warDist/";
-	public static final String CSAP_WAR_TOKEN = FileToken.STAGING.value + CSAP_WAR_SUFFIX;
+	public static final String CSAP_SERVICE_PACKAGES = "/csap-packages/";
+	public static final String CSAP_PACKAGES_TOKEN = FileToken.STAGING.value + CSAP_SERVICE_PACKAGES;
 
 	public static final String MISSING_SERVICE_MESSAGE = "Did not find service. ";
 	public static final String ALL_PACKAGES = "All Packages";
@@ -2435,7 +2435,7 @@ public class Application {
 	public File getDeploymentStorageFolder () {
 
 		if ( deployFolder == null ) {
-			deployFolder = new File( getStagingFolder(), CSAP_WAR_SUFFIX );
+			deployFolder = new File( getStagingFolder(), CSAP_SERVICE_PACKAGES );
 			deployFolder.mkdirs();
 		}
 		return deployFolder;
