@@ -199,14 +199,9 @@ public class ServiceOsManager {
 		// " moded params " + params );
 		String result = "";
 
-		// File svcDirOnHost = csapApp.getHostDir();
-		// File workingDir = new File(svcDirOnHost.getAbsolutePath());
-		String stagingPath = ".";
-		if ( System.getenv( "STAGING" ) != null ) {
-			stagingPath = System.getenv( "STAGING" );
-		}
-		File workingDir = new File( stagingPath );
-		File scriptPath = new File( stagingPath + "/bin/" + scriptName );
+
+		File workingDir = csapApp.getStagingFolder();
+		File scriptPath = new File( workingDir, "/bin/" + scriptName );
 
 		// String userName = getUserIdFromContext();
 		List<String> parmList = new ArrayList<String>();
@@ -1963,6 +1958,21 @@ public class ServiceOsManager {
 			return;
 		}
 
+		File workingDir = csapApp.getStagingFolder();
+		File rebuildPath = new File( workingDir, "/bin/" + REBUILD_FILE );
+		
+		if ( !rebuildPath.exists() ) {
+			logger.warn( "did not find: {}. Ensure latest csap-package-linx is deployed. Switching names to legacy", 
+				rebuildPath.getAbsolutePath() );
+			REBUILD_FILE = "rebuildAndDeploySvc.sh";
+			KILL_FILE = "killInstance.sh";
+			START_FILE = "startInstance.sh";
+			JOB_RUNNER = "jobRunner.sh";
+		} else {
+			logger.info( "Found csap-package-linx : {}", 
+				rebuildPath.getAbsolutePath() );
+		}
+		
 		isInit = true;
 
 		if ( Application.isStatefulRestartNeeded() ) {

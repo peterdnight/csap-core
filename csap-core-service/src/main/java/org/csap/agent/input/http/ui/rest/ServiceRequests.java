@@ -1564,7 +1564,7 @@ public class ServiceRequests {
 			clusterFilter = cluster;
 		}
 
-		logger.info( "cluster: {}, clusterFilter: {}, blocking: {}, releasePackage: {}, ",
+		logger.debug( "cluster: {}, clusterFilter: {}, blocking: {}, releasePackage: {}, ",
 			cluster, clusterFilter, blocking, releasePackage );
 
 		if ( releasePackage == null ) {
