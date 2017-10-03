@@ -98,7 +98,7 @@ public class ServiceOsManager {
 	static public String START_FILE = "csap-start.sh";
 	static public String KILL_FILE = "csap-kill.sh";
 	static public String REBUILD_FILE = "csap-deploy.sh";
-	static public String STOP_FILE = "cap-stop.sh";
+	static public String STOP_FILE = "csap-stop.sh";
 	
 	// deploy log file names
 	static public String START_OP = "_start";
