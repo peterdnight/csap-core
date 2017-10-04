@@ -229,9 +229,10 @@ public class Application {
 
 			}
 
-			String mailInfo=CSAP.pad( "Mail:" ) + "not initialized" ;
+			String mailInfo = CSAP.pad( "Mail:" ) + "not initialized";
 			if ( springEnvironment != null ) {
-				mailInfo=CSAP.pad( "Mail:" ) + springEnvironment.getProperty( "spring.mail.host" ) + ":" +  springEnvironment.getProperty( "spring.mail.port" );
+				mailInfo = CSAP.pad( "Mail:" ) + springEnvironment.getProperty( "spring.mail.host" ) + ":"
+						+ springEnvironment.getProperty( "spring.mail.port" );
 			}
 			logger
 				.warn( "\n\t {}{} \n\t {}{} \n\t {}{} \n\t {}{} \n\t {}{} \n\t {}\n\n",
@@ -239,7 +240,7 @@ public class Application {
 					CSAP.pad( "PROCESSING:" ), PROCESSING,
 					CSAP.pad( "STAGING:" ), STAGING,
 					CSAP.pad( "Definition:" ), CSAP_ROOT_DEFINITION_FILE.toString(),
-					CSAP.pad( "Host Pattern:" ), getAgentHostUrlPattern( false ) ,
+					CSAP.pad( "Host Pattern:" ), getAgentHostUrlPattern( false ),
 					mailInfo );
 
 			// final CHECK
@@ -274,7 +275,7 @@ public class Application {
 
 	private void updateApplicationVariables ()
 			throws UnknownHostException {
-		
+
 		httpdIntegration.updateConstants();
 
 		WAR_DIR = STAGING + CSAP_SERVICE_PACKAGES;
@@ -566,16 +567,17 @@ public class Application {
 
 	@Autowired
 	private Environment springEnvironment;
-	
-	public String getCompanyConfiguration(String key, String defaultValue) {
-		
-		if ( springEnvironment == null) return defaultValue ;
-		//logger.info("Getting: {}", key) ;
+
+	public String getCompanyConfiguration ( String key, String defaultValue ) {
+
+		if ( springEnvironment == null )
+			return defaultValue;
+		// logger.info("Getting: {}", key) ;
 		return springEnvironment.getProperty( key, defaultValue );
 	}
-	
-	public boolean isCompanyVariableConfigured(String key) {
-		if ( springEnvironment != null && springEnvironment.getProperty( key) != null ) {
+
+	public boolean isCompanyVariableConfigured ( String key ) {
+		if ( springEnvironment != null && springEnvironment.getProperty( key ) != null ) {
 			return true;
 		}
 		return false;
@@ -606,8 +608,9 @@ public class Application {
 
 	public String decode ( String input, String description ) {
 		String result = input;
-		
-		if ( encryptor == null ) return result;
+
+		if ( encryptor == null )
+			return result;
 		try {
 			result = encryptor.decrypt( input );
 		} catch (EncryptionOperationNotPossibleException e) {
@@ -769,7 +772,6 @@ public class Application {
 
 	private StringBuffer lastParseResults = null;
 
-
 	// Helper method for testing
 	public boolean loadDefinitionForJunits ( boolean isTest, File definitionFile )
 			throws JsonProcessingException, IOException {
@@ -795,9 +797,8 @@ public class Application {
 
 		logger.info( "springEnvironment: {}, isJvmInManagerMode: {} ", springEnvironment, isJvmInManagerMode() );
 
-
-		if ( springEnvironment != null && !isJvmInManagerMode()  ) {
-			startCollectorsForJunit() ;
+		if ( springEnvironment != null && !isJvmInManagerMode() ) {
+			startCollectorsForJunit();
 		}
 
 		setBootstrapComplete();
@@ -810,9 +811,9 @@ public class Application {
 
 		return true;
 	}
-	
-	public void startCollectorsForJunit() {
-		if (  !collectorsStarted ) {
+
+	public void startCollectorsForJunit () {
+		if ( !collectorsStarted ) {
 			collectorsStarted = true;
 			startResourceCollectors();
 		}
@@ -2223,12 +2224,12 @@ public class Application {
 	static final long CSAPTOOLS_REFRESH = 1000 * 60 * 60; // every hour
 
 	public String updatePlatformVersionsFromCsapTools ( boolean forceUpdate ) {
-		
+
 		if ( !lifeCycleSettings().isEventPublishEnabled() ) {
 			logger.info( "Stubbing out data for trends - add csap events services" );
-			csagentCachedRelease="6";
-			linuxCachedRelease="6";
-			jdkCachedRelease="6";
+			csagentCachedRelease = "6";
+			linuxCachedRelease = "6";
+			jdkCachedRelease = "6";
 			return csagentCachedRelease + ", " + jdkCachedRelease + ", " + linuxCachedRelease;
 		}
 
@@ -2439,6 +2440,42 @@ public class Application {
 			deployFolder.mkdirs();
 		}
 		return deployFolder;
+	}
+
+	public void move_to_csap_saved_folder ( File folder_to_backup, StringBuilder operation_output )
+			throws IOException {
+
+		File csapSavedFolder = getStagingFile( "saved" );
+
+		if ( !csapSavedFolder.exists() ) {
+			operation_output.append( "\n\n creating csap saved folder: " + csapSavedFolder.getAbsolutePath() + "\n" );
+			csapSavedFolder.mkdirs();
+		}
+		String now = LocalDateTime.now().format( DateTimeFormatter.ofPattern( "MMM.d-HH.mm.ss" ) );
+
+		File backUpFolder = new File( csapSavedFolder, folder_to_backup.getName() + "." + now );
+
+		if ( backUpFolder.exists() ) {
+			logger.info( "Warning: agent jobs are not cleaning up: {}", backUpFolder.getAbsolutePath() );
+			FileUtils.deleteQuietly( backUpFolder );
+			operation_output.append( "\n\n Deleting previous backup: " + backUpFolder.getAbsolutePath() + "\n" );
+		}
+
+		if ( folder_to_backup.exists() ) {
+
+			logger.info( "Moving: {} to {}" );
+
+			operation_output.append( "\n\n Moving : "
+					+ folder_to_backup.getAbsolutePath()
+					+ " to: "
+					+ backUpFolder.getAbsolutePath() + "\n" );
+			
+			FileUtils.moveDirectory( folder_to_backup, backUpFolder );
+		} else {
+			operation_output.append( "Folder does not exist: " + folder_to_backup.getCanonicalPath() );
+			logger.warn( "Folder does not exist: {}", folder_to_backup.getCanonicalPath() );
+			
+		}
 	}
 
 	public File getFileOnHost ( String svcName, String logSelect, String propSelect ) {

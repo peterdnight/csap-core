@@ -2173,7 +2173,9 @@ public class OsManager {
 
 	public String updatePlatformCore (	MultipartFile multiPartFile, String extractTargetPath,
 										boolean skipExtract, String remoteServerName,
-										String chownUserid, String auditUser, String deleteExisting, OutputFileMgr outputFileManager )
+										String chownUserid, String auditUser, 
+										String deleteExisting, 
+										OutputFileMgr outputFileManager )
 			throws IOException {
 
 		StringBuilder results = new StringBuilder( "\n==  Host:" + remoteServerName );
@@ -2272,7 +2274,7 @@ public class OsManager {
 
 			// backup existing
 			if ( deleteExisting != null ) {
-				createBackupAndDelete( extractTarget, results );
+				csapApp.move_to_csap_saved_folder( extractTarget, results ) ;
 			}
 
 			// hook for root ownership, and script execution
@@ -2320,26 +2322,6 @@ public class OsManager {
 
 	public static String MISSING_PARAM_HACK = CSAP.CONFIG_PARSE_ERROR + "-BlankParamFound";
 
-	// Adds a .old suffix
-	private void createBackupAndDelete ( File globalModelBuildFolder, StringBuilder results )
-			throws IOException {
-		// In case of Check-IN - or reload - working folder will
-		// contain propertyOverrid files from svn Checkout
-		File backUpFolder = new File( globalModelBuildFolder.getCanonicalPath() + ".previous" );
-		if ( backUpFolder.exists() ) {
-			FileUtils.deleteQuietly( backUpFolder );
-			results.append( "\n\n Deleting previous backup: " + backUpFolder.getAbsolutePath() + "\n" );
-		}
-		if ( globalModelBuildFolder.exists() ) {
-			// check out into a clean folder every time.
-			results.append( "\n\n Moving : " + globalModelBuildFolder.getAbsolutePath()
-					+ " to: " + backUpFolder.getAbsolutePath() + "\n" );
-			FileUtils.moveDirectory( globalModelBuildFolder, backUpFolder );
-		} else {
-			results.append( "Folder does not exist: " + globalModelBuildFolder.getCanonicalPath() );
-			logger.warn( "Folder does not exist: {}", globalModelBuildFolder.getCanonicalPath() );
-		}
-	}
 
 	/**
 	 * Note that cluster can be none, in which case command is only run on

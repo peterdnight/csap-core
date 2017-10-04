@@ -328,17 +328,17 @@ public class DefinitionRequests {
 		}
 		csapApp.updateCache( true );
 
-		ObjectNode modelObject ;
-		
+		ObjectNode modelObject;
+
 		if ( csapApp.getModel( releasePackage ) != null ) {
 			modelObject = (ObjectNode) csapApp
-					.getModel( releasePackage )
-					.getJsonModelDefinition();
+				.getModel( releasePackage )
+				.getJsonModelDefinition();
 		} else {
 
 			logger.warn( "Did not find requested model: {}", releasePackage );
-			modelObject = jacksonMapper.createObjectNode() ;
-			modelObject.put( "error", "Release package not found: " + releasePackage ) ;
+			modelObject = jacksonMapper.createObjectNode();
+			modelObject.put( "error", "Release package not found: " + releasePackage );
 		}
 
 		return modelObject;
@@ -798,26 +798,26 @@ public class DefinitionRequests {
 		}
 	}
 
-	@Inject 
+	@Inject
 	DockerHelper dockerHelper;
-	
+
 	@GetMapping ( value = "/serviceDockerTemplate" , produces = MediaType.APPLICATION_JSON_VALUE )
 	public JsonNode getDockerTemplate (
-	                                   String templateName
-			)
-	
+										String templateName )
+
 			throws IOException {
-		
+
 		// templateName = DockerJson.defaultJavaDocker.key
-		ObjectNode dockerTemplate = (ObjectNode) dockerHelper.getDockerTemplates().get( templateName ) ;
-		String imageName =  dockerTemplate.get( "image" ).asText().replaceAll(
+		ObjectNode dockerTemplate = (ObjectNode) dockerHelper.getDockerTemplates().get( templateName );
+		String imageName = dockerTemplate.get( "image" ).asText().replaceAll(
 			Matcher.quoteReplacement( CSAP.DOCKER_REPOSITORY ),
 			Matcher.quoteReplacement( csapApp.getCsapCoreService().getDocker().getTemplateRepository() ) );
-		dockerTemplate.put( "image", imageName) ;
-		
-		return dockerTemplate ;
-		
+		dockerTemplate.put( "image", imageName );
+
+		return dockerTemplate;
+
 	}
+
 	@RequestMapping ( value = "/service" , produces = MediaType.APPLICATION_JSON_VALUE , method = RequestMethod.GET )
 	public ObjectNode getService (
 									@RequestParam ( "serviceName" ) String serviceName,
@@ -1088,7 +1088,8 @@ public class DefinitionRequests {
 			results += "Failed to notify, contact your administrator for assistance: "
 					+ e.getMessage();
 
-			logger.error( "Failed to send message - verify settings in application.yml;  Error: \n {}", CSAP.getCsapFilteredStackTrace( e ) );
+			logger.error( "Failed to send message - verify settings in application.yml;  Error: \n {}",
+				CSAP.getCsapFilteredStackTrace( e ) );
 		}
 
 		return results;
@@ -1370,7 +1371,7 @@ public class DefinitionRequests {
 		// encrypt pass
 
 		logger.info( "user:{}, branch: {}, package: {}, applyOnly: {} , uri: {} ",
-			scmUserid ,  scmBranch,  releasePackage ,  isApplyButNoCheckin , request.getRequestURI() );
+			scmUserid, scmBranch, releasePackage, isApplyButNoCheckin, request.getRequestURI() );
 
 		ServiceInstance dummyServiceInstanceForApp = new ServiceInstance();
 		dummyServiceInstanceForApp.setScmLocation( csapApp.getSourceLocation() );
@@ -1420,11 +1421,12 @@ public class DefinitionRequests {
 						logger.warn( "overwriting source control files with current definition on disk" );
 						File activeDefinitionFolder = csapApp.getDefinitionFolder();
 						FileUtils.copyDirectory( activeDefinitionFolder, defWorkingFolder, getGitFilter() );
-						outputManager.print( "\n\n *** overwriting source control files with current definition on disk: " + defWorkingFolder.getAbsolutePath()
+						outputManager.print( "\n\n *** overwriting source control files with current definition on disk: "
+								+ defWorkingFolder.getAbsolutePath()
 								+ "\n initialized from: " + activeDefinitionFolder.getAbsolutePath()
 								+ "\n containing: " + Arrays.asList( defWorkingFolder.list() ) );
 					} else {
-						outputManager.print( "\n **WARNING: only git supports the update all option") ;
+						outputManager.print( "\n **WARNING: only git supports the update all option" );
 					}
 				}
 			} else {
@@ -1646,7 +1648,9 @@ public class DefinitionRequests {
 
 		}
 
-		backupCurrentApplication( globalModelBuildFolder, outputManager.getBufferedWriter() );
+		StringBuilder output = new StringBuilder();
+		csapApp.move_to_csap_saved_folder( globalModelBuildFolder, output );
+		outputManager.print( output.toString() );
 
 		FileUtils.copyDirectory( checkedOutSourceFolder, globalModelBuildFolder );
 		outputManager.print( " Copied: " + checkedOutSourceFolder.getAbsolutePath() + " to: "
@@ -1657,26 +1661,6 @@ public class DefinitionRequests {
 			csapApp.getModel( releasePackage ),
 			scmUserid, liveConfigFile, parsingResultsBuffer,
 			outputManager, comment );
-	}
-
-	// Adds a .old suffix
-	private void backupCurrentApplication ( File globalModelBuildFolder, BufferedWriter writer )
-			throws IOException {
-		// In case of Check-IN - or reload - working folder will
-		// contain propertyOverrid files from svn Checkout
-		File backUpFolder = new File( globalModelBuildFolder.getCanonicalPath() + ".old" );
-		if ( backUpFolder.exists() ) {
-			FileUtils.deleteQuietly( backUpFolder );
-			writer.write( "\n\n Deleting previous backup: " + backUpFolder.getAbsolutePath() + "\n" );
-		}
-		if ( globalModelBuildFolder.exists() ) {
-			// check out into a clean folder every time.
-			writer.write( "\n\n Moving : " + globalModelBuildFolder.getAbsolutePath()
-					+ " to: " + backUpFolder.getAbsolutePath() + "\n" );
-			FileUtils.moveDirectory( globalModelBuildFolder, backUpFolder );
-		} else {
-			logger.warn( "Folder does not exist: {}", globalModelBuildFolder.getCanonicalPath() );
-		}
 	}
 
 	private Lock configLock = new ReentrantLock();
@@ -1825,17 +1809,21 @@ public class DefinitionRequests {
 			throws IOException {
 
 		try {
-			ServiceInstance instanceConfig = new ServiceInstance();
-			instanceConfig.setScmLocation( csapApp.getSourceLocation() );
-			instanceConfig.setScm( csapApp.getSourceType() );
+			ServiceInstance serviceInstance = new ServiceInstance();
+			serviceInstance.setScmLocation( csapApp.getSourceLocation() );
+			serviceInstance.setScm( csapApp.getSourceType() );
 
-			File clusterFileName = new File( csapApp.getRootModelBuildLocation() );
+			File definitionFolder = new File( csapApp.getRootModelBuildLocation() );
 
-			backupCurrentApplication( clusterFileName, outputWriter );
+			//back_up_to_csap_saved( clusterFileName, outputWriter );
+			StringBuilder output = new StringBuilder();
+			csapApp.move_to_csap_saved_folder( definitionFolder, output );
+			outputWriter.append( output.toString() );
 
 			sourceControlManager.checkOutFolder(
 				scmUserid, encryptedPass, scmBranch,
-				clusterFileName.getName(), instanceConfig, outputWriter );
+				definitionFolder.getName(), 
+				serviceInstance, outputWriter );
 
 		} catch (TransportException gitException) {
 			logger.error( "Definition reload failed: {}", CSAP.getCsapFilteredStackTrace( gitException ) );
@@ -1928,11 +1916,12 @@ public class DefinitionRequests {
 		outputMgr.print( emailResults );
 
 		results.append( commandResultsBuf ); // only adding the diff, others
-		// clutter the ui
 
-		// FileUtils.deleteQuietly( liveDefinitionFolder );
-		// outputMgr.print( "Deleted: " + liveDefinitionFolder );
-		backupCurrentApplication( liveDefinitionFolder, outputMgr.getBufferedWriter() );
+		//back_up_to_csap_saved( liveDefinitionFolder, outputMgr.getBufferedWriter() );
+		StringBuilder output = new StringBuilder();
+		csapApp.move_to_csap_saved_folder( liveDefinitionFolder, output );
+		outputMgr.print( output.toString() );
+		
 		liveDefinitionFolder.mkdir();
 
 		// FileUtils.copyDirectory( updatedDefinitionFile.getParentFile(),
