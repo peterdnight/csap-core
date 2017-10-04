@@ -2445,12 +2445,8 @@ public class Application {
 	public void move_to_csap_saved_folder ( File folder_to_backup, StringBuilder operation_output )
 			throws IOException {
 
-		File csapSavedFolder = getStagingFile( "saved" );
+		File csapSavedFolder = getCsapSavedFolder();
 
-		if ( !csapSavedFolder.exists() ) {
-			operation_output.append( "\n\n creating csap saved folder: " + csapSavedFolder.getAbsolutePath() + "\n" );
-			csapSavedFolder.mkdirs();
-		}
 		String now = LocalDateTime.now().format( DateTimeFormatter.ofPattern( "MMM.d-HH.mm.ss" ) );
 
 		File backUpFolder = new File( csapSavedFolder, folder_to_backup.getName() + "." + now );
@@ -2463,7 +2459,7 @@ public class Application {
 
 		if ( folder_to_backup.exists() ) {
 
-			logger.info( "Moving: {} to {}" );
+			logger.info( "Moving: {} to {}", folder_to_backup.getAbsolutePath() , backUpFolder.getAbsolutePath() );
 
 			operation_output.append( "\n\n Moving : "
 					+ folder_to_backup.getAbsolutePath()
@@ -2476,6 +2472,15 @@ public class Application {
 			logger.warn( "Folder does not exist: {}", folder_to_backup.getCanonicalPath() );
 			
 		}
+	}
+
+	private File getCsapSavedFolder () {
+		File csapSavedFolder = getStagingFile( "saved" );
+		if ( !csapSavedFolder.exists() ) {
+			logger.info( "creating csap saved folder: {}", csapSavedFolder.getAbsolutePath()  );
+			csapSavedFolder.mkdirs();
+		}
+		return csapSavedFolder;
 	}
 
 	public File getFileOnHost ( String svcName, String logSelect, String propSelect ) {
@@ -3364,9 +3369,9 @@ public class Application {
 
 	public File getScriptDir () {
 
-		File scriptDir = new File( getStagingFolder(), "scripts" );
+		File scriptDir = new File( getCsapSavedFolder (), "scripts-run" );
 		if ( testMode ) {
-			scriptDir = new File( PROCESSING, "scripts" );
+			scriptDir = new File( PROCESSING, "scripts-run" );
 		}
 
 		if ( !scriptDir.exists() ) {
