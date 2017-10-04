@@ -216,7 +216,7 @@ public class DefinitionParser {
 				FileUtils.copyFile( getPackageTemplate(), releasePackageFile );
 			}
 
-			ObjectNode supportingJson = parseJsonConfig( releasePackageFile );
+			ObjectNode supportingJson = loadReleasePackageDefinition( releasePackageFile );
 			ReleasePackage releaseModel = new ReleasePackage( supportingJson );
 
 			releaseModel.setReleaseModelMap( testRootModel );
@@ -236,21 +236,21 @@ public class DefinitionParser {
 				releaseModel );
 
 		}
-		ReleasePackage releaseModel = testRootModel.getReleasePackage(
+		ReleasePackage releasePackage = testRootModel.getReleasePackage(
 			fileNameMap.get( releasePackageFileName ) );
 
-		if ( releaseModel.getLifeCycleToGroupMap().get( platformLifeCycle ) == null ) {
+		if ( releasePackage.getLifeCycleToGroupMap().get( platformLifeCycle ) == null ) {
 			ArrayList<String> packageGroupList = new ArrayList<String>();
-			releaseModel.getLifeCycleToGroupMap().put( platformLifeCycle, packageGroupList );
+			releasePackage.getLifeCycleToGroupMap().put( platformLifeCycle, packageGroupList );
 		}
 
-		ArrayList<String> packageGroupList = releaseModel.getLifeCycleToGroupMap().get(
+		ArrayList<String> packageGroupList = releasePackage.getLifeCycleToGroupMap().get(
 			platformLifeCycle );
 
-		releaseModel.getLifeCycleToHostMap().put( platformLifeCycle, new ArrayList<String>() );
-		releaseModel.getLifecycleList().add( platformLifeCycle );
+		releasePackage.getLifeCycleToHostMap().put( platformLifeCycle, new ArrayList<String>() );
+		releasePackage.getLifecycleList().add( platformLifeCycle );
 
-		for ( Iterator<String> supportingClusterIterator = releaseModel.getJsonModelDefinition()
+		for ( Iterator<String> supportingClusterIterator = releasePackage.getJsonModelDefinition()
 			.path( PARSER_CLUSTER_DEFN ).path( platformLifeCycle ).fieldNames(); supportingClusterIterator
 				.hasNext(); ) {
 
@@ -258,15 +258,15 @@ public class DefinitionParser {
 
 			logger.debug( "clusterName: {} , platformLifeCycle: {}", clusterName, platformLifeCycle );
 
-			JsonNode supportingClusterJson = releaseModel.getJsonModelDefinition()
+			JsonNode supportingClusterJson = releasePackage.getJsonModelDefinition()
 				.path( PARSER_CLUSTER_DEFN ).path( platformLifeCycle ).path( clusterName );
 
 			// logger.info("Supporting Definition"
 			// + supportingClusterJson);
 			generateLifecycleServiceInstances(
-				releaseModel,
+				releasePackage,
 				platformLifeCycle, parsingResults,
-				lifeMetaData, packageGroupList, clusterName, supportingClusterJson );
+				lifeMetaData, packageGroupList, clusterName, supportingClusterJson, testRootModel );
 
 			// logger.info(fileName
 			// + " SubService found:"
@@ -276,8 +276,8 @@ public class DefinitionParser {
 
 		// If we find the current host name in release, then we
 		// override
-		if ( releaseModel.getHostToConfigMap().keySet().contains( Application.getHOST_NAME() ) ) {
-			testRootModel.setActiveModel( releaseModel );
+		if ( releasePackage.getHostToConfigMap().keySet().contains( Application.getHOST_NAME() ) ) {
+			testRootModel.setActiveModel( releasePackage );
 		}
 
 	}
@@ -605,7 +605,7 @@ public class DefinitionParser {
 		StringBuffer parsingResultsBuffer = new StringBuffer( "\n\n ============ Results from parsing: "
 				+ applicationDefintionFile.getAbsolutePath() + "\n\n" );
 
-		ObjectNode testGlobalJson = parseJsonConfig( applicationDefintionFile );
+		ObjectNode testGlobalJson = loadReleasePackageDefinition( applicationDefintionFile );
 
 		parsingResultsBuffer.append( checkForInvalidMongoKeys( testGlobalJson, applicationDefintionFile.getAbsolutePath() ) );
 
@@ -671,7 +671,7 @@ public class DefinitionParser {
 				generateLifecycleServiceInstances(
 					testRootModel,
 					platformLifeCycle, parsingResultsBuffer,
-					lifeMetaData, globalGroupList, clusterName, clusterJson );
+					lifeMetaData, globalGroupList, clusterName, clusterJson, testRootModel );
 			}
 			if ( testGlobalJson.path( PARSER_CAPABILITY ).has( PARSER_RELEASE_PACKAGES ) ) {
 
@@ -852,7 +852,7 @@ public class DefinitionParser {
 														StringBuilder releaseLoadResults, File releasePackageFile, ReleasePackage model )
 			throws IOException {
 
-		ObjectNode releaseNode = parseJsonConfig( releasePackageFile );
+		ObjectNode releaseNode = loadReleasePackageDefinition( releasePackageFile );
 
 		releaseNode.fields().forEachRemaining( serviceEntry -> {
 			String serviceName = serviceEntry.getKey();
@@ -916,16 +916,13 @@ public class DefinitionParser {
 		return true;
 	}
 
-	public ObjectNode parseJsonConfig ( File jsConfigFile )
+	public ObjectNode loadReleasePackageDefinition ( File definitionFile )
 			throws JsonProcessingException,
 			IOException {
 
 		ObjectNode resultNode = null;
-		if ( jsConfigFile.exists() ) {
-			String configJson = FileUtils.readFileToString( jsConfigFile );
-			configJson = configJson.substring( configJson.indexOf( "{" ) );
-			// String[] stringMatches = configJson.split("config =") ;
-			// logger.debug("Read in: " + configJson ) ;
+		if ( definitionFile.exists() ) {
+			String configJson = FileUtils.readFileToString( definitionFile );
 
 			jacksonMapper.getFactory().enable( JsonParser.Feature.ALLOW_COMMENTS );
 			jacksonMapper.getFactory().enable( JsonParser.Feature.ALLOW_SINGLE_QUOTES );
@@ -936,10 +933,10 @@ public class DefinitionParser {
 			jacksonMapper.getFactory().setCharacterEscapes( new HTMLCharacterEscapes() );
 			resultNode = (ObjectNode) jacksonMapper.readTree( configJson );
 
-			logger.debug( "Parsed Cluster from file: {} Contains: \n{}", jsConfigFile.getAbsolutePath(),
+			logger.debug( "Parsed Cluster from file: {} Contains: \n{}", definitionFile.getAbsolutePath(),
 				resultNode.toString() );
 
-			String packageName = resultNode.path( PARSER_CAPABILITY ).path( "name" ).asText( jsConfigFile.getName() );
+			String packageName = resultNode.path( PARSER_CAPABILITY ).path( "name" ).asText( definitionFile.getName() );
 			if ( resultNode.has( PARSER_PACKAGE_DEFN ) ) {
 				packageName = resultNode.path( PARSER_PACKAGE_DEFN ).path( PARSER_RELEASE_PACKAGE_NAME )
 					.asText();
@@ -948,13 +945,13 @@ public class DefinitionParser {
 			// Most basic test
 			logger.info( "\n\n ===> Parsing package: {} using: {} \t testing: {}"
 					+ "\n\t {}, \t Size: {}\n\n",
-				packageName, jsConfigFile.getName(), isTest_FOR_LOGS_ONLY,
-				jsConfigFile.getParentFile().getAbsolutePath(),
-				jsConfigFile.length() );
+				packageName, definitionFile.getName(), isTest_FOR_LOGS_ONLY,
+				definitionFile.getParentFile().getAbsolutePath(),
+				definitionFile.length() );
 
 		} else {
-			logger.error( "Did not find JSON cluster file: " + jsConfigFile.getAbsolutePath() );
-			throw new IOException( "File does not exist: " + jsConfigFile.getAbsolutePath() );
+			logger.error( "Did not find JSON cluster file: " + definitionFile.getAbsolutePath() );
+			throw new IOException( "File does not exist: " + definitionFile.getAbsolutePath() );
 		}
 		return resultNode;
 	}
@@ -1210,12 +1207,14 @@ public class DefinitionParser {
 	}
 
 	private void generateLifecycleServiceInstances (
-														ReleasePackage model,
+														ReleasePackage releasePackage,
 														String platformLifeCycle, StringBuffer resultsBuf, LifeCycleSettings lifeMetaData,
-														ArrayList<String> groupList, String platformSubLife, JsonNode subLifeNode )
+														ArrayList<String> groupList, String platformSubLife, JsonNode subLifeNode,
+														ReleasePackage testRootModel
+														)
 			throws IOException, JsonParseException, JsonMappingException {
 
-		logger.debug( "Checking: {} ", model.getReleasePackageFileName() );
+		logger.debug( "Checking: {} ", releasePackage.getReleasePackageFileName() );
 
 		if ( subLifeNode.has( DEFINITION_MONITORS ) ) {
 			// this is a hook for cluster level settings that overwrite
@@ -1237,12 +1236,14 @@ public class DefinitionParser {
 
 		// Any logic/semantic errors are pushed via
 		// Application.CONFIG_PARSE_ERROR
-		resultsBuf.append( "\n \t " + model.getReleasePackageFileName() + "\t - \t" + platformSubLife );
-		configureAllJavaServices( resultsBuf, model, platformLifeCycle, platformSubLife, subLifeNode );
+		resultsBuf.append( "\n \t " + releasePackage.getReleasePackageFileName() + "\t - \t" + platformSubLife );
+		
+		
+		configureAllJavaServices( resultsBuf, releasePackage, platformLifeCycle, platformSubLife, subLifeNode );
 
-		configureAllOsProcesses( resultsBuf, model, platformLifeCycle, platformSubLife, subLifeNode );
+		configureAllOsProcesses( resultsBuf, releasePackage, platformLifeCycle, platformSubLife, subLifeNode, testRootModel );
 
-		generateMapsForConfigScreen( model, platformLifeCycle, platformSubLife, subLifeNode );
+		generateMapsForConfigScreen( releasePackage, platformLifeCycle, platformSubLife, subLifeNode );
 
 	}
 
@@ -1441,10 +1442,11 @@ public class DefinitionParser {
 	}
 
 	private void configureAllOsProcesses (	StringBuffer resultsBuf, ReleasePackage model,
-											String platformLifeCycle, String platformSubLife, JsonNode subLifeNode )
+											String platformLifeCycle, String platformSubLife, JsonNode subLifeNode,
+											ReleasePackage testRootModel)
 			throws IOException, JsonParseException, JsonMappingException {
 
-		JsonNode configNode = model.getJsonModelDefinition();
+		JsonNode modelDefinition = model.getJsonModelDefinition();
 
 		if ( !subLifeNode.has( CLUSTER_OS_SERVICES ) ) {
 			logger.debug( "Did not find an OS element" );
@@ -1458,10 +1460,18 @@ public class DefinitionParser {
 
 		for ( String osProcessName : osProcessList ) {
 
-			JsonNode serviceNode = configNode.path( OS_PROCESSES ).path( osProcessName );
+			JsonNode serviceDefinition = modelDefinition.path( OS_PROCESSES ).path( osProcessName );
+			
+			if ( serviceDefinition.isMissingNode() ) {
+				// Support for overloading from root model
+				logger.info( "Looking in global model: {} for {}", testRootModel.getName(), osProcessName  );
+				serviceDefinition = testRootModel.getJsonModelDefinition().path( OS_PROCESSES ).path( osProcessName );
+				
+			}
+			
 
 			// core semantic checks
-			validateService( resultsBuf, osProcessName, serviceNode, model, platformLifeCycle, platformSubLife );
+			validateService( resultsBuf, osProcessName, serviceDefinition, model, platformLifeCycle, platformSubLife );
 
 			for ( Iterator<String> versionIter = getClusterPartionNode( subLifeNode ).fieldNames(); versionIter
 				.hasNext(); ) {
@@ -1494,7 +1504,7 @@ public class DefinitionParser {
 
 				for ( String hostName : hostList ) {
 
-					configureOsService( hostName, osProcessName, partitionType, serviceNode, resultsBuf, model, origPlatformVersion,
+					configureOsService( hostName, osProcessName, partitionType, serviceDefinition, resultsBuf, model, origPlatformVersion,
 						subLife, platformVersion, versionNode, platformLifeCycle );
 				}
 			}

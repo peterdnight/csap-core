@@ -27,7 +27,7 @@
 
 				"osProcessesList": 
 				[
-					"oracle"
+					"oracle", "denodo"
 				],
 
 				"singleVmPartition": 

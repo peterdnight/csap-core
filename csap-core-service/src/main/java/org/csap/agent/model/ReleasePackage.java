@@ -145,7 +145,7 @@ public class ReleasePackage {
 		this.releasePackageName = releasePackageName;
 		this.releasePackageFileName = releasePackageFileName;
 	}
-
+	
 	private ReleasePackage allPackagesModel = this;
 
 	public ReleasePackage getAllPackagesModel() {

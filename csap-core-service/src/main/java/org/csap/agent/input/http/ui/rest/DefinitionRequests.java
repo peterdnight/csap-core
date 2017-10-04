@@ -361,7 +361,7 @@ public class DefinitionRequests {
 
 		ObjectNode releaseJson = null;
 		try {
-			releaseJson = csapApp.getParser().parseJsonConfig( releaseFile );
+			releaseJson = csapApp.getParser().loadReleasePackageDefinition( releaseFile );
 		} catch (IOException iOException) {
 			releaseJson = jacksonMapper.createObjectNode();
 			releaseJson.put( "error", iOException.getMessage() );
