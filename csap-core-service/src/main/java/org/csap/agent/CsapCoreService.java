@@ -128,11 +128,14 @@ public class CsapCoreService extends WebMvcConfigurerAdapter {
 	@Override
 	public void addResourceHandlers ( ResourceHandlerRegistry registry ) {
 
-		if ( Application.isRunningOnDesktop() ) {
+//		if ( Application.isRunningOnDesktop() ) {   // NOT initialized prior to start
+		if ( System.getenv( "STAGING" ) == null ) {
 			logger.warn( "\n\n\n Desktop detected: Caching DISABLED \n\n\n" );
 			return; // when disabled in yaml
 			// ONE_YEAR_SECONDS = 0;
 			// return;
+		} else {
+			logger.info( "Web caching enabled" );
 		}
 
 		// String version = csapInformation.getVersion(); // this is fixed

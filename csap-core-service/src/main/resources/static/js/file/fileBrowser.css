@@ -29,6 +29,18 @@
   background-image: url('../../images/folder.png');
 }
 
+
+#fileTree span.fancytree-node.ft_folderopen > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/folder-open.png');
+}
+
+#fileTree span.fancytree-node.ft_homedir > span.fancytree-icon {
+  background-position: 0 0;
+  background-image: url('../../images/home.png');
+}
+
+
 #fileTree span.fancytree-node.ft_docker > span.fancytree-icon {
   background-position: 0 0;
   background-image: url('../../images/docker.png');

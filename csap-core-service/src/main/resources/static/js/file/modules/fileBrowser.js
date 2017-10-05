@@ -726,16 +726,17 @@ require( [], function ( ) {
 		}
 
 		defaultTree.push( {
-			"title": "CSAP Runtime                          ",
+			"title": "Deployed Services                          ",
 			"name": "processing",
 			"location": "__processing__",
 			"folder": true,
 			"lazy": true,
-			"tooltip": diskPathsForTips.processingDisk
+			"tooltip": diskPathsForTips.processingDisk,
+			"extraClasses": "ft_folderopen"
 		} );
 
 		defaultTree.push( {
-			"title": "CSAP Staging                           ",
+			"title": "CSAP Platform                           ",
 			"name": "staging",
 			"location": "__staging__",
 			"folder": true,
@@ -755,12 +756,13 @@ require( [], function ( ) {
 		}
 
 		defaultTree.push( {
-			"title": "CSAP Home                               ",
+			"title": "OS Home                               ",
 			"name": "csapHome",
 			"location": "__home__",
 			"folder": true,
 			"lazy": true,
-			"tooltip": diskPathsForTips.homeDisk
+			"tooltip": diskPathsForTips.homeDisk,
+			"extraClasses": "ft_homedir"
 		} );
 
 		if ( diskPathsForTips.dockerDisk ) { 
