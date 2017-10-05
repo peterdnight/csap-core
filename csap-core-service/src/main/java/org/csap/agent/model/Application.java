@@ -4004,16 +4004,21 @@ public class Application {
 	}
 
 	private File getHostCollectionCacheLocation ( String cacheName ) {
-		File cacheFile = new File( getStagingFolder(), cacheName + ".json" );
+		File cacheFile = new File( getCsapSavedFolder(), cacheName + ".json" );
 		return cacheFile;
 	}
 
 	public void loadCacheFromDisk ( ArrayNode cache, String cacheName ) {
 		try {
 			File cacheFile = getHostCollectionCacheLocation( cacheName );
+			
+			if ( ! cacheFile.exists() ) {
+				logger.info( "Legacy file support" );
+				 cacheFile = new File( getStagingFolder(), cacheName + ".json" );
+			}
 
 			if ( cacheFile.exists() ) {
-				logger.warn( "Reading  info from disk: {}", cacheFile.getAbsolutePath() );
+				logger.warn( "Reading cache disk: {}", cacheFile.getAbsolutePath() );
 
 				String cacheData = FileUtils.readFileToString( cacheFile ) ;
 				JsonNode loadedCache = jacksonMapper.readTree( cacheData );

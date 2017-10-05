@@ -291,10 +291,13 @@ public class CsapEventClient {
 			logger.debug( "Posting url: {}, params:\n {} ", lifecycleSettings.getEventUrl(),
 				WordUtils.wrap( formParams.toString(), 140 ) );
 
-
-			logger.info( "eventPostPool terminated: {}", eventPostPool.isTerminated() );
+			logger.debug( "eventPostPool terminated: {}", eventPostPool.isTerminated() );
 			eventPostPool.submit(
-				new EventPostRunnable( lifecycleSettings.getEventUrl(), formParams, category, summary ) );
+				new EventPostRunnable(
+					lifecycleSettings.getEventUrl(),
+					formParams,
+					category,
+					summary ) );
 
 			logger.debug( " post size: {}", getBacklogCount() );
 		} catch (Exception e) {
