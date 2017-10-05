@@ -76,6 +76,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @Service
 public class ServiceOsManager {
 
+	private static final String PACKAGE_SYNC = "package-transfer-id";
+
 	public static final String BUILD_SUCCESS = "BUILD__SUCCESS";
 
 	final Logger logger = LoggerFactory.getLogger( ServiceOsManager.class );
@@ -1265,7 +1267,7 @@ public class ServiceOsManager {
 
 	private File getSyncLocation ()
 			throws IOException {
-		return new File( csapApp.getDeploymentStorageFolder(), "_sync" ).getCanonicalFile();
+		return new File( csapApp.getCsapSavedFolder(), PACKAGE_SYNC ).getCanonicalFile();
 	}
 
 	private String jsonFormat ( ObjectNode json ) {
@@ -1874,7 +1876,7 @@ public class ServiceOsManager {
 		}
 		deployCompleteManager.httpCopyViaCsAgent( userid,
 			deployCompleteFile,
-			Application.CSAP_PACKAGES_TOKEN + "_sync", hostList );
+			Application.CSAP_PACKAGES_TOKEN + PACKAGE_SYNC, hostList );
 
 		String transResults = deployCompleteManager.waitForComplete();
 

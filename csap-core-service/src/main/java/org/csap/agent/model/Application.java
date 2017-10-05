@@ -2474,7 +2474,7 @@ public class Application {
 		}
 	}
 
-	private File getCsapSavedFolder () {
+	public File getCsapSavedFolder () {
 		File csapSavedFolder = getStagingFile( "saved" );
 		if ( !csapSavedFolder.exists() ) {
 			logger.info( "creating csap saved folder: {}", csapSavedFolder.getAbsolutePath()  );
