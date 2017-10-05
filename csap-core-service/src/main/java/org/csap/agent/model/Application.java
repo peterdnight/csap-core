@@ -4005,6 +4005,7 @@ public class Application {
 
 	private File getHostCollectionCacheLocation ( String cacheName ) {
 		File cacheFile = new File( getCsapSavedFolder(), "collection-cache/" + cacheName + ".json" );
+		cacheFile.getParentFile().mkdirs() ;
 		return cacheFile;
 	}
 
