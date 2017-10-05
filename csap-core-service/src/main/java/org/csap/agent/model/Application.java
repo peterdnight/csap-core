@@ -4013,8 +4013,8 @@ public class Application {
 			File cacheFile = getHostCollectionCacheLocation( cacheName );
 			
 			if ( ! cacheFile.exists() ) {
-				logger.info( "Legacy file support" );
 				 cacheFile = new File( getStagingFolder(), cacheName + ".json" );
+				logger.info( "Legacy file support: {}", cacheFile.getAbsolutePath() );
 			}
 
 			if ( cacheFile.exists() ) {
