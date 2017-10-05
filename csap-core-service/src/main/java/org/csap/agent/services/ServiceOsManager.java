@@ -1864,16 +1864,18 @@ public class ServiceOsManager {
 		}
 
 		// Final step - send file to sync deploy complete
-		List<String> lines = Arrays.asList( "passed" );
+		List<String> lines = Arrays.asList( "source: " + Application.getHOST_NAME() + " deploy passed" );
 		if ( !isBuildSuccessful ) {
-			lines = Arrays.asList( "failed" );
+			lines =  Arrays.asList( "source: " + Application.getHOST_NAME() + " deploy failed" );
 		}
-		TransferManager deployCompleteManager = new TransferManager( csapApp, 30, null );
 		try {
 			Files.write( deployCompleteFile.toPath(), lines, Charset.forName( "UTF-8" ) );
 		} catch (IOException ex) {
 			logger.error( "Failed creating version file", ex );
 		}
+		
+
+		TransferManager deployCompleteManager = new TransferManager( csapApp, 30, null );
 		deployCompleteManager.httpCopyViaCsAgent( userid,
 			deployCompleteFile,
 			Application.CSAP_PACKAGES_TOKEN + PACKAGE_SYNC, hostList );
