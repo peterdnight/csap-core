@@ -3987,7 +3987,7 @@ public class Application {
 		// TODO Auto-generated method stub
 
 		try {
-			File cacheFile = new File( getStagingFolder(), cacheName + ".json" );
+			File cacheFile = getHostCollectionCacheLocation( cacheName );
 
 			if ( cacheFile.exists() ) {
 				logger.error( "Existing file found, should not happen: {}", cacheFile.getCanonicalPath() );
@@ -3998,32 +3998,41 @@ public class Application {
 
 			FileUtils.writeStringToFile( cacheFile, jacksonMapper.writeValueAsString( cache ) );
 		} catch (Exception e) {
-			logger.error( "Failed to store cache", e );
+			logger.error( "Failed to store cache {}", CSAP.getCsapFilteredStackTrace( e ) );
 		}
 
 	}
 
+	private File getHostCollectionCacheLocation ( String cacheName ) {
+		File cacheFile = new File( getStagingFolder(), cacheName + ".json" );
+		return cacheFile;
+	}
+
 	public void loadCacheFromDisk ( ArrayNode cache, String cacheName ) {
 		try {
-			File cacheFile = new File( getStagingFolder(), cacheName + ".json" );
+			File cacheFile = getHostCollectionCacheLocation( cacheName );
 
 			if ( cacheFile.exists() ) {
-				logger.warn( "Reading  cache from disk: " + cacheFile.getAbsolutePath() );
+				logger.warn( "Reading  info from disk: {}", cacheFile.getAbsolutePath() );
 
-				JsonNode loadedCache = jacksonMapper.readTree( cacheFile );
+				String cacheData = FileUtils.readFileToString( cacheFile ) ;
+				JsonNode loadedCache = jacksonMapper.readTree( cacheData );
 				if ( loadedCache.isArray() ) {
-					logger.info( "Loading disk entries count: " + loadedCache.size() );
+					logger.info( "Loading disk entries: {}", loadedCache.size() );
 					cache.addAll( (ArrayNode) loadedCache );
 				}
 
-				logger.info( "in memory cache size: " + cache.size() );
-				cacheFile.delete();
+				logger.info( "in memory cache size: {}", cache.size() );
+				if ( !cacheFile.delete() ) {
+					logger.warn( "Cache read in - but cannot delete" );
+				}
+				;
 			} else {
 				logger.error( "Existing cache file not found: {} , should not happen", cacheFile.getCanonicalPath() );
 			}
 
 		} catch (Exception e) {
-			logger.error( "Failed to store cache", e );
+			logger.error( "Failed to load cache {}", CSAP.getCsapFilteredStackTrace( e ) );
 		}
 
 	}
