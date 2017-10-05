@@ -47,6 +47,7 @@ import org.csap.agent.model.ReleasePackage;
 import org.csap.agent.model.ServiceAlertsEnum;
 import org.csap.agent.model.ServiceAttributes;
 import org.csap.agent.model.ServiceInstance;
+import org.csap.agent.model.Application.FileToken;
 import org.csap.integations.CsapEncryptableProperties;
 import org.csap.integations.CsapPerformance;
 import org.csap.security.SpringAuthCachingFilter;
@@ -1878,7 +1879,7 @@ public class ServiceOsManager {
 		TransferManager deployCompleteManager = new TransferManager( csapApp, 30, null );
 		deployCompleteManager.httpCopyViaCsAgent( userid,
 			deployCompleteFile,
-			Application.CSAP_PACKAGES_TOKEN + PACKAGE_SYNC, hostList );
+			Application.CSAP_SAVED_TOKEN +  PACKAGE_SYNC, hostList );
 
 		String transResults = deployCompleteManager.waitForComplete();
 

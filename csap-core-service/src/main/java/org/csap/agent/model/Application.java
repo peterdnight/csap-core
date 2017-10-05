@@ -125,6 +125,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  */
 @Service
 public class Application {
+
 	final static Logger logger = LoggerFactory.getLogger( Application.class );
 
 	/**
@@ -401,6 +402,9 @@ public class Application {
 			this.value = value;
 		}
 	}
+
+	private static final String SAVED = "saved";
+	public static final String CSAP_SAVED_TOKEN = FileToken.STAGING.value + "/" + SAVED + "/";
 
 	public static final String CSAP_SERVICE_PACKAGES = "/csap-packages/";
 	public static final String CSAP_PACKAGES_TOKEN = FileToken.STAGING.value + CSAP_SERVICE_PACKAGES;
@@ -2459,25 +2463,25 @@ public class Application {
 
 		if ( folder_to_backup.exists() ) {
 
-			logger.info( "Moving: {} to {}", folder_to_backup.getAbsolutePath() , backUpFolder.getAbsolutePath() );
+			logger.info( "Moving: {} to {}", folder_to_backup.getAbsolutePath(), backUpFolder.getAbsolutePath() );
 
 			operation_output.append( "\n\n Moving : "
 					+ folder_to_backup.getAbsolutePath()
 					+ " to: "
 					+ backUpFolder.getAbsolutePath() + "\n" );
-			
+
 			FileUtils.moveDirectory( folder_to_backup, backUpFolder );
 		} else {
 			operation_output.append( "Folder does not exist: " + folder_to_backup.getCanonicalPath() );
 			logger.warn( "Folder does not exist: {}", folder_to_backup.getCanonicalPath() );
-			
+
 		}
 	}
 
 	public File getCsapSavedFolder () {
-		File csapSavedFolder = getStagingFile( "saved" );
+		File csapSavedFolder = getStagingFile( SAVED );
 		if ( !csapSavedFolder.exists() ) {
-			logger.info( "creating csap saved folder: {}", csapSavedFolder.getAbsolutePath()  );
+			logger.info( "creating csap saved folder: {}", csapSavedFolder.getAbsolutePath() );
 			csapSavedFolder.mkdirs();
 		}
 		return csapSavedFolder;
@@ -3369,7 +3373,7 @@ public class Application {
 
 	public File getScriptDir () {
 
-		File scriptDir = new File( getCsapSavedFolder (), "scripts-run" );
+		File scriptDir = new File( getCsapSavedFolder(), "scripts-run" );
 		if ( testMode ) {
 			scriptDir = new File( PROCESSING, "scripts-run" );
 		}
