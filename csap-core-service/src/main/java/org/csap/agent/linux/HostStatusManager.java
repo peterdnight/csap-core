@@ -3,10 +3,8 @@ package org.csap.agent.linux;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -25,10 +23,9 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
-import org.csap.agent.CsapCoreService;
 import org.csap.agent.CSAP;
+import org.csap.agent.CsapCoreService;
 import org.csap.agent.input.http.api.AgentApi;
 import org.csap.agent.input.http.ui.rest.HostRequests;
 import org.csap.agent.model.Application;
@@ -38,15 +35,11 @@ import org.csap.agent.services.HostKeys;
 import org.csap.alerts.AlertInstance;
 import org.csap.alerts.AlertInstance.AlertItem;
 import org.csap.alerts.MonitorMbean.Report;
-import org.csap.helpers.CsapRestTemplateFactory;
 import org.csap.helpers.CsapSimpleCache;
 import org.javasimon.SimonManager;
 import org.javasimon.Split;
-import org.javasimon.Stopwatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -74,7 +67,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  * @author someDeveloper
  *
  */
-public class HostStatusManager implements Runnable {
+public class HostStatusManager  {
 
 	final Logger logger = LoggerFactory.getLogger( HostStatusManager.class );
 
@@ -151,7 +144,11 @@ public class HostStatusManager implements Runnable {
 
 	public void restartHostRefreshTimer ( int initialDelaySeconds ) {
 		refreshHostStatusHandle = scheduleGetHostStatusJobs
-			.scheduleWithFixedDelay( this, initialDelaySeconds, csapApp.getHostRefreshIntervalSeconds(), TimeUnit.SECONDS );
+			.scheduleWithFixedDelay( 
+				() -> runScheduledRefreshes(), 
+				initialDelaySeconds, 
+				csapApp.getHostRefreshIntervalSeconds(), 
+				TimeUnit.SECONDS );
 	}
 
 	/**
@@ -590,14 +587,14 @@ public class HostStatusManager implements Runnable {
 	ExecutorService hostStatusRequestPool;
 	ExecutorCompletionService<AgentStatus> hostStatusThreadManager;
 
-	public void run () {
+	public void runScheduledRefreshes () {
 
 		logger.debug( "Checking for hosts to Query" );
 		try {
 			update_hosts_runtime_lock.lock();
 			executeQueriesInParallel( null );
-		} catch (Exception e) {
-			logger.warn( "Scheduled refresh interruption: " + e.getMessage(), e );
+		} catch (Throwable t) {
+			logger.warn( "Failed quering host: {}", CSAP.getCsapFilteredStackTrace( t ) );
 		} finally {
 
 			try {

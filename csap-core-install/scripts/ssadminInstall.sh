@@ -6,7 +6,7 @@ function installCsapJavaPackage() {
 	#\rm -rf JavaDevKitPackage-8u*.zip
 	#wgetWrapper $csapDefaultJdk
 
-	unzip -qo $STAGING/warDist/jdk.zip
+	unzip -qo $csapPackageFolder/jdk.zip
 	
 	printIt "Setting java variables"
 	source $csapWorkingDir/scripts/consoleCommands.sh
