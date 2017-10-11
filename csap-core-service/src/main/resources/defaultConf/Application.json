@@ -227,12 +227,16 @@
 			},
 			"ApplicationShared": {
 				"osProcessesList": [
-					"jdk",
+					"Java",
+					"Java9",
 					"mpstatMonitor"
 				],
 				"jvmPorts": {
 					"CsapTest": [
 						"701x"
+					],
+					"SimpleServlet": [
+						"702x"
 					]
 				},
 				"multiVm": {
@@ -580,7 +584,7 @@
 			},
 			"files": []
 		},
-		"ServletSample": {
+		"SimpleServlet": {
 			"description": "Provides a simple servlet implementation to validate the tomcat runtime",
 			"parameters": "-Xms128M -Xmx128M",
 			"osProcessPriority": "2",
@@ -956,7 +960,7 @@
 			},
 			"description": "pnightin added, and needs to update this description"
 		},
-		"jdk": {
+		"Java": {
 			"description": "Oracle JDK 8",
 			"url": "http://docs.oracle.com/javase/8/docs/",
 			"port": "0",
