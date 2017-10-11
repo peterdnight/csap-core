@@ -661,22 +661,90 @@
 				}
 			}
 		},
+		"CsapSimple": {
+			"description": "Csap simple tests",
+			"autoStart": "41",
+			"osProcessPriority": "0",
+			"server": "SpringBoot",
+			"maven": {
+				"dependency": "org.csap:csap-starter-simple:1.0.0:jar"
+			},
+			"source": {
+				"scm": "git",
+				"path": "https://github.com/csap-platform/csap-starter.git",
+				"branch": "HEAD",
+				"buildLocation": "/csap-starter-simple"
+			},
+			"monitors": {
+				"max_diskUtil": "150",
+				"max_threadCount": "100",
+				"max_fileCount": "300",
+				"max_socketCount": "20",
+				"max_rssMemory": "768m",
+				"max_tomcatConnections": "40",
+				"max_topCpu": "150"
+			},
+			"health": {
+				"statusMbean": "org.csap:application=CsapPerformance,name=PerformanceMonitor",
+				"reportMbean": "org.csap:application=CsapPerformance,name=PerformanceMonitor",
+				"statusAttribute": "HealthStatus",
+				"reportAttribute": "HealthReport"
+			},
+			"version": {
+				"1": {}
+			},
+			"metaData": "webServerIntegration",
+			"parameters": "-DcsapJava8  -Xms128M -Xmx133M -XX:MaxMetaspaceSize=96M -XX:+ExitOnOutOfMemoryError",
+			"environmentVariables": {
+				"csapExternalPropertyFolder": "$STAGING/conf/propertyOverride/shared"
+			},
+			"lastModifiedBy": "pnightin",
+			"customMetrics": {
+				"HostCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"attribute": "SystemCpuLoad",
+					"max": 40,
+					"title": "Host CPU"
+				},
+				"ProcessCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"attribute": "ProcessCpuLoad",
+					"max": 40,
+					"title": "JVM Cpu"
+				},
+				"classesLoaded": {
+					"title": "JVM Classes Loaded",
+					"mbean": "java.lang:type=ClassLoading",
+					"attribute": "LoadedClassCount",
+					"max": 10
+				},
+				"rememberMeMs": {
+					"title": "Remember Me (ms)",
+					"max": 10,
+					"simonMedianTime": "csap.security.rememberMe"
+				},
+				"rememberMe": {
+					"title": "Remember Me Requests",
+					"max": 10,
+					"simonCounter": "csap.security.rememberMe"
+				}
+			},
+			"notifications": {
+				"csapAddresses": "pnightin@cisco.com"
+			}
+		},
 		"CsapTest": {
 			"description": "csap-starter reference implementation",
-			"docUrl": "https://github.com/csap-platform/csap-core/wiki#updateRefCode+Samples",
 			"parameters": "-DcsapJava8  -Xms256M -Xmx256M -XX:MaxMetaspaceSize=96M -XX:+ExitOnOutOfMemoryError",
-			"lastModifiedBy": "someDeveloper",
-			"autoStart": "40",
+			"lastModifiedBy": "pnightin",
+			"autoStart": "42",
 			"osProcessPriority": "0",
 			"server": "SpringBoot",
 			"source": {
 				"scm": "git",
-				"path": "https://bitbucket.yourcompany.com/bitbucket/scm/csap/javasamples.git",
+				"path": "https://github.com/csap-platform/csap-starter.git",
 				"branch": "HEAD",
-				"buildLocation": "/BootEnterprise"
-			},
-			"maven": {
-				"dependency": "org.csap:BootEnterprise:1.0.33:jar"
+				"buildLocation": "/csap-starter-tester"
 			},
 			"health": {
 				"reportMbean": "org.csap:application=CsapPerformance,name=PerformanceMonitor",
@@ -692,6 +760,9 @@
 				"max_rssMemory": "1000m",
 				"max_tomcatConnections": "10",
 				"max_topCpu": "150"
+			},
+			"maven": {
+				"dependency": "org.csap:csap-starter-tester:1.0.0:jar"
 			},
 			"version": {
 				"1": {}
@@ -757,7 +828,9 @@
 					"simonCounter": "jpa.Demo_DataAccessObject.showScheduleItemsJpql()",
 					"title": "DB: Show Schedule"
 				}
-			}
+			},
+			"files": [],
+			"launchUrl": "http://$host.cisco.com:$port/$context"
 		}
 	},
 	"osProcesses": {
