@@ -676,7 +676,7 @@ function formBefore( $progressBar, $percent, $status ) {
 		fromFolder = FROM_BASE + "_delete.log";
 	} else if ( command == "script" ) {
 		var fullName = $( "#scriptName" ).val() + "_" + $( "#jobIdInput" ).val() + ".log";
-		fromFolder = "__staging__/saved/scripts/" + fullName;
+		fromFolder = SCRIPT_BASE + fullName;
 
 		var targetHosts = getSelectedHosts();
 		console.log( "targetHosts.length: " + targetHosts.length );
