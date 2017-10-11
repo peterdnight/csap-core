@@ -597,7 +597,7 @@
 				"branch": "HEAD"
 			},
 			"maven": {
-				"dependency": "org.csap:csap-core-servlet:1.0.0:jar"
+				"dependency": "org.csap:csap-java-servlet:1.0.0:war"
 			},
 			"version": {
 				"1": {}
