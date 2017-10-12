@@ -13,7 +13,4 @@ _**view: [Release Notes](https://github.com/csap-platform/csap-core/wiki/Release
     - host portal: provides dashboards
     - application portal: provides application managment
     - analytics portal: provides analytics for multiple applications
-- csap-core-install: installation scripts
-- csap-core-docker: dockerfiles that can be used to create csap containers
-- desktop-definition: application definition for development
-- docker-definition: docker definition
+
