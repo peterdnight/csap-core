@@ -1507,7 +1507,7 @@ public class Application {
 	}
 
 	static public boolean isStatefulRestartNeeded () {
-		return System.getProperty( "org.csap.needStatefulRestart=yes" ) != null;
+		return System.getProperty( "org.csap.needStatefulRestart" ) != null;
 	}
 
 	private void updateManagerAgentInstances () {

@@ -419,7 +419,7 @@
 				"statusAttribute": "HealthStatus"
 			},
 			"notifications": {
-				"csapAddresses": "someUser@yourCompany.com"
+				"csapAddresses": "someUser@yourcompany.com"
 			},
 			"scheduledJobs": {
 				"scripts": [
@@ -579,7 +579,7 @@
 			},
 			"osProcessPriority": "-1",
 			"notifications": {
-				"csapAddresses": "someUser@yourCompany.com"
+				"csapAddresses": "someUser@yourcompany.com"
 			},
 			"files": []
 		},
