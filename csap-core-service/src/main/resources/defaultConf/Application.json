@@ -227,6 +227,7 @@
 			},
 			"ApplicationShared": {
 				"osProcessesList": [
+					"linux",
 					"Java",
 					"mpstatMonitor"
 				],
@@ -837,6 +838,36 @@
 		}
 	},
 	"osProcesses": {
+		"linux": {
+			"description": "csap linux integration",
+			"autoStart": "01",
+			"port": "0",
+			"scmVersion": "none",
+			"user": "ssadmin",
+			"server": "wrapper",
+			"metaData": "isScript",
+			"logDirectory": "logs",
+			"defaultLogToShow": "var-log-messages",
+			"propDirectory": "/etc",
+			"maven": {
+				"dependency": "org.csap:csap-package-linux:1.0.4:zip"
+			},
+			"source": {
+				"scm": "git",
+				"path": "https://github.com/csap-platform/csap-packages.git",
+				"branch": "HEAD",
+				"buildLocation": "/csap-package-linux"
+			},
+			"version": {
+				"1": {}
+			},
+			"jmxPort": "-1",
+			"lastModifiedBy": "pnightin",
+			"disk": "sda1",
+			"monitors": {
+				"max_diskUtil": "6g"
+			}
+		},
 		"docker": {
 			"description": "Provides installation and management of dockerd",
 			"autoStart": "04",
