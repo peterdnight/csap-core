@@ -228,7 +228,6 @@
 			"ApplicationShared": {
 				"osProcessesList": [
 					"Java",
-					"Java9",
 					"mpstatMonitor"
 				],
 				"jvmPorts": {
