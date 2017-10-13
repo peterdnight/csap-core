@@ -126,6 +126,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @Service
 public class Application {
 
+	private static final String SCRIPTS_RUN = "scripts-run";
+
 	final static Logger logger = LoggerFactory.getLogger( Application.class );
 
 	/**
@@ -404,6 +406,8 @@ public class Application {
 	}
 
 	private static final String SAVED = "saved";
+
+	private static final String CSAP_SCRIPTS_TOKEN = FileToken.STAGING.value + "/" + SAVED + "/" + SCRIPTS_RUN + "/";
 	public static final String CSAP_SAVED_TOKEN = FileToken.STAGING.value + "/" + SAVED + "/";
 
 	public static final String CSAP_SERVICE_PACKAGES = "/csap-packages/";
@@ -1503,7 +1507,7 @@ public class Application {
 	}
 
 	static public boolean isStatefulRestartNeeded () {
-		return System.getProperty( "org.csap.needStatefulRestart=yes" ) != null;
+		return System.getProperty( "org.csap.needStatefulRestart" ) != null;
 	}
 
 	private void updateManagerAgentInstances () {
@@ -2478,6 +2482,7 @@ public class Application {
 		}
 	}
 
+	
 	public File getCsapSavedFolder () {
 		File csapSavedFolder = getStagingFile( SAVED );
 		if ( !csapSavedFolder.exists() ) {
@@ -3370,12 +3375,16 @@ public class Application {
 
 		return fpath;
 	}
+	
+	public String getScriptToken() {
+		return CSAP_SCRIPTS_TOKEN ;
+	}
 
 	public File getScriptDir () {
 
-		File scriptDir = new File( getCsapSavedFolder(), "scripts-run" );
+		File scriptDir = new File( getCsapSavedFolder(), SCRIPTS_RUN );
 		if ( testMode ) {
-			scriptDir = new File( PROCESSING, "scripts-run" );
+			scriptDir = new File( PROCESSING, SCRIPTS_RUN );
 		}
 
 		if ( !scriptDir.exists() ) {

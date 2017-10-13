@@ -227,12 +227,16 @@
 			},
 			"ApplicationShared": {
 				"osProcessesList": [
-					"jdk",
+					"linux",
+					"Java",
 					"mpstatMonitor"
 				],
 				"jvmPorts": {
 					"CsapTest": [
 						"701x"
+					],
+					"SimpleServlet": [
+						"702x"
 					]
 				},
 				"multiVm": {
@@ -268,7 +272,7 @@
 				"branch": "HEAD"
 			},
 			"maven": {
-				"dependency": "org.csap:csap-core-service:6.0.0.1:jar"
+				"dependency": "org.csap:csap-core-service:6.0.0.8:jar"
 			},
 			"version": {
 				"1": {
@@ -416,7 +420,7 @@
 				"statusAttribute": "HealthStatus"
 			},
 			"notifications": {
-				"csapAddresses": "someUser@yourCompany.com"
+				"csapAddresses": "someUser@yourcompany.com"
 			},
 			"scheduledJobs": {
 				"scripts": [
@@ -489,7 +493,7 @@
 				"branch": "HEAD"
 			},
 			"maven": {
-				"dependency": "org.csap:csap-core-service:6.0.0.1:jar"
+				"dependency": "org.csap:csap-core-service:6.0.0.8:jar"
 			},
 			"version": {
 				"1": {
@@ -576,14 +580,13 @@
 			},
 			"osProcessPriority": "-1",
 			"notifications": {
-				"csapAddresses": "someUser@yourCompany.com"
+				"csapAddresses": "someUser@yourcompany.com"
 			},
 			"files": []
 		},
-		"ServletSample": {
-			"description": "ServletSample provides a simple tomcat 7 implementation to validate the tomcat runtime",
-			"docUrl": "https://github.com/csap-platform/csap-core/wiki#updateRefCode+Samples",
-			"parameters": "-Xms128M -Xmx128M ",
+		"SimpleServlet": {
+			"description": "Provides a simple servlet implementation to validate the tomcat runtime",
+			"parameters": "-Xms128M -Xmx128M",
 			"osProcessPriority": "2",
 			"autoStart": "90",
 			"server": "tomcat8-5.x",
@@ -593,22 +596,19 @@
 			],
 			"source": {
 				"scm": "git",
-				"path": "https://bitbucket.yourcompany.com/bitbucket/scm/csap/javasamples.git",
-				"branch": "HEAD",
-				"buildLocation": "/Servlet3Sample"
+				"path": "https://github.com/csap-platform/csap-java.git",
+				"buildLocation": "/csap-java-servlet",
+				"branch": "HEAD"
 			},
 			"maven": {
-				"repo": "http://maven.yourcompany.com/artifactory/cstg-smartservices-group/",
-				"dependency": "org.csap:Servlet3Sample:1.0.9:war"
+				"dependency": "org.csap:csap-java-servlet:1.0.0:war"
 			},
 			"version": {
 				"1": {}
 			},
-			"lastModifiedBy": "someDeveloper",
+			"lastModifiedBy": "pnightin",
 			"environmentVariables": {
-				"csapExternalPropertyFolder": "$STAGING/conf/propertyOverride/shared",
-				"testServiceRef": "$serviceRef:BootReference",
-				"testMissingServiceRef": "$serviceRef:MissingService"
+				"demo": "none"
 			},
 			"deployTimeoutMinutes": "1",
 			"files": [],
@@ -625,15 +625,17 @@
 				"RewriteRule ^/test1/(.*)$  /ServletSample/$1 [PT]",
 				"RewriteRule ^/test2/(.*)$  /ServletSample/$1 [PT]"
 			],
-			"useDockerJavaContainer": "true",
+			"useDockerJavaContainer": "false",
 			"docker": {
-				"image": "$dockerRepository/csap-tomcat-oracle:latest",
+				"image": "containers.cisco.com/pnightin/csap-tomcat-oracle:latest",
 				"entryPoint": [
 					"/bin/sh",
 					"-c",
-					"echo use csap service log viewer; java -version ;$CATALINA_HOME/bin/catalina.sh run  >> logs/catalina.out 2>&1"
+					"echo use csap service log viewer, id is `id`; java -version ; catalina.sh run  >> logs/catalina.out 2>&1",
+					""
 				],
 				"command": [],
+				"runUser": "$csapUser",
 				"workingDirectory": "/_working",
 				"containerName": "$instance",
 				"environmentVariables": [
@@ -659,40 +661,94 @@
 					}
 				],
 				"limits": {
-					"cpuCoresMax": 2,
-					"cpuCoresAssigned": "0-7",
-					"memoryInMb": 512,
-					"ulimits": [
-						{
-							"name": "nofile",
-							"soft": 500,
-							"hard": 500
-						},
-						{
-							"name": "nproc",
-							"soft": 200,
-							"hard": 200
-						}
-					]
+					"cpuCoresMax": 3
 				}
+			}
+		},
+		"CsapSimple": {
+			"description": "Csap simple tests",
+			"autoStart": "41",
+			"osProcessPriority": "0",
+			"server": "SpringBoot",
+			"maven": {
+				"dependency": "org.csap:csap-starter-simple:1.0.0:jar"
+			},
+			"source": {
+				"scm": "git",
+				"path": "https://github.com/csap-platform/csap-starter.git",
+				"branch": "HEAD",
+				"buildLocation": "/csap-starter-simple"
+			},
+			"monitors": {
+				"max_diskUtil": "150",
+				"max_threadCount": "100",
+				"max_fileCount": "300",
+				"max_socketCount": "20",
+				"max_rssMemory": "768m",
+				"max_tomcatConnections": "40",
+				"max_topCpu": "150"
+			},
+			"health": {
+				"statusMbean": "org.csap:application=CsapPerformance,name=PerformanceMonitor",
+				"reportMbean": "org.csap:application=CsapPerformance,name=PerformanceMonitor",
+				"statusAttribute": "HealthStatus",
+				"reportAttribute": "HealthReport"
+			},
+			"version": {
+				"1": {}
+			},
+			"metaData": "webServerIntegration",
+			"parameters": "-DcsapJava8  -Xms128M -Xmx133M -XX:MaxMetaspaceSize=96M -XX:+ExitOnOutOfMemoryError",
+			"environmentVariables": {
+				"csapExternalPropertyFolder": "$STAGING/conf/propertyOverride/shared"
+			},
+			"lastModifiedBy": "pnightin",
+			"customMetrics": {
+				"HostCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"attribute": "SystemCpuLoad",
+					"max": 40,
+					"title": "Host CPU"
+				},
+				"ProcessCpu": {
+					"mbean": "java.lang:type=OperatingSystem",
+					"attribute": "ProcessCpuLoad",
+					"max": 40,
+					"title": "JVM Cpu"
+				},
+				"classesLoaded": {
+					"title": "JVM Classes Loaded",
+					"mbean": "java.lang:type=ClassLoading",
+					"attribute": "LoadedClassCount",
+					"max": 10
+				},
+				"rememberMeMs": {
+					"title": "Remember Me (ms)",
+					"max": 10,
+					"simonMedianTime": "csap.security.rememberMe"
+				},
+				"rememberMe": {
+					"title": "Remember Me Requests",
+					"max": 10,
+					"simonCounter": "csap.security.rememberMe"
+				}
+			},
+			"notifications": {
+				"csapAddresses": "pnightin@cisco.com"
 			}
 		},
 		"CsapTest": {
 			"description": "csap-starter reference implementation",
-			"docUrl": "https://github.com/csap-platform/csap-core/wiki#updateRefCode+Samples",
 			"parameters": "-DcsapJava8  -Xms256M -Xmx256M -XX:MaxMetaspaceSize=96M -XX:+ExitOnOutOfMemoryError",
-			"lastModifiedBy": "someDeveloper",
-			"autoStart": "40",
+			"lastModifiedBy": "pnightin",
+			"autoStart": "42",
 			"osProcessPriority": "0",
 			"server": "SpringBoot",
 			"source": {
 				"scm": "git",
-				"path": "https://bitbucket.yourcompany.com/bitbucket/scm/csap/javasamples.git",
+				"path": "https://github.com/csap-platform/csap-starter.git",
 				"branch": "HEAD",
-				"buildLocation": "/BootEnterprise"
-			},
-			"maven": {
-				"dependency": "org.csap:BootEnterprise:1.0.33:jar"
+				"buildLocation": "/csap-starter-tester"
 			},
 			"health": {
 				"reportMbean": "org.csap:application=CsapPerformance,name=PerformanceMonitor",
@@ -708,6 +764,9 @@
 				"max_rssMemory": "1000m",
 				"max_tomcatConnections": "10",
 				"max_topCpu": "150"
+			},
+			"maven": {
+				"dependency": "org.csap:csap-starter-tester:1.0.0:jar"
 			},
 			"version": {
 				"1": {}
@@ -773,31 +832,62 @@
 					"simonCounter": "jpa.Demo_DataAccessObject.showScheduleItemsJpql()",
 					"title": "DB: Show Schedule"
 				}
-			}
+			},
+			"files": [],
+			"launchUrl": "http://$host.cisco.com:$port/$context"
 		}
 	},
 	"osProcesses": {
-		"docker": {
-			"description": "Provides installation and management of dockerd",
-			"docUrl": "https://github.com/csap-platform/csap-core/wiki#updateRefCSAP+Docker",
-			"autoStart": "04",
-			"url": "https://github.com/csap-platform/csap-core/wiki#updateRefCSAP+Docker",
+		"linux": {
+			"description": "csap linux integration",
+			"autoStart": "01",
+			"port": "0",
+			"scmVersion": "none",
+			"user": "ssadmin",
 			"server": "wrapper",
-			"metaData": "skipJmxCollection",
+			"metaData": "isScript",
+			"logDirectory": "logs",
+			"defaultLogToShow": "var-log-messages",
+			"propDirectory": "/etc",
 			"maven": {
-				"dependency": "org.csap:docker:1.13.2.LATEST:zip"
+				"dependency": "org.csap:csap-package-linux:1.0.4:zip"
 			},
 			"source": {
 				"scm": "git",
-				"path": "https://bitbucket.yourcompany.com/bitbucket/scm/csap/packages.git",
+				"path": "https://github.com/csap-platform/csap-packages.git",
 				"branch": "HEAD",
-				"buildLocation": "/docker"
+				"buildLocation": "/csap-package-linux"
+			},
+			"version": {
+				"1": {}
+			},
+			"jmxPort": "-1",
+			"lastModifiedBy": "pnightin",
+			"disk": "sda1",
+			"monitors": {
+				"max_diskUtil": "6g"
+			}
+		},
+		"docker": {
+			"description": "Provides installation and management of dockerd",
+			"autoStart": "04",
+			"url": "https://github.com/csap-platform/csap-core/wiki",
+			"server": "wrapper",
+			"metaData": "skipJmxCollection",
+			"maven": {
+				"dependency": "org.csap:csap-package-docker:1.13.3.LATEST:zip"
+			},
+			"source": {
+				"scm": "git",
+				"path": "https://github.com/csap-platform/csap-packages.git",
+				"branch": "HEAD",
+				"buildLocation": "/csap-package-docker"
 			},
 			"version": {
 				"1": {}
 			},
 			"processFilter": ".*dockerd.*",
-			"lastModifiedBy": "someDeveloper",
+			"lastModifiedBy": "pnightin",
 			"disk": "/home/ssadmin/dockerStorage",
 			"logDirectory": "logs",
 			"defaultLogToShow": "var-log-messages",
@@ -808,14 +898,14 @@
 			},
 			"environmentVariables": {
 				"dockerStorage": "/home/ssadmin/dockerStorage",
-				"allowRemote": "false",
+				"allowRemote": "true",
 				"dockerPackage": "docker-latest"
 			},
 			"scheduledJobs": {
 				"scripts": [
 					{
 						"description": "docker system prune",
-						"frequency": "daily ",
+						"frequency": "hourly",
 						"hour": "03",
 						"script": "$workingFolder/scripts/cleanUp.sh"
 					}
@@ -823,24 +913,22 @@
 			}
 		},
 		"httpd": {
-			"description": "httpd includes modjk for routing to services.  It will use the $STAGING/httpConf files without the *Export*",
-			"docUrl": "https://github.com/csap-platform/csap-core/wiki#updateRefHttpd+Wrapper",
-			"lastModifiedBy": "someDeveloper",
-			"url": "http://$host.yourcompany.com:8011/CsAgent/service/httpd,http://$host.yourcompany.com:8011/CsAgent/service/modjk,http://$host.yourcompany.com:8080/about.html",
+			"lastModifiedBy": "pnightin",
+			"url": "http://$host.cisco.com:8011/CsAgent/service/httpd,http://$host.cisco.com:8011/CsAgent/service/modjk,http://$host.cisco.com:8080/about.html",
 			"autoStart": "05",
 			"propDirectory": "/home/ssadmin/staging/httpdConf",
 			"deployTimeoutMinutes": "10",
 			"port": "8080",
 			"defaultLogToShow": "error_log",
 			"server": "wrapper",
+			"maven": {
+				"dependency": "org.csap:csap-package-httpd:2.4.23.10:zip"
+			},
 			"source": {
 				"scm": "git",
-				"path": "https://bitbucket.yourcompany.com/bitbucket/scm/csap/packages.git",
+				"path": "https://github.com/csap-platform/csap-packages.git",
 				"branch": "HEAD",
-				"buildLocation": "/HttpdWrapper"
-			},
-			"maven": {
-				"dependency": "org.csap.web:HttpdWrapper:2.4.23.3:zip"
+				"buildLocation": "/csap-package-httpd"
 			},
 			"version": {
 				"1": {
@@ -865,7 +953,7 @@
 			"osProcessPriority": "-12",
 			"customMetrics": {
 				"config": {
-					"httpCollectionUrl": "http://localhost:8080/server-status?auto",
+					"httpCollectionUrl": "http://localhost.cisco.com:8080/server-status?auto",
 					"patternMatch": ": ([^\n]*)",
 					"title": "CSAP Collection Url"
 				},
@@ -899,11 +987,11 @@
 					"decimals": "2",
 					"title": "Requests: Number per Second"
 				}
-			}
+			},
+			"description": "pnightin added, and needs to update this description"
 		},
-		"jdk": {
-			"description": "Oracle JDK",
-			"docUrl": "https://github.com/csap-platform/csap-core/wiki#updateRefCSAP+JDK+Package",
+		"Java": {
+			"description": "Oracle JDK 8",
 			"url": "http://docs.oracle.com/javase/8/docs/",
 			"port": "0",
 			"scmVersion": "none",
@@ -913,65 +1001,96 @@
 			"logDirectory": "/opt/java",
 			"propDirectory": "/opt/java",
 			"maven": {
-				"dependency": "org.csap:JavaDevKitPackage:8u121.1:zip"
+				"dependency": "org.csap:csap-package-java:1.0.1:zip"
 			},
 			"source": {
 				"scm": "git",
-				"path": "https://bitbucket.yourcompany.com/bitbucket/scm/csap/packages.git",
+				"path": "https://github.com/csap-platform/csap-packages.git",
 				"branch": "HEAD",
-				"buildLocation": "/JavaDevKitPackage8"
+				"buildLocation": "/csap-package-java"
 			},
 			"version": {
 				"1": {}
 			},
 			"jmxPort": "-1",
-			"lastModifiedBy": "someDeveloper",
+			"lastModifiedBy": "pnightin",
 			"autoStart": "02",
 			"processFilter": "NEVER_MATCH"
 		},
+		
+		"Java9": {
+			"description": "Oracle JDK",
+			"url": "http://www.oracle.com/technetwork/java/javase/9all-relnotes-3704433.html",
+			"port": "0",
+			"scmVersion": "none",
+			"user": "ssadmin",
+			"server": "wrapper",
+			"metaData": "isScript",
+			"logDirectory": "/opt/java",
+			"propDirectory": "/opt/java",
+			"maven": {
+				"dependency": "org.csap:csap-package-java:1.0.1:zip"
+			},
+			"source": {
+				"scm": "git",
+				"path": "https://github.com/csap-platform/csap-packages.git",
+				"branch": "HEAD",
+				"buildLocation": "/csap-package-java"
+			},
+			"version": {
+				"1": {}
+			},
+			"jmxPort": "-1",
+			"lastModifiedBy": "pnightin",
+			"autoStart": "02",
+			"processFilter": "NEVER_MATCH",
+			"environmentVariables": {
+				"jdkMajorVersion": "jdk9",
+				"jdkMinorVersion": "none"
+			}
+		},
 		"jstatd": {
 			"description": "Java Statistics",
-			"docUrl": "https://github.com/csap-platform/csap-core/wiki#updateRefCSAP+Java+Stats+Package",
-			"autoStart": "50",
-			"url": "https://github.com/csap-platform/csap-core/wiki#updateRefCSAP+Java+Stats+Package",
+			"autoStart": "98",
+			"url": "https://wiki.cisco.com/display/SFAECSAP/CSAP+Java+Stats+Package",
 			"port": "7995",
 			"server": "wrapper",
 			"metaData": "skipJmxCollection",
 			"propDirectory": "/home/ssadmin/processing/mongodb/conf",
 			"maven": {
-				"dependency": "com.yourcompany.csap:jstatd:1.0.0:zip"
+				"dependency": "org.csap:csap-package-java-statd:1.0.0:zip"
 			},
 			"source": {
 				"scm": "git",
-				"path": "https://bitbucket.yourcompany.com/bitbucket/scm/csap/packages.git",
+				"path": "https://github.com/csap-platform/csap-packages.git",
 				"branch": "HEAD",
-				"buildLocation": "/JavaStatDaemon"
+				"buildLocation": "/csap-package-java-statd"
 			},
 			"version": {
 				"1": {}
 			},
-			"processFilter": ".*jstatd.*"
+			"processFilter": ".*jstatd.*",
+			"lastModifiedBy": "pnightin"
 		},
 		"tomcat": {
 			"description": "Apache Tomcat Servers",
-			"docUrl": "https://github.com/csap-platform/csap-core/wiki#updateRefCSAP+Tomcat+Package",
 			"autoStart": "09",
 			"environmentVariables": {
 				"extractAsNeeded": "false"
 			},
-			"lastModifiedBy": "someDeveloper",
-			"url": "https://github.com/csap-platform/csap-core/wiki#updateRefCSAP+Tomcat+Package",
+			"lastModifiedBy": "pnightin",
+			"url": "https://github.com/csap-platform/csap-core/wiki",
 			"port": "0",
 			"server": "wrapper",
 			"metaData": "isScript",
 			"maven": {
-				"dependency": "org.csap:TomcatPackage:8.5.16.3:zip"
+				"dependency": "org.csap:csap-package-tomcat:1.0.1:zip"
 			},
 			"source": {
 				"scm": "git",
-				"path": "https://bitbucket.yourcompany.com/bitbucket/scm/csap/packages.git",
+				"path": "https://github.com/csap-platform/csap-packages.git",
 				"branch": "HEAD",
-				"buildLocation": "/TomcatPackage"
+				"buildLocation": "/csap-package-tomcat"
 			},
 			"version": {
 				"1": {}

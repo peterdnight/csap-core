@@ -30,7 +30,7 @@ spring:
 csap-agent:
 
   # agent URI pattern used by admin (to sync state) and ui cross launching to logs, host dashboard, file manager, etc.
-  host-url-pattern: "${hostUrlPattern:http://CSAP_HOST.yourCompany.com:8011/CsAgent}"
+  host-url-pattern: "${hostUrlPattern:http://CSAP_HOST.yourcompany.com:8011/CsAgent}"
   
   # private network support: used for server side communication - defaults to be same as host-url-pattern
   #  host-url-pattern-internal: "http://CSAP_HOST.yourcompany.com:8011/CsAgent"

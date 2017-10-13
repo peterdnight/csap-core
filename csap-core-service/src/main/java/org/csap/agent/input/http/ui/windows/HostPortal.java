@@ -419,6 +419,7 @@ public class HostPortal {
 
 		modelMap.addAttribute( "userid", CsapUser.currentUsersID() );
 
+		modelMap.addAttribute( "scriptBase", csapApp.getScriptToken() );
 		modelMap.addAttribute( "agentHostUrlPattern", csapApp.getAgentHostUrlPattern( false ) );
 		
 		modelMap.addAttribute( "deskTop", Application.isRunningOnDesktop()

@@ -1131,13 +1131,7 @@ public class ServiceBaseParser extends ServiceBase {
 		}
 
 		if ( serviceMeter != null && serviceMeter.getSimonId() != null ) {
-			// legacy support at cisco
-			String mbeanNameCustom = "com.cisco:application=csap,name=SimonManager";
-
-			if ( isSpringBoot() || isDockerContainer() ) {
-				mbeanNameCustom = CsapPerformance.SIMON_MBEAN;
-			}
-			setSimonMbean( mbeanNameCustom );
+			setSimonMbean( CsapPerformance.SIMON_MBEAN );
 		}
 
 		if ( serviceMeter != null && serviceMeter.getMbeanName() != null ) {

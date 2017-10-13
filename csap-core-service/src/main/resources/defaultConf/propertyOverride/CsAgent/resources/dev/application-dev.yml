@@ -1,0 +1,8 @@
+
+#
+# use in-memory security as the default. Upgrade to LDAP ASAP
+#
+csap:
+  security: 
+    enabled: true
+    ldap-enabled: false   # set env csapTest to folder with csapSecurity.properties

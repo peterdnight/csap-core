@@ -420,7 +420,8 @@ public class AgentApi {
 		OutputFileMgr outputFm = new OutputFileMgr( csapApp.getScriptDir(), fullName );
 
 		ObjectNode apiResponse = jacksonMapper.createObjectNode();
-		apiResponse.put( "scriptOutput", "$STAGING/scripts/xfer_" + scriptName + ".log" );
+		apiResponse.put( "scriptOutput", csapApp.getScriptDir().getAbsolutePath() +
+						"/xfer_" + scriptName + ".log" );
 
 		ObjectNode runResponse = osManager.executeShellScriptClustered(
 			apiUserid,

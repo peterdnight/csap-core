@@ -58,7 +58,7 @@ define( ["./validation-handler", "./json-forms"], function ( validationHandler, 
 					"maxDepth": 1
 				},
 				{
-					"path": "$staging/scripts",
+					"path": "$staging/saved",
 					"olderThenDays": 30,
 					"maxDepth": 10,
 					"pruneEmptyFolders": true
