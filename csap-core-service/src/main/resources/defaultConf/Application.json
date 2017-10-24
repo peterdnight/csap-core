@@ -229,7 +229,8 @@
 				"osProcessesList": [
 					"linux",
 					"Java",
-					"mpstatMonitor"
+					"mpstatMonitor",
+					"CsapStarter"
 				],
 				"jvmPorts": {
 					"CsapTest": [
@@ -866,6 +867,27 @@
 			"disk": "sda1",
 			"monitors": {
 				"max_diskUtil": "6g"
+			}
+		},
+		"CsapStarter": {
+			"description": "Used to build the latest csap-starter",
+			"url": "https://github.com/csap-platform/csap-core/wiki",
+			"server": "wrapper",
+			"metaData": "isScript",
+			"logDirectory": "/home/ssadmin/staging/build",
+			"logRegEx": ".*\\.log",
+			"propDirectory": "/home/ssadmin/staging/build",
+			"maven": {
+				"dependency": "org.csap:csap-starter-simple:1.0.0:jar"
+			},
+			"source": {
+				"scm": "git",
+				"path": "https://github.com/csap-platform/csap-starter.git",
+				"branch": "HEAD",
+				"buildLocation": "/csap-starter"
+			},
+			"version": {
+				"1": {}
 			}
 		},
 		"docker": {
