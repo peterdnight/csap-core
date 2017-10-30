@@ -699,7 +699,7 @@
 				"1": {}
 			},
 			"metaData": "webServerIntegration",
-			"parameters": "-DcsapJava8  -Xms128M -Xmx133M -XX:MaxMetaspaceSize=96M -XX:+ExitOnOutOfMemoryError",
+			"parameters": "-DcsapJava8  -Dspring.profiles.active=CSAP_LIFE,desktop -Xms128M -Xmx133M -XX:MaxMetaspaceSize=96M -XX:+ExitOnOutOfMemoryError",
 			"environmentVariables": {
 				"csapExternalPropertyFolder": "$STAGING/conf/propertyOverride/shared"
 			},
