@@ -230,8 +230,7 @@
 					"linux",
 					"Java",
 					"mpstatMonitor",
-					"CsapStarter",
-					"CsapParent"
+					"CsapStarter"
 				],
 				"jvmPorts": {
 					"CsapTest": [
@@ -870,27 +869,6 @@
 				"max_diskUtil": "6g"
 			}
 		},
-		"CsapParent": {
-			"description": "Used to build the latest csap-starter-parent",
-			"url": "https://github.com/csap-platform/csap-core/wiki",
-			"server": "wrapper",
-			"metaData": "isScript",
-			"logDirectory": "/home/ssadmin/staging/build",
-			"logRegEx": ".*\\.log",
-			"propDirectory": "/home/ssadmin/staging/build",
-			"maven": {
-				"dependency": "org.csap:csap-starter-simple:1.0.0:jar"
-			},
-			"source": {
-				"scm": "git",
-				"path": "https://github.com/csap-platform/csap-starter.git",
-				"branch": "HEAD",
-				"buildLocation": "/csap-starter/csap-starter-parent"
-			},
-			"version": {
-				"1": {}
-			}
-		},
 		"CsapStarter": {
 			"description": "Used to build the latest csap-starter",
 			"url": "https://github.com/csap-platform/csap-core/wiki",
@@ -901,6 +879,9 @@
 			"propDirectory": "/home/ssadmin/staging/build",
 			"maven": {
 				"dependency": "org.csap:csap-starter-simple:1.0.0:jar"
+			},
+			"environmentVariables": {
+				"javaBuildOnly": "true"
 			},
 			"source": {
 				"scm": "git",
